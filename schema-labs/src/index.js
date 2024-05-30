@@ -2,28 +2,22 @@ import React from 'react';
 import './index.scss';
 import ReactDOM from 'react-dom/client';
 import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Link,
-  Route,
-  RouterProvider,
-  Outlet
+  RouterProvider
 } from "react-router-dom";
-import AuthProvider from './utils/AuthProvider';
-import Base from './layouts/Base';
-
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<Base/>}>
-      <Route path="login" element={<div>/login</div>} />
-    </Route>
-  )
-);
+import './index.css';
+import reportWebVitals from './reportWebVitals';
+import router from "./routes.jsx";
+import AuthProvider from './utils/components/auth/AuthProvider.js';
+import ClientPreferencesProvider from './client/ClientPreferencesProvider.jsx';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ClientPreferencesProvider>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </ClientPreferencesProvider>
   </React.StrictMode>
 );
 
