@@ -7,7 +7,7 @@ import {
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import router from "./routes.jsx";
-import AuthProvider from './utils/components/auth/AuthProvider.js';
+import AuthProvider from './utils/components/auth/AuthProvider.jsx';
 import ClientPreferencesProvider from './client/ClientPreferencesProvider.jsx';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
