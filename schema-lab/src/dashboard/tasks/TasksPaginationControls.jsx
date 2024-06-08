@@ -26,21 +26,22 @@ const TasksPaginationControls = () => {
         }
 
         return <Row className="p-3 justify-content-between">
-            <Col className="d-flex justify-content-start align-items-center">
+            <Col className="d-flex justify-content-start align-items-start">
                 {count > pageSize
                     ? <small>Displaying tasks {(currentPageIndex * pageSize) + 1}-{Math.min((currentPageIndex + 1) * pageSize, count)}, out of {count} total</small>
                     : <small>Displaying {count} total tasks</small>
                 }
             </Col>
-            <Col className="d-flex justify-content-end align-items-center">
+            <Col className="d-flex justify-content-end align-items-start">
                 <Pagination>
                     {currentPageIndex > 2 && <Pagination.First onClick={() => { setCurrent(0) }} />}
-                    {paginationItems.length > 1 && paginationItems}
+                    {paginationItems.length > 0 && paginationItems} 
                     {maxPageIndex - currentPageIndex > 2 && <Pagination.Last onClick={() => { setCurrent(maxPageIndex) }} />}
                 </Pagination>
             </Col>
         </Row>
-    }
+    } 
+
     return;
 }
 

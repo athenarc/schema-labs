@@ -92,7 +92,9 @@ const ColumnOrderToggle = ({ columnName, currentOrder, setOrder }) => {
 const TaskList = () => {
     const { taskData } = useTaskData();
     const { taskFilters, setTaskFilters } = useTaskFilters();
-
+    const [token, setToken] = useState(taskFilters.token);
+    const [statuses, setStatuses] = useState({ ...(taskFilters.statuses) });
+    
     const orderBy = taskFilters.order;
     const setOrderBy = attribute => {
         const newTaskFilters = cloneDeep(taskFilters);
@@ -100,12 +102,50 @@ const TaskList = () => {
         setTaskFilters(newTaskFilters);
     }
 
+    const handleNameInput = evt => {
+        setToken(evt.target.value);
+    }
+
+    const restoreFilters = evt => {
+        // on empty token restore filters
+        if (evt.target.value === "") {
+            setTaskFilters({...taskFilters, token:"", statuses:{}})
+            
+        } 
+    }
+
+    // Get filtered task elements on Enter pushed
+    const handleApplyFilters = (event) => {
+        if(event.key === 'Enter'){
+            setTaskFilters({
+                ...taskFilters,
+                token,
+                statuses: { ...statuses },
+                page:0 // Always render first page of filtering results
+            });
+        }
+    }
+
+    // Get the amount of filtered elements found
+    const findFilteredTokens = () => {
+        const { count } = taskData;
+        if (count === 0) {
+            return <div class="alert alert-warning text-center" role="alert">Your search <b>{token}</b> did not match any task!</div>
+        }
+        return null
+     }
+
     return <Row className="p-3 mb-5">
-        <Col>
-            {taskData && taskData.results && taskData.results.length > 0 && <Table borderless responsive>
+        <Col className="align-items-center">
+            {taskData && taskData.results && <Table borderless responsive>
                 <thead>
-                    <tr>
-                        <th>Name/UUID <ColumnOrderToggle columnName={"uuid"} currentOrder={orderBy} setOrder={setOrderBy} /></th>
+                    <tr> 
+                        <th>
+                            <div class="input-group">
+                                <span class="input-group-text fw-bold" id="search">Name/UUID&nbsp;<ColumnOrderToggle columnName={"uuid"} currentOrder={orderBy} setOrder={setOrderBy}/></span>
+                                <input type="text" class="form-control" placeholder="Search..." aria-label="search" aria-describedby="search-box" value={token} onInput={handleNameInput} onKeyDown={handleApplyFilters} onChange={restoreFilters}/>
+                            </div>
+                        </th>
                         <th>Status <ColumnOrderToggle columnName={"status"} currentOrder={orderBy} setOrder={setOrderBy} /></th>
                         <th>Submission time <ColumnOrderToggle columnName={"submitted_at"} currentOrder={orderBy} setOrder={setOrderBy} /></th>
                         <th>Update time</th>
@@ -120,6 +160,7 @@ const TaskList = () => {
             </Table>
             }
         </Col>
+        {findFilteredTokens()}
     </Row>;
 }
 
