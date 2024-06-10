@@ -128,11 +128,14 @@ const TaskList = () => {
 
     // Get the amount of filtered elements found
     const findFilteredTokens = () => {
-        const { count } = taskData;
-        if (count === 0) {
-            return <div class="alert alert-warning text-center" role="alert">Your search <b>{token}</b> did not match any task!</div>
+        if (taskData) {
+            const { count } = taskData;
+            if (count === 0) {
+                return <div class="alert alert-warning text-center" role="alert">Your search <b>{token}</b> did not match any task!</div>
+            }
+        } else {
+            return null
         }
-        return null
      }
 
     return <Row className="p-3 mb-5">
