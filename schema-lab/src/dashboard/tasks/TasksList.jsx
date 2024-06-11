@@ -94,7 +94,9 @@ const TaskList = () => {
     const { taskFilters, setTaskFilters } = useTaskFilters();
     const [token, setToken] = useState(taskFilters.token);
     const [statuses, setStatuses] = useState({ ...(taskFilters.statuses) });
-    // const [count, setCount] = useState(taskFilters.token);
+    const [typedChar, setTypedChar] = useState();
+
+    const minCharThreshold = 2; // The minimum amount of characters to apply a filter
 
     const orderBy = taskFilters.order;
     const setOrderBy = attribute => {
@@ -108,18 +110,19 @@ const TaskList = () => {
     }
 
     const restoreFilters = evt => {
+        if (evt.key !== 'Enter') {
+            setTypedChar(evt.target.value.length)
+        }
         // on empty token restore filters
         if (evt.target.value === "") {
             setTaskFilters({...taskFilters, token:"", statuses:{}})
-            
         } 
     }
 
     // Get filtered task elements on Enter pushed
     const handleApplyFilters = (event) => {
-        let minCharThreshold = 2 // The minimum amount of characters to apply a filter
         // Apply filter on Enter key pushed and two charackter have typed
-        if(event.key === 'Enter' && (event.target.value.length + 1) >= minCharThreshold){
+        if(event.key === 'Enter' && (typedChar >= minCharThreshold)){
             setTaskFilters({
                 ...taskFilters,
                 token,
