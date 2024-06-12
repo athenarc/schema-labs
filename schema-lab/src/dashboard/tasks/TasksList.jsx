@@ -122,13 +122,18 @@ const TaskList = () => {
     // Get filtered task elements on Enter pushed
     const handleApplyFilters = (event) => {
         // Apply filter on Enter key pushed and two charackter have typed
-        if(event.key === 'Enter' && (typedChar >= minCharThreshold)){
-            setTaskFilters({
-                ...taskFilters,
-                token,
-                statuses: { ...statuses },
-                page:0 // Always render first page of filtering results
-            });
+        if(event.key === 'Enter') {
+            if (typedChar >= minCharThreshold){
+                setTaskFilters({
+                    ...taskFilters,
+                    token,
+                    statuses: { ...statuses },
+                    page:0 // Always render first page of filtering results
+                });
+            } else {
+                // Block accepting filtering keywords less than 2 chars
+                alert("Pleast type at least two characters!")
+            }
         }
     }
 
