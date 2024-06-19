@@ -62,15 +62,7 @@ const TaskListing = props => {
         <td>{new Date(props.submitted_at).toLocaleString('el')}</td>
         <td>{props.completed_at ? new Date(props.completed_at).toLocaleString('el') : "-"}</td>
         <td className="text-end">
-            <Dropdown as={ButtonGroup} size="sm">
-                <Button variant="primary" size="sm">Details...</Button>
-
-                <Dropdown.Toggle split variant="primary" size="sm" id="dropdown-split-basic" />
-
-                <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1" disabled>Cancel</Dropdown.Item>
-                </Dropdown.Menu>
-            </Dropdown>
+            <Button variant="primary" size="sm" as={Link} to="#/action-1">Cancel</Button>
         </td>
     </tr>
 }
