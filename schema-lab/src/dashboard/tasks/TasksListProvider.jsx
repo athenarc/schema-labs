@@ -3,7 +3,7 @@ import { listTasks } from "../../api/v1/actions";
 import { UserDetailsContext } from "../../utils/components/auth/AuthProvider";
 import { useClientPreferences } from "../../client/ClientPreferencesProvider";
 
-const TasksContext = createContext();
+export const TasksContext = createContext();
 
 export const useTaskData = () => {
     const {taskData, setTaskData} = useContext(TasksContext);
@@ -28,7 +28,9 @@ const TasksListProvider = ({children}) => {
     });
     const { userDetails } = useContext(UserDetailsContext);
 
-    useEffect(()=>{
+    const refreshInterval = 5000; // TaskData refresh rate (every 5sec)
+
+    const fetchTaskData = ()=>{
         const filters = {
             ...taskFilters,
             statuses: Object.keys(taskFilters.statuses).filter(k=>taskFilters.statuses[k]),
@@ -49,6 +51,16 @@ const TasksListProvider = ({children}) => {
                 results: data.results
             });
         })
+    };
+
+    useEffect(() => {
+        fetchTaskData();
+    }, [taskFilters]);
+
+    // Every refreshInterval seconds call fetchTaskData task
+    useEffect(() => {
+        const intervalId = setInterval(fetchTaskData, refreshInterval);
+        return () => clearInterval(intervalId); // Clear interval on component unmount
     }, [taskFilters]);
     
     return <TasksContext.Provider value={{taskData, setTaskData, taskFilters, setTaskFilters}}>

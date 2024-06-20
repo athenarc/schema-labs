@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
-import Dropdown from "react-bootstrap/Dropdown";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Link } from "react-router-dom";
@@ -57,7 +55,7 @@ const TaskStatus = props => {
 
 const TaskListing = props => {
     return <tr>
-        <td><Link to={"#"}>{props.uuid}</Link></td>
+        <td><Link to={`/task-details/${props.uuid}`}>{props.uuid}</Link></td>
         <td><TaskStatus status={props.status} /></td>
         <td>{new Date(props.submitted_at).toLocaleString('el')}</td>
         <td>{props.completed_at ? new Date(props.completed_at).toLocaleString('el') : "-"}</td>
