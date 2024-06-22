@@ -8,7 +8,7 @@ const Name = () => {
         <div>
             {selectedTask ? (
                 <div>
-                    <p>{selectedTask.name}</p>
+                    <span class="d-block p-2 text-dark">{selectedTask.name}</span>
                 </div>
             ) : (
                 <p>-</p>

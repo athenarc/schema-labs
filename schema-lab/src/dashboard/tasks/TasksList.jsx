@@ -55,7 +55,7 @@ const TaskStatus = props => {
 
 const TaskListing = props => {
     return <tr>
-        <td><Link to={`/task-details/${props.uuid}`}>{props.uuid}</Link></td>
+        <td><Link to={`/task-details/${props.uuid}/name`}>{props.uuid}</Link></td>
         <td><TaskStatus status={props.status} /></td>
         <td>{new Date(props.submitted_at).toLocaleString('el')}</td>
         <td>{props.completed_at ? new Date(props.completed_at).toLocaleString('el') : "-"}</td>
