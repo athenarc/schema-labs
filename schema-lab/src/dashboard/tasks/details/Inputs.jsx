@@ -8,7 +8,7 @@ const Inputs = () => {
         <div>
             {selectedTask ? (
                 <div>
-                    <p>{selectedTask.uuid}</p>
+                    <span class="d-block p-2 text-dark">{selectedTask.uuid}</span>
                 </div>
             ) : (
                 <p>-</p>

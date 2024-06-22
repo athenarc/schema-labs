@@ -8,7 +8,7 @@ const Status = () => {
         <div>
             {selectedTask ? (
                 <div>
-                    <p>{selectedTask.status}</p>
+                    <span class="d-block p-2 text-dark">{selectedTask.status}</span>
                 </div>
             ) : (
                 <p>-</p>
