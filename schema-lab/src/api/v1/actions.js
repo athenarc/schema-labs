@@ -24,7 +24,6 @@ export const listTasks = options => {
         }
     }
     const qualifiedUrl=[`${config.api.url}/api/test`, queryParameters.join("&")].join("?");
-    console.log("Qualified URL: ",qualifiedUrl);
     return fetch(
         qualifiedUrl,
         {
@@ -32,4 +31,21 @@ export const listTasks = options => {
             headers
         }
     );
+}
+
+export const retrieveTaskDetails = (taskUUID, options) => {
+    let headers = {};
+    if (options) {
+        if (options.auth) {
+            headers["Authorization"] = `Bearer ${options.auth}`;
+        }
+    }
+    const qualifiedUrl=`${config.api.url}/api/tasks/${taskUUID}`
+    return fetch(
+        qualifiedUrl,
+        {
+            method: "GET",
+            headers
+        }
+    )
 }
