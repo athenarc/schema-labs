@@ -1,20 +1,26 @@
 import React from 'react';
 import { useTaskDetails } from './TaskListDetails';
+import { Card, Alert } from 'react-bootstrap';
+import JSONViewer from 'react-json-view'; // install npm install react-json-view
 
 const Executors = () => {
+    const taskDetails = useTaskDetails();
 
-  const selectedTask = useTaskDetails();
-
-  return (
-      <div>
-          {selectedTask ? (
-              <div>
-                 <span class="d-block p-2 text-dark">{selectedTask.uuid}</span>
-              </div>
-          ) : (
-              <p>No task selected.</p>
-          )}
-      </div>
-  );
+    return (
+        <div>
+            {taskDetails ? (
+                <Card className="mt-3">
+                    <Card.Body>
+                        <JSONViewer src={taskDetails.executors} theme="default:inverted" />
+                    </Card.Body>
+                </Card>
+            ) : (
+                <Alert variant="warning" className="mt-3">
+                    No task details are available!
+                </Alert>
+            )}
+        </div>
+    );
 };
-export default Executors
+
+export default Executors;
