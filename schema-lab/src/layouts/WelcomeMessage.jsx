@@ -17,7 +17,7 @@ const WelcomeCard = () => {
       </div>
       <div className="card-body">
         <p className="card-text">
-          We're excited to have you onboard! Customize your experiments to suit your needs with our intuitive tools and organized workspace. Explore how Projects can help your team work better together and ship faster.
+          We're excited to have you onboard! Customize your experiments to suit your needs with our intuitive tools and organized workspace. Explore how Experiments can help your team work better and faster.
         </p>
         <ListGroup variant="flush" className="text-left">
           <ListGroup.Item className="border-0 text-muted">
