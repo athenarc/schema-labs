@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { UserDetailsContext } from "../utils/components/auth/AuthProvider";
 import LoginPrompt from "./LoginPrompt";
 import LogoutPrompt from "./LogoutPrompt";
+import WelcomeCard from "../layouts/WelcomeMessage";
 
 const Auth = () => {
     const { userDetails } = useContext(UserDetailsContext);
@@ -17,7 +18,7 @@ const Auth = () => {
     const internal = userDetails
         ? <LogoutPrompt />
         : <Row>
-            <Col className="border-end border-muted-subtle">{/* Placeholder for potential register prompt */}</Col>
+            <Col className="border-end border-muted-subtle"><WelcomeCard /> {/* Placeholder for potential register prompt */}</Col>
             <Col className="p-4">
                 <LoginPrompt />
             </Col>

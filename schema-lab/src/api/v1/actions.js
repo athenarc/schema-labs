@@ -33,19 +33,18 @@ export const listTasks = options => {
     );
 }
 
-export const retrieveTaskDetails = (taskUUID, options) => {
-    let headers = {};
-    if (options) {
-        if (options.auth) {
-            headers["Authorization"] = `Bearer ${options.auth}`;
-        }
-    }
+export const retrieveTaskDetails = ({taskUUID, auth}) => {
     const qualifiedUrl=`${config.api.url}/api/tasks/${taskUUID}`
     return fetch(
         qualifiedUrl,
         {
             method: "GET",
-            headers
+            headers: {
+                'Authorization': `Bearer ${auth}`
+            }
         }
-    )
+    ).then(response => {
+        console.log('Response status:', response.status);
+        return response;
+    });
 }

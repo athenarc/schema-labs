@@ -1,17 +1,33 @@
 import React from 'react';
+import { Table, Alert } from 'react-bootstrap';
 import { useTaskDetails } from './TaskListDetails';
 
 const Stderr = () => {
-    const selectedTask = useTaskDetails();
+    const taskDetails = useTaskDetails();
 
     return (
         <div>
-            {selectedTask ? (
-                <div>
-                    <span class="d-block p-2 text-dark">{selectedTask.uuid}</span>
-                </div>
+            {taskDetails.stderr && taskDetails.stderr.length > 0 ? (
+                <Table bordered hover responsive className="mt-3">
+                    <thead className="table-light">
+                        <tr className="text-center">
+                            <th>Executor ID</th>
+                            <th>Path</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {taskDetails.stderr.map((stderr, index) => (
+                            <tr className="text-center" key={index}>
+                                <td>{index + 1}</td>
+                                <td>{stderr ? stderr : <span className="text-muted">No STDERR path is available!</span>}</td>    
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
             ) : (
-                <p>-</p>
+                <Alert variant="warning" className="mt-3">
+                    No task details are available!
+                </Alert>
             )}
         </div>
     );
