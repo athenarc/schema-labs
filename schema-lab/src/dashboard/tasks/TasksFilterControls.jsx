@@ -10,6 +10,7 @@ import isEqual from "lodash/isEqual";
 import { useTaskFilters } from "./TasksListProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const TasksFilterControls = () => {
     const [show, setShow] = useState(false);
@@ -22,7 +23,9 @@ const TasksFilterControls = () => {
 
         </Col>
         <Col xs={6} className="text-end">
+        <Link to="/create-experiment">
             <Button ref={elementRef} variant="primary" className="rounded-pill">Create Experiment <FontAwesomeIcon icon={faPlus} /></Button>
+        </Link>       
         </Col>
     </Row>;
 }
