@@ -12,13 +12,21 @@ import { useTaskData, useTaskFilters } from "./TasksListProvider";
 import { cloneDeep } from "lodash";
 import  TaskStatus  from "./TaskStatus"
 
-const TaskListing = (props) => {
+
+const TaskListing = ({ uuid, status, submitted_at, completed_at, isSelected, toggleSelection }) => {
+    const handleCheckboxChange = () => {
+        toggleSelection(uuid);
+    };
+
     return (
-        <tr>
-            <td><Link to={`/task-details/${props.uuid}/executors`}>{props.uuid}</Link></td>
-            <td><TaskStatus status={props.status} /></td>
-            <td>{new Date(props.submitted_at).toLocaleString('el')}</td>
-            <td>{props.completed_at ? new Date(props.completed_at).toLocaleString('el') : "-"}</td>
+        <tr className={isSelected ? 'table-active' : ''}>
+            <td>
+                <input className="form-check-input" type="checkbox" checked={isSelected} onChange={handleCheckboxChange} />
+            </td>
+            <td><Link to={`/task-details/${uuid}/executors`}>{uuid}</Link></td>
+            <td><TaskStatus status={status} /></td>
+            <td>{new Date(submitted_at).toLocaleString('el')}</td>
+            <td>{completed_at ? new Date(completed_at).toLocaleString('el') : "-"}</td>
             <td className="text-end">
                 <Button variant="primary" size="sm" as={Link} to="#/action-1">Cancel</Button>
             </td>
@@ -57,7 +65,7 @@ const TaskList = () => {
     const [statuses, setStatuses] = useState({ ...(taskFilters.statuses) });
     const [typedChar, setTypedChar] = useState();
     const [showValidationMessage, setShowValidationMessage] = useState(false); // State for managing validation message visibility
-    const [selectedStatus, setSelectedStatus] = useState("");
+    const [selectedRows, setSelectedRows] = useState([]);
 
     const minCharThreshold = 2; // The minimum amount of characters to apply a filter
 
@@ -133,6 +141,25 @@ const TaskList = () => {
         }
     };
 
+    const toggleRowSelection = (uuid) => {
+        let updatedSelectedRows;
+        if (selectedRows.includes(uuid)) {
+            updatedSelectedRows = selectedRows.filter(id => id !== uuid);
+        } else {
+            updatedSelectedRows = [...selectedRows, uuid];
+        }
+        setSelectedRows(updatedSelectedRows);
+    };
+
+    const handleSelectAll = (event) => {
+        if (event.target.checked) {
+            const allUuids = taskData.results.map(task => task.uuid);
+            setSelectedRows(allUuids);
+        } else {
+            setSelectedRows([]);
+        }
+    };
+
     return (
         <Row className="p-3 mb-5">
             <Col className="align-items-center">
@@ -140,6 +167,9 @@ const TaskList = () => {
                     <Table borderless responsive>
                         <thead>
                             <tr>
+                                <th>
+                                    <input className="form-check-input" type="checkbox" onChange={handleSelectAll} />
+                                </th>
                                 <th>
                                     <div className="input-group">
                                         <span className="input-group-text fw-bold" id="search">
@@ -199,9 +229,17 @@ const TaskList = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {taskData.results.map((task) => {
-                                return <TaskListing {...task} key={task.uuid} />;
-                            })}
+                        {taskData.results.map((task) => (
+                                <TaskListing
+                                    key={task.uuid}
+                                    uuid={task.uuid}
+                                    status={task.status}
+                                    submitted_at={task.submitted_at}
+                                    completed_at={task.completed_at}
+                                    isSelected={selectedRows.includes(task.uuid)}
+                                    toggleSelection={toggleRowSelection}
+                                />
+                            ))}
                         </tbody>
                     </Table>
                 )}
