@@ -79,11 +79,11 @@ const TaskListDetails = () => {
     };
 
     const title = taskDetails.name
-        ? <span><span className="fw-normal">Name:</span> {taskDetails.name} <span className="text-muted fs-6">({uuid})</span></span>
-        : <span><span className="fw-normal">UUID:</span> {uuid}</span>;
+        ? <span>Name: {taskDetails.name} <span className="text-muted fs-6">({uuid})</span></span>
+        : <span>UUID: {uuid}</span>;
 
     const subtitle = taskDetails.status
-        ? <span><span className="fw-normal">Status:</span> <TaskStatus status={taskDetails.status} /></span>
+        ? <span><TaskStatus status={taskDetails.status} /></span>
         : ' - ';
 
     return (
@@ -91,7 +91,7 @@ const TaskListDetails = () => {
             <div>
                 <div>
                     <div className="lead">{title}</div>
-                    <div className="text-muted fs-6">{subtitle}</div>
+                    <div className="lead">{subtitle}</div>
                     <Navbar bg="light" data-bs-theme="info">
                         <Container>
                             <Nav variant="underline">
