@@ -31,23 +31,21 @@ const TaskListDetails = () => {
                     auth: userDetails.apiKey
                 });
                 if (!response.ok) {
-                    throw new Error(`Network response was not ok. Status: ${response.status}, Status Text: ${response.statusText}`);
+                    throw new Error(`Error network response.. Status: ${response.status}, Status Text: ${response.statusText}`);
                 }
                 const data = await response.json();
-                console.log("stderr:",data.executors[0].stderr)
                 const stderrArray = data.executors.map(executor => executor.stderr);
-                const stdoutArray = data.executors.map(executor => executor.stdout);
+                const stdoutArray = data.executors.map(executor => executor.inputs);
+                console.log("input:",stdoutArray)
+                console.log("exec:",data.executors)
                 setTaskDetails({
                     name: data.name,
                     status: data.status,
                     executors: data.executors,
                     inputs: data.inputs,
                     outputs: data.outputs,
-                    stderr: stderrArray,
-                    stdout: stdoutArray
                 });
             } catch (error) {
-                console.error('Fetch error:', error);
                 setError(error.toString());
             }
         };
@@ -59,8 +57,6 @@ const TaskListDetails = () => {
     const renderNavLinks = () => {
         const navLinks = [
             { to: 'executors', text: 'Executors' },
-            { to: 'stdout', text: 'Stdout' },
-            { to: 'stderr', text: 'Stderr' },
             { to: 'inputs', text: 'Inputs' },
             { to: 'outputs', text: 'Outputs' }
         ];

@@ -20,16 +20,18 @@ const TaskListing = ({ uuid, status, submitted_at, completed_at, isSelected, tog
 
     return (
         <tr className={isSelected ? 'table-active' : ''}>
-            <td>
+            {/* Remove for pre-release version */}
+            {/* <td>
                 <input className="form-check-input" type="checkbox" checked={isSelected} onChange={handleCheckboxChange} />
-            </td>
+            </td> */}
             <td><Link to={`/task-details/${uuid}/executors`}>{uuid}</Link></td>
             <td><TaskStatus status={status} /></td>
             <td>{new Date(submitted_at).toLocaleString('el')}</td>
             <td>{completed_at ? new Date(completed_at).toLocaleString('el') : "-"}</td>
-            <td className="text-end">
+            {/* Remove for pre-release version */}
+            {/* <td className="text-end">
                 <Button variant="primary" size="sm" as={Link} to="#/action-1">Cancel</Button>
-            </td>
+            </td> */}
         </tr>
     );
 };
@@ -167,9 +169,10 @@ const TaskList = () => {
                     <Table borderless responsive>
                         <thead>
                             <tr>
-                                <th>
+                                {/* Remove from pre-release version */}
+                                {/* <th>
                                     <input className="form-check-input" type="checkbox" onChange={handleSelectAll} />
-                                </th>
+                                </th> */}
                                 <th>
                                     <div className="input-group">
                                         <span className="input-group-text fw-bold" id="search">
@@ -225,7 +228,8 @@ const TaskList = () => {
                                     Submission time <ColumnOrderToggle columnName={"submitted_at"} currentOrder={orderBy} setOrder={setOrderBy} />
                                 </th>
                                 <th>Update time</th>
-                                <th className="text-end">Actions</th>
+                                {/* Remove for pre-release version */}
+                                {/* <th className="text-end">Actions</th> */}
                             </tr>
                         </thead>
                         <tbody>
