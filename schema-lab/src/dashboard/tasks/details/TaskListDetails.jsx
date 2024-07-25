@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { retrieveTaskDetails } from "../../../api/v1/actions";
 import { UserDetailsContext } from "../../../utils/components/auth/AuthProvider";
 import TaskStatus  from "../TaskStatus"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const TaskDetailsContext = createContext();
 
@@ -21,7 +22,8 @@ const TaskListDetails = () => {
     const { userDetails } = useContext(UserDetailsContext);
     
     const [taskDetails, setTaskDetails] = useState({}); // State to store task details
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(null); // State variable to store error messages
+    const [titleColor, setTitleColor] = useState(''); // State variable to store the color
 
     useEffect(() => {
         const fetchTaskDetails = async () => {
@@ -74,12 +76,24 @@ const TaskListDetails = () => {
         ));
     };
 
+    const handleColorChange = (color) => {
+        setTitleColor(color); 
+    };
     const title = taskDetails.name
-        ? <span>Name: {taskDetails.name} <span className="text-muted fs-6">({uuid})</span></span>
-        : <span>UUID: {uuid}</span>;
+    ? (
+        <span>
+            Name: <span className={`text-${titleColor}`}>{taskDetails.name}</span>
+            <span> (<span className={`text-${titleColor} fs-6`}>{uuid}</span>)</span>
+        </span>
+    )
+    : (
+        <span>
+            UUID: <span className={`text-${titleColor}`}>{uuid}</span>
+        </span>
+    );
 
     const subtitle = taskDetails.status
-        ? <span><TaskStatus status={taskDetails.status} /></span>
+        ? <span><TaskStatus status={taskDetails.status} onColorChange={handleColorChange} /></span>
         : ' - ';
 
     return (
