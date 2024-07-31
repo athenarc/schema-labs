@@ -18,7 +18,7 @@ const Auth = () => {
     const internal = userDetails
         ? <LogoutPrompt />
         : <Row>
-            <Col className="border-end border-muted-subtle"><WelcomeCard /> {/* Placeholder for potential register prompt */}</Col>
+            <Col className="border-end border-muted-subtle"><WelcomeCard /></Col>
             <Col className="p-4">
                 <LoginPrompt />
             </Col>

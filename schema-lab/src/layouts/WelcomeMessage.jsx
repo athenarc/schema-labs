@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 
 
 const WelcomeCard = () => {
@@ -12,27 +14,11 @@ const WelcomeCard = () => {
 
   return (
     <div>
-      <div className="card-header text-classic text-center py-2">
-        <h2 className="card-title mb-0">Welcome to Experiments!</h2>
+      <div className="text-center ps-3 mt-4">
+      <p className="display-6">Welcome to SCHEMA Lab</p>
       </div>
       <div className="card-body">
-        <p className="card-text">
-          We're excited to have you onboard! Customize your experiments to suit your needs with our intuitive tools and organized workspace. Explore how Experiments can help your team work better and faster.
-        </p>
-        <ListGroup variant="flush" className="text-left">
-          <ListGroup.Item className="border-0 text-muted">
-            <strong>Create Experiments:</strong> Combine one or more tasks (execution instances) into a computational experiment.
-          </ListGroup.Item>
-          <ListGroup.Item className="border-0 text-muted">
-            <strong>Manage Tasks:</strong> Easily select and group tasks using checkboxes.
-          </ListGroup.Item>
-          <ListGroup.Item className="border-0 text-muted">
-            <strong>View Details:</strong> Access detailed information about each task and experiment.
-          </ListGroup.Item>
-          <ListGroup.Item className="border-0 text-muted">
-            <strong>Export and Share:</strong> Export experiments as RO-crates and register them on RO-Hub, or download and import them for further use.
-          </ListGroup.Item>
-        </ListGroup>
+        <p className="card-text text-center">Your platform for managing computational tasks.</p>
         <div className="text-center mt-4">
           <Button variant="primary" onClick={handleShow} className="rounded-pill px-4">
             Learn more
@@ -68,7 +54,7 @@ const WelcomeCard = () => {
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" className="rounded-pill" onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer>
