@@ -42,34 +42,30 @@ const WelcomeCard = () => {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Help Information</Modal.Title>
+          <Modal.Title>What is SCHEMA Lab?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Welcome to the Experiments platform! Here are the steps to guide you through:</p>
+          <p>
+            <strong>SCHEMA Lab</strong> is an open-source platform designed to assist researchers and scientists in managing and executing computational tasks efficiently. It specializes in submitting and monitoring containerized task execution requests, providing a seamless environment for your computational needs.
+          </p>
+          <p>Key features currently supported:</p>
           <ListGroup variant="flush">
             <ListGroup.Item className="border-0 text-muted">
-              <strong>Access the Experiments Interface:</strong> Navigate to the "Experiments" tab in the main menu.
+              <strong>Task Management</strong>
             </ListGroup.Item>
             <ListGroup.Item className="border-0 text-muted">
-              <strong>Select Tasks:</strong> In the tasks list, use the checkboxes in the first column to select the tasks you want to include in your experiment. These tasks represent the execution instances.
+              <strong>Create and Run Tasks:</strong> Easily create computational tasks and monitor their execution in real-time.
             </ListGroup.Item>
             <ListGroup.Item className="border-0 text-muted">
-              <strong>Create Experiment:</strong> Once you have selected the desired tasks, click the "Create Experiment" button. This button is located at the top of the tasks list.
+              <strong>Track Task Status:</strong> Stay informed with clear status indicators showing whether tasks are submitted, running, completed, or have encountered errors.
             </ListGroup.Item>
             <ListGroup.Item className="border-0 text-muted">
-              <strong>Name and Configure Experiment:</strong> A new window will appear prompting you to name your experiment. Enter a descriptive name and add a description for this experiment.
-            </ListGroup.Item>
-            <ListGroup.Item className="border-0 text-muted">
-              <strong>Save Experiment:</strong> After configuring your experiment, click the "Save" button. Your experiment will now appear in the "Experiments" tab.
-            </ListGroup.Item>
-            <ListGroup.Item className="border-0 text-muted">
-              <strong>View and Manage Experiments:</strong> You can view all your experiments in the "Experiments" tab. Click on an experiment to see the detailed view, including all tasks involved. Each task within an experiment is clickable, allowing you to view its individual details.
-            </ListGroup.Item>
-            <ListGroup.Item className="border-0 text-muted">
-              <strong>Export and Register:</strong> To export your experiment as an RO-crate, select the experiment and click the "Export" button. For registering the experiment in RO-Hub, click the "Register" button. You may be prompted to add additional fields required for registration.
+              <strong>Manage with Ease:</strong> Cancel or rerun tasks with just a click, ensuring flexibility and control over your computational workflows.
             </ListGroup.Item>
           </ListGroup>
-          <p>By following these steps, you can effectively create and manage experiments, streamlining your computational workflows and improving organization in your research projects.</p>
+          <p>
+            Open-source code for SCHEMA Lab is available here: <a href="https://github.com/athenarc/schema" target="_blank" rel="noopener noreferrer">SCHEMA Lab</a>
+          </p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={handleClose}>
