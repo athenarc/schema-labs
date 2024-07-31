@@ -1,7 +1,7 @@
 const Footer = () => {
     return (
-        <footer className="footer">
-            <p>&copy; 2024 Your Company. All rights reserved.</p>
+        <footer className="text-center">
+            <p>&copy; Copyright © 2024, Schema-lab, ATHENA RC. </p>
         </footer>
     );
 };
