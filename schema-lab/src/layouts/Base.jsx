@@ -5,7 +5,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Image from 'react-bootstrap/Image';
-import logo from '../img/schema-logo.png';
+import logo from '../img/schema-logo-lab-1.png';
 import {
     Link,
     Outlet
