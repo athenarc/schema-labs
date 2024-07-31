@@ -19,7 +19,8 @@ const ApiKeyLogin = props => {
     }
     return <Form onSubmit={handleLogin}>
         <Form.Group className="mb-3" controlId="apiKeyInput">
-            <Form.Label>API key</Form.Label>
+            {/* Temporarily disabled since API key is the only available login method */}
+            {/* <Form.Label>API key</Form.Label> */} 
             <Form.Control type="password" placeholder="API key" onChange={e => setApiKey(e.target.value)} />
         </Form.Group>
         <Button variant="primary" type="submit">

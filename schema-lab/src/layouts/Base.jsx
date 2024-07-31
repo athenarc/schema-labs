@@ -4,6 +4,8 @@ import Container from 'react-bootstrap/Container';
 import Dropdown from "react-bootstrap/Dropdown";
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import Image from 'react-bootstrap/Image';
+import logo from '../img/schema-logo.png';
 import {
     Link,
     Outlet
@@ -31,7 +33,16 @@ const Base = props => {
     return <>
         <Navbar collapseOnSelect expand="lg" bg="white" data-bs-theme="light" sticky="top" className={showShadow ? "shadow-sm" : ""}>
             <Container>
-                <Navbar.Brand as={Link} to='/'><strong className="text-primary">SCHEMA lab</strong></Navbar.Brand>
+                <Navbar.Brand as={Link} to='/'>
+                <Image
+                    src={logo} // Path to your image
+                    alt="SCHEMA lab"
+                    style={{
+                        height: '40px', // Set height to match button size
+                        width: 'auto', // Maintain aspect ratio
+                    }}
+                />
+                </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto ms-5">
@@ -40,8 +51,8 @@ const Base = props => {
                         {userDetails && <Button className="ms-3" as={Link} to={"/runtask"} variant="outline-primary">Run a task</Button>}
                     </Nav>
                     <Nav className="text-primary">
-                        {userDetails
-                            ? <>
+                        {userDetails 
+                            ? ( <>
                                 <Dropdown>
                                     <Dropdown.Toggle variant="primary" id="dropdown-basic" className="rounded-pill">
                                         Logged in with API key: {userDetails.apiKey.substring(0, 8)}...
@@ -53,8 +64,12 @@ const Base = props => {
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </>
-                            : <Button variant="primary" as={Link} to="/auth" className="rounded-pill">Login</Button>
-                        }
+                            ) : (
+                            <>
+                                <Button variant="primary" as={Link} to="/aboutus" className="rounded-pill me-2">About us</Button>
+                                <Button variant="primary" as={Link} to="/auth" className="rounded-pill">Login</Button>
+                            </>
+                        )}
                     </Nav>
                 </Navbar.Collapse>
             </Container>

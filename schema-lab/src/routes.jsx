@@ -13,6 +13,7 @@ import Outputs from "./dashboard/tasks/details/Outputs"
 import Inputs from "./dashboard/tasks/details/Inputs"
 import CreateExperiment from "./dashboard/tasks/CreateExperiment";
 import RunTask from "./runtask";
+import Aboutus from './layouts/Aboutus';
 
 const ProtectedRoutes = () => {
     const { userDetails } = useContext(UserDetailsContext);
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
         <Route element={<Base />}>
             <Route path="/" element={<Home />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/aboutus" element={<Aboutus />} />
             <Route element={<ProtectedRoutes />}>
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/dashboard" element={<Dashboard />} />
