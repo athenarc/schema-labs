@@ -18,7 +18,7 @@ const WelcomeCard = () => {
       <p className="display-6">Welcome to SCHEMA Lab</p>
       </div>
       <div className="card-body">
-        <p className="card-text text-center">Your platform for managing computational tasks.</p>
+        <p className="card-text text-center">Your platform for managing computational tasks</p>
         <div className="text-center mt-4">
           <Button variant="primary" onClick={handleShow} className="rounded-pill px-4">
             Learn more

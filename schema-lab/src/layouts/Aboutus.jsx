@@ -43,6 +43,9 @@ const Aboutus = () => {
         { name: 'Thanasis Vergoulis', role: 'Team Leader', image: thanasis, twitter: 'https://twitter.com/vergoulis?lang=el', linkedin: 'https://www.linkedin.com/in/thanasis-vergoulis-863b8152/?originalSubdomain=gr', email: 'vergoulis@athenarc.gr' },
         { name: 'Eleni Adamidi', role: 'Project Manager', image: eleni, twitter: '', linkedin: 'https://www.linkedin.com/in/eleni-adamidi-74575952/?originalSubdomain=gr', email: 'eleni.adamidi@athenarc.gr' },
         { name: 'Panagiotis Deligiannis', role: 'Full-stack Developer', image: panagiotis, twitter: '', linkedin: 'https://www.linkedin.com/in/panagiotis-deligiannis-8b2885203/', email: 'deligianp@athenarc.gr' },
+    ];
+
+    const formerteamMembers = [
         { name: 'Katerina Mastoraki', role: 'Full-stack Developer', image: katerina, twitter: '', linkedin: 'https://www.linkedin.com/in/katerina-mastoraki-a71570246/', email: 'kmastoraki@athenarc.gr' },
         { name: 'Kostis Zagannas', role: 'DevOps', image: kostis, twitter: '', linkedin: 'https://www.linkedin.com/in/kostis-zagganas/', email: 'zagganas@athenarc.gr' },
     ];
@@ -67,6 +70,22 @@ const Aboutus = () => {
             <h1 className="display-6 text-center mb-4">About Us</h1>
             <Row className="justify-content-center">
                 {teamMembers.map((member, index) => (
+                    <Col xs={12} sm={6} md={4} lg={3} key={index} className="d-flex justify-content-center mb-4">
+                        <TeamMemberCard 
+                            name={member.name} 
+                            role={member.role} 
+                            image={member.image} 
+                            twitter={member.twitter}
+                            linkedin={member.linkedin}
+                            email={member.email}
+                        />
+                    </Col>
+                ))}
+            </Row>
+
+            <h1 className="display-6 text-center mb-4">Former Members</h1>
+            <Row className="justify-content-center">
+                {formerteamMembers.map((member, index) => (
                     <Col xs={12} sm={6} md={4} lg={3} key={index} className="d-flex justify-content-center mb-4">
                         <TeamMemberCard 
                             name={member.name} 
