@@ -4,6 +4,9 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 import Container from 'react-bootstrap/Container';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { faLocationPin } from '@fortawesome/free-solid-svg-icons';
 
 import thanasis from '../img/thanasis.png';
 import eleni from '../img/eleni.png';
@@ -71,12 +74,13 @@ const Aboutus = () => {
             <Row className="justify-content-center mt-4">
                 <Col md={6} className="text-center">
                     <h2 className="display-6">Contact Us</h2>
-                    <p className="mb-2"><b>Email: </b> 
+                    <p className="mb-2"> <FontAwesomeIcon icon={faEnvelope} /><b> Email: </b> 
                         <a href="mailto:schema-services@athenarc.gr" className="text-decoration-none"> 
                              schema-services@athenarc.gr
                         </a>
                     </p>
-                    <p className="mb-4"><b>Address: </b> Athena RC, Artemidos 6 & Epidavrou, Maroussi 15125, Greece</p>
+                    <p className="mb-4"><FontAwesomeIcon icon={faLocationPin} /> 
+                    <b> Address: </b> Athena RC, Artemidos 6 & Epidavrou, Maroussi 15125, Greece</p>
                     <div className="embed-responsive embed-responsive-16by9 mb-5">
                         <iframe
                             className="embed-responsive-item"
