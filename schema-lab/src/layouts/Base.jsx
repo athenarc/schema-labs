@@ -40,7 +40,7 @@ const Base = props => {
                             src={logo} // Path to your image
                             alt="SCHEMA lab"
                             style={{
-                                height: '40px', // Set height to match button size
+                                height: '50px', // Set height to match button size
                                 width: 'auto', // Maintain aspect ratio
                             }}
                         />
