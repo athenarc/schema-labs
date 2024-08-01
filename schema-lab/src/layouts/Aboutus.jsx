@@ -7,6 +7,7 @@ import Container from 'react-bootstrap/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { faLocationPin } from '@fortawesome/free-solid-svg-icons';
+import { faXTwitter, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 import thanasis from '../img/thanasis.png';
 import eleni from '../img/eleni.png';
@@ -14,7 +15,7 @@ import panagiotis from '../img/panagiotis.jpeg';
 import katerina from '../img/katerina.jpg';
 import kostis from '../img/kostis.png';
 
-const TeamMemberCard = ({ name, role, image }) => {
+const TeamMemberCard = ({ name, role, image, twitter, linkedin, email }) => {
     return (
         <Card className="text-center mb-4 shadow-sm border-light rounded">
             <Card.Body>
@@ -27,6 +28,11 @@ const TeamMemberCard = ({ name, role, image }) => {
                 />
                 <Card.Title className="mb-2">{name}</Card.Title>
                 <Card.Text className="text-muted">{role}</Card.Text>
+                <div className="d-flex justify-content-center">
+                    {twitter && <a href={twitter} className="mx-2 text-decoration-none text-muted"><FontAwesomeIcon icon={faXTwitter} size="lg" /></a>}
+                    {linkedin && <a href={linkedin} className="mx-2 text-decoration-none text-muted"><FontAwesomeIcon icon={faLinkedin} size="lg" /></a>}
+                    {email && <a href={`mailto:${email}`} className="mx-2 text-decoration-none text-muted"><FontAwesomeIcon icon={faEnvelope} size="lg" /></a>}
+                </div>
             </Card.Body>
         </Card>
     );
@@ -34,11 +40,11 @@ const TeamMemberCard = ({ name, role, image }) => {
 
 const Aboutus = () => {
     const teamMembers = [
-        { name: 'Thanasis Vergoulis', role: 'Team Leader', image: thanasis },
-        { name: 'Eleni Adamidi', role: 'Project Manager', image: eleni },
-        { name: 'Panagiotis Deligiannis', role: 'Full-stack Developer', image: panagiotis },
-        { name: 'Katerina Mastoraki', role: 'Full-stack Developer', image: katerina },
-        { name: 'Kostis Zagannas', role: 'DevOps', image: kostis },
+        { name: 'Thanasis Vergoulis', role: 'Team Leader', image: thanasis, twitter: 'https://twitter.com/vergoulis?lang=el', linkedin: 'https://www.linkedin.com/in/thanasis-vergoulis-863b8152/?originalSubdomain=gr', email: 'vergoulis@athenarc.gr' },
+        { name: 'Eleni Adamidi', role: 'Project Manager', image: eleni, twitter: '', linkedin: 'https://www.linkedin.com/in/eleni-adamidi-74575952/?originalSubdomain=gr', email: 'eleni.adamidi@athenarc.gr' },
+        { name: 'Panagiotis Deligiannis', role: 'Full-stack Developer', image: panagiotis, twitter: '', linkedin: 'https://www.linkedin.com/in/panagiotis-deligiannis-8b2885203/', email: 'deligianp@athenarc.gr' },
+        { name: 'Katerina Mastoraki', role: 'Full-stack Developer', image: katerina, twitter: '', linkedin: 'https://www.linkedin.com/in/katerina-mastoraki-a71570246/', email: 'kmastoraki@athenarc.gr' },
+        { name: 'Kostis Zagannas', role: 'DevOps', image: kostis, twitter: '', linkedin: 'https://www.linkedin.com/in/kostis-zagganas/', email: 'zagganas@athenarc.gr' },
     ];
 
     return (
@@ -66,6 +72,9 @@ const Aboutus = () => {
                             name={member.name} 
                             role={member.role} 
                             image={member.image} 
+                            twitter={member.twitter}
+                            linkedin={member.linkedin}
+                            email={member.email}
                         />
                     </Col>
                 ))}
