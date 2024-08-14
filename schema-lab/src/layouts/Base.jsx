@@ -49,14 +49,15 @@ const Base = props => {
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto ms-5">
                             {userDetails && <Nav.Link as={Link} to={"/dashboard"}>Dashboard</Nav.Link>}
-                            {userDetails && <Nav.Link as={Link} to={"/ro-crates"}>RO-crates</Nav.Link>}
+                            {/* {userDetails && <Nav.Link as={Link} to={"/ro-crates"}>RO-crates</Nav.Link>} */}
                             {userDetails && <Button className="ms-3" as={Link} to={"/runtask"} variant="outline-primary">Run a task</Button>}
                         </Nav>
                         <Nav className="text-primary">
                             {userDetails 
                                 ? (
                                     <>
-                                        <Dropdown>
+                                        <Button variant="primary" as={Link} to="/logout" className="me-2">Logout</Button>
+                                        {/* <Dropdown>
                                             <Dropdown.Toggle variant="primary" id="dropdown-basic" className="rounded-pill">
                                                 Logged in with API key: {userDetails.apiKey.substring(0, 8)}...
                                             </Dropdown.Toggle>
@@ -65,12 +66,12 @@ const Base = props => {
                                                 <Dropdown.Item as={Link} to="/preferences">Preferences</Dropdown.Item>
                                                 <Dropdown.Item as={Link} to="/logout">Logout</Dropdown.Item>
                                             </Dropdown.Menu>
-                                        </Dropdown>
+                                        </Dropdown> */}
                                     </>
                                 ) : (
                                     <>
-                                        <Button variant="primary" as={Link} to="/aboutus" className="rounded-pill me-2">About us</Button>
-                                        <Button variant="primary" as={Link} to="/auth" className="rounded-pill">Login</Button>
+                                        <Button variant="primary" as={Link} to="/aboutus" className="me-2">About us</Button>
+                                        <Button variant="primary" as={Link} to="/auth">Login</Button>
                                     </>
                                 )}
                         </Nav>

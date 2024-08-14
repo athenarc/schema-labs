@@ -14,10 +14,10 @@ const Home = () => {
                     <Col className="d-flex justify-content-center align-items-center"> 
                     <Image
                                 src={welcome_img} 
-                                alt="Description of image"
+                                alt="Welcome to SCHEMA lab"
                                 fluid 
                                 style={{
-                                    maxWidth: '60%', 
+                                    maxWidth: '80%', 
                                     height: 'auto',
                                     filter: 'brightness(0.9) contrast(1.2) saturate(1.5) sepia(0.2)',
                                     borderRadius: '8px',

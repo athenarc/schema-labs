@@ -1,9 +1,9 @@
 import config from "../../config"
 
-const getTasks = (limit, offset) => {
+// const getTasks = (limit, offset) => {
 
-    fetch(`${config.api.url}/api/v1/test`,)
-}
+//     fetch(`${config.api.url}/api/v1/test`,)
+// }
 
 export const listTasks = options => {
     let queryParameters = [];
@@ -23,7 +23,7 @@ export const listTasks = options => {
             headers["Authorization"] = `Bearer ${options.auth}`;
         }
     }
-    const qualifiedUrl=[`${config.api.url}/api/test`, queryParameters.join("&")].join("?");
+    const qualifiedUrl=[`${config.api.url}/api/tasks`, queryParameters.join("&")].join("?");
     return fetch(
         qualifiedUrl,
         {
@@ -44,6 +44,22 @@ export const retrieveTaskDetails = ({taskUUID, auth}) => {
             }
         }
     ).then(response => {
+        console.log('Response status:', response.status);
+        return response;
+    });
+}
+
+// POST details of run a task
+export const runTaskPost = (auth, requestData) => {
+    const qualifiedUrl = `${config.api.url}/api/tasks`;
+    return fetch(qualifiedUrl, {
+        method: "POST",
+        headers: {
+            'Authorization': `Bearer ${auth}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    }).then(response => {
         console.log('Response status:', response.status);
         return response;
     });

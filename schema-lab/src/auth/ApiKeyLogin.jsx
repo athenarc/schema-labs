@@ -13,7 +13,8 @@ const ApiKeyLogin = props => {
             apiKey,
             type: "apiKey"
         });
-    };
+    };     
+
     if (userDetails) {
         return <span>Already logged in</span>
     }
@@ -23,7 +24,7 @@ const ApiKeyLogin = props => {
             {/* <Form.Label>API key</Form.Label> */} 
             <Form.Control type="password" placeholder="API key" onChange={e => setApiKey(e.target.value)} />
         </Form.Group>
-        <Button variant="primary" type="submit">
+        <Button variant="primary" className="me-2" type="submit">
             Log in
         </Button>
     </Form>

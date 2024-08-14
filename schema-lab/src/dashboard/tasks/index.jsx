@@ -14,7 +14,7 @@ export const useTaskFilters = () => {
 
 const Tasks = () => <Row>
     <Col>
-        <h1 class="display-6">Tasks</h1>
+        <h1 className="display-6">Tasks</h1>
         <TasksListProvider>
             <TasksFilterControls />
             <TasksPaginationControls />
