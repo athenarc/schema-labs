@@ -5,7 +5,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { retrieveTaskDetails } from "../../../api/v1/actions";
 import { UserDetailsContext } from "../../../utils/components/auth/AuthProvider";
 import TaskStatus  from "../TaskStatus"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const TaskDetailsContext = createContext();
 
@@ -36,10 +35,6 @@ const TaskListDetails = () => {
                     throw new Error(`Error network response.. Status: ${response.status}, Status Text: ${response.statusText}`);
                 }
                 const data = await response.json();
-                const stderrArray = data.executors.map(executor => executor.stderr);
-                const stdoutArray = data.executors.map(executor => executor.inputs);
-                console.log("input:",stdoutArray)
-                console.log("exec:",data.executors)
                 setTaskDetails({
                     name: data.name,
                     status: data.status,

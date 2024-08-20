@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Link } from "react-router-dom";
@@ -13,7 +12,7 @@ import { cloneDeep } from "lodash";
 import  TaskStatus  from "./TaskStatus"
 
 
-const TaskListing = ({ uuid, status, submitted_at, completed_at, isSelected, toggleSelection }) => {
+const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggleSelection }) => {
     const handleCheckboxChange = () => {
         toggleSelection(uuid);
     };
@@ -26,8 +25,8 @@ const TaskListing = ({ uuid, status, submitted_at, completed_at, isSelected, tog
             </td> */}
             <td><Link to={`/task-details/${uuid}/executors`}>{uuid}</Link></td>
             <td><TaskStatus status={status} /></td>
-            <td>{new Date(submitted_at).toLocaleString('el')}</td>
-            <td>{completed_at ? new Date(completed_at).toLocaleString('el') : "-"}</td>
+            <td>{new Date(submitted_at).toLocaleString('en')}</td>
+            <td>{new Date(updated_at).toLocaleString('en')}</td>
             {/* Remove for pre-release version */}
             {/* <td className="text-end">
                 <Button variant="primary" size="sm" as={Link} to="#/action-1">Cancel</Button>
@@ -166,14 +165,14 @@ const TaskList = () => {
         <Row className="p-3 mb-5">
             <Col className="align-items-center">
                 {taskData && taskData.results && (
-                    <Table borderless responsive>
+                    <Table borderless responsive hover>
                         <thead>
                             <tr>
                                 {/* Remove from pre-release version */}
                                 {/* <th>
                                     <input className="form-check-input" type="checkbox" onChange={handleSelectAll} />
                                 </th> */}
-                                <th>
+                                <th className="col-4">
                                     <div className="input-group">
                                         <span className="input-group-text fw-bold" id="search">
                                             Name/UUID&nbsp;
@@ -227,7 +226,10 @@ const TaskList = () => {
                                 <th>
                                     Submission time <ColumnOrderToggle columnName={"submitted_at"} currentOrder={orderBy} setOrder={setOrderBy} />
                                 </th>
-                                <th>Update time</th>
+                                <th>
+                                    Update time 
+                                    {/* <ColumnOrderToggle columnName={"updated_at"} currentOrder={orderBy} setOrder={setOrderBy} /> */}
+                                </th>
                                 {/* Remove for pre-release version */}
                                 {/* <th className="text-end">Actions</th> */}
                             </tr>
@@ -239,9 +241,9 @@ const TaskList = () => {
                                     uuid={task.uuid}
                                     status={task.status}
                                     submitted_at={task.submitted_at}
-                                    completed_at={task.completed_at}
-                                    isSelected={selectedRows.includes(task.uuid)}
-                                    toggleSelection={toggleRowSelection}
+                                    updated_at={task.state.updated_at}
+                                    // isSelected={selectedRows.includes(task.uuid)}
+                                    // toggleSelection={toggleRowSelection}
                                 />
                             ))}
                         </tbody>
