@@ -49,18 +49,75 @@ export const retrieveTaskDetails = ({taskUUID, auth}) => {
     });
 }
 
+// Get project name from ipatia
+export const getProjectName = (auth) => {
+    const qualifiedUrl=`${config.api.url}/api/context-info`
+    return fetch(
+        qualifiedUrl,
+        {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${auth}`
+            }
+        }
+    ).then(response => {
+        console.log('Project name response status:', response.status);
+        return response;
+    });
+}
+
 // POST details of run a task
-export const runTaskPost = (auth, requestData) => {
-    const qualifiedUrl = `${config.api.url}/api/tasks`;
-    return fetch(qualifiedUrl, {
-        method: "POST",
-        headers: {
-            'Authorization': `Bearer ${auth}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestData)
-    }).then(response => {
-        console.log('Response status:', response.status);
+// export const runTaskPost = (auth, requestData) => {
+//     const qualifiedUrl = `${config.api.url}/api/tasks`;
+//     return fetch(qualifiedUrl, {
+//         method: "POST",
+//         headers: {
+//             'Authorization': `Bearer ${auth}`,
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(requestData)
+//     }).then(response => {
+//         console.log('Response status:', response.status);
+//         return response;
+//     });
+// }
+export const runTaskPost = async (apiKey, requestData) => {
+    try {
+        const response = await fetch(`${config.api.url}/api/tasks`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify(requestData)
+        });
+        
+        if (!response.ok) {
+            // Handle errors based on response status
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        return response;
+    } catch (error) {
+        console.error('Error during fetch:', error);
+        throw error;
+    }
+};
+
+
+// Cancel a running task
+export const cancelTaskPost = ({taskUUID, auth}) => {
+    const qualifiedUrl=`${config.api.url}/api/tasks/${taskUUID}/cancel`
+    return fetch(
+        qualifiedUrl,
+        {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${auth}`
+            }
+        }
+    ).then(response => {
+        console.log('Cancel request response status:', response.status);
         return response;
     });
 }

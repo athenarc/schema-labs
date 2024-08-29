@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
-import { Form, Button, Row, Col, Card, Container, Accordion, OverlayTrigger, Tooltip, Modal } from "react-bootstrap";
+import { Form, Button, Row, Col, Card, Container, Accordion, OverlayTrigger, Tooltip, Modal, Alert } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { runTaskPost } from "../api/v1/actions";
@@ -10,14 +10,13 @@ const TaskForm = () => {
     const navigate = useNavigate();
     const [activeKey, setActiveKey] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    // Set structure to store user-defined data
     const [basicData, setBasicData] = useState({name: "", description: "" });
-    const [executors, setExecutors] = useState([{image: "", command: [], workdir: "", stdout: "", stderr: "", env: []}]);
+    const [executors, setExecutors] = useState([{image: "", command: [], workdir: "", stdout: "", stderr: "", env: ""}]);
     const [inputs, setInputs] = useState([{ name: "", description: "", url: "", path: "", content: "", type: ""}]);
     const [outputs, setOutputs] = useState([{ name: "", description: "", url: "", path: "", type: ""}]);
-    const [resources, setResources] = useState([{ cpu_cores: "1", zones: "", preemptible: false, disk_size: 5.0, ram_size: 1.0 }]);
+    const [resources, setResources] = useState({ cpu_cores: 1, zones: "", preemptible: false, disk_gb: 5.0, ram_gb: 1.0 });
     const [tags, setTags] = useState({tag: []});
-    const [volumes, setVolumes] = useState({path: []});
+    const [volumes, setVolumes] = useState([]);
     const { userDetails } = useContext(UserDetailsContext);
 
 
@@ -35,21 +34,47 @@ const TaskForm = () => {
         requiredFields.forEach(field => {
             if (!field.value.trim()) {
                 isValid = false;
-                field.classList.add('is-invalid'); // Optionally, add a class for visual feedback
+                field.classList.add('is-invalid');
             } else {
                 field.classList.remove('is-invalid');
             }
         });
     
         if (isValid) {
-            // If all required fields are filled, show the confirmation modal
             setShowModal(true);
         }
     };
 
+
+    const isEmpty = (value) => {
+        if (typeof value === 'string') {
+            return value.trim() === '';
+        } else if (Array.isArray(value)) {
+            return value.length === 0 || value.every(isEmpty);
+        } else if (typeof value === 'object' && value !== null) {
+            return Object.keys(value).length === 0 || Object.values(value).every(isEmpty);
+        } else if (typeof value === 'number') {
+            return isNaN(value) || value === 0;
+        }
+        return value === null || value === undefined;
+    };
+    
+    const cleanEmptyValues = (data) => {
+        if (Array.isArray(data)) {
+            return data.map(cleanEmptyValues).filter(value => !isEmpty(value));
+        } else if (typeof data === 'object' && data !== null) {
+            return Object.fromEntries(
+                Object.entries(data)
+                    .map(([key, value]) => [key, cleanEmptyValues(value)])
+                    .filter(([key, value]) => !isEmpty(value))
+            );
+        }
+        return data;
+    };
+    
     const prepareRequestData = () => {
         const { name, description } = basicData;
-        return {
+        const data = {
             name,
             description,
             executors,
@@ -59,22 +84,38 @@ const TaskForm = () => {
             tags,
             volumes
         };
-    };
     
+        return cleanEmptyValues(data);
+    };
+
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertVariant, setAlertVariant] = useState('danger');
 
     const handleConfirmSubmit = () => {
         const requestData = prepareRequestData();
+        console.log("RequestData:",requestData)
         runTaskPost(userDetails.apiKey, requestData)
             .then(response => {
                 if (response.ok) {
-                    console.log('Task submitted successfully');
-                    navigate('/success');
+                    setAlertVariant('success');
+                    setAlertMessage('The task has been submitted successfully!');
+                    setShowAlert(true);
+                    setTimeout(() => {
+                        navigate('/Dashboard'); // Navigate to /Dashboard after a delay
+                    }, 2000);
                 } else {
                     console.error('Failed to submit task');
+                    setAlertMessage('Failed to submit task!');
+                    setAlertVariant('danger');
+                    setShowAlert(true);
                 }
             })
             .catch(error => {
                 console.error('Error submitting task:', error);
+                setAlertMessage('Failed to submit task!');
+                setAlertVariant('danger');
+                setShowAlert(true);
             })
             .finally(() => {
                 setShowModal(false);
@@ -96,10 +137,15 @@ const TaskForm = () => {
             const updatedExecutors = [...prevExecutors];
             const updatedExecutor = { ...updatedExecutors[index] };
     
-            if (name === "env") {
-                updatedExecutor.env = value.split(' ');
-            } else if (name === "command") {
+            if (name === "command") {
                 updatedExecutor.command = value.split(' ');
+            } else if (name === "env") {
+                const envObject = value.split(' ').reduce((acc, pair) => {
+                    const [key, ...val] = pair.split(':');
+                    if (key) acc[key] = val.join(':');
+                    return acc;
+                }, {});
+                updatedExecutor.env = envObject;
             } else {
                 updatedExecutor[name] = value;
             }
@@ -112,12 +158,12 @@ const TaskForm = () => {
     // Clear input boxes
     const handleClear = () => {
         setBasicData({name: "", description: ""});
-        setExecutors([{image: "", command: [], workdir: "", stdout: "", stderr: "", env: []}]);
+        setExecutors([{image: "", command: [], workdir: "", stdout: "", stderr: "", env: ""}]);
         setInputs([{ name: "", description: "", url: "", path: "", content: "", type: ""}]);
         setOutputs([{ name: "", description: "", url: "", path: "", type: ""}]);
-        setResources([{ cpu_cores: "", zones: "", preemptible: false, disk_size: "", ram_size: "" }]);
+        setResources({ cpu_cores: 1, zones: "", preemptible: false, disk_gb: 5.0, ram_gb: 1.0 });
         setTags({tag: []});
-        setVolumes({path: []});
+        setVolumes([]);
     };
 
     const handleInputChange = (index, e) => {
@@ -134,13 +180,16 @@ const TaskForm = () => {
         ));
     };
 
-    const handleResourceChange = (index, event) => {
-        const { name, type, value, checked } = event.target;
-        setResources(resources.map((resource, i) =>
-            i === index ? { ...resource, [name]: type === "checkbox" ? checked : value } : resource
-        ));
-    };
 
+    const handleResourceChange = (event) => {
+        const { name, type, value, checked } = event.target;
+        const newValue = name === 'cpu_cores' ? Number(value) : (type === 'checkbox' ? checked : value);
+        setResources(prevResources => ({
+            ...prevResources,
+            [name]: newValue,
+        }));
+    };
+    
     const addInputField = () => {
         const newInput = { name: "", description: "", url: "", path: "", content: "", type: ""};
         setInputs(prevInputs => [...prevInputs, newInput]);
@@ -168,19 +217,18 @@ const TaskForm = () => {
         }));
     };
     
-
     const handleVolumeInputChange = (e) => {
-        const { name, value } = e.target;
-    
-        setVolumes(prevVolumes => ({
-            ...prevVolumes,
-            [name]: value.split(' ')
-        }));
+        const { value } = e.target;
+            setVolumes(value.split(' '));
     };
-    
 
     return (
         <Container className="py-5">
+            {showAlert && (
+                <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>
+                    {alertMessage}
+                </Alert>
+            )}
             <Card className="border-0 shadow-sm rounded-3 mb-4">
                 <Card.Body>
                     <p className="text-muted mb-4" style={{ fontSize: '0.875rem' }}>
@@ -194,7 +242,7 @@ const TaskForm = () => {
                             <Card.Body>
                                 <Form.Group as={Row} className="mb-3">
                                     <Form.Label column sm="3" className="fw-bold">
-                                        Name <span className="text-danger">*</span>
+                                        Name
                                     </Form.Label>
                                     <Col sm="9">
                                         <Form.Control
@@ -203,7 +251,6 @@ const TaskForm = () => {
                                             value={basicData.name}
                                             onChange={handleBasicChange}
                                             placeholder="Type name..."
-                                            required
                                         />
                                     </Col>
                                 </Form.Group>
@@ -308,23 +355,22 @@ const TaskForm = () => {
                                             />
                                         </Col>
                                     </Form.Group>
-
-                                    <Form.Group as={Row} className="mb-3">
+                                        <Form.Group as={Row} className="mb-3">
                                         <Form.Label column sm="3" className="fw-bold">
                                             Env
                                         </Form.Label>
                                         <Col sm="9">
                                             <OverlayTrigger
                                                 placement="top"
-                                                overlay={<Tooltip id={`tooltip-env`}>Please type key=value pairs with the following format: KEY1=VALUE1 KEY2=VALUE2</Tooltip>}
+                                                overlay={<Tooltip id={`tooltip-env`}>Please type key:value pairs with the following format: KEY1:VALUE1, KEY2:VALUE2</Tooltip>}
                                             >
-                                                <Form.Control
-                                                    type="text"
-                                                    name="env"
-                                                    value={executor.env.join(' ')}
-                                                    onChange={(e) => handleExecutorChange(index, e)}
-                                                    placeholder="Type environmental vars, separated with space..."
-                                                />
+                                                                <Form.Control
+                                                type="text"
+                                                name="env"
+                                                value={Object.entries(executor.env).map(([key, val]) => `${key}:${val}`).join(' ')}
+                                                onChange={(e) => handleExecutorChange(index, e)}
+                                                placeholder="Type environmental vars as key:value pairs, separated by comma..."
+                                            />
                                             </OverlayTrigger>
                                         </Col>
                                     </Form.Group>
@@ -577,13 +623,12 @@ const TaskForm = () => {
                                             Paths
                                         </Form.Label>
                                         <Col sm="9">
-                                            <Form.Control
-                                                type="text"
-                                                name="path"
-                                                value={volumes.path.join(' ')}
-                                                onChange={handleVolumeInputChange}
-                                                placeholder="Type paths, separated with space..."
-                                            />
+                                        <Form.Control
+                                            type="text"
+                                            value={volumes.join(' ')}
+                                            onChange={handleVolumeInputChange}
+                                            placeholder="Type volumes, separated by comma..."
+                                        />
                                         </Col>
                                     </Form.Group>
                                 </Accordion.Body>
@@ -595,97 +640,92 @@ const TaskForm = () => {
                                     Resources Information (Optional)
                                 </Accordion.Header>
                                 <Accordion.Body>
-                                    {resources.map((resource, index) => (
-                                        <div key={index} className="mb-4">                                          
-                                            <Form.Group as={Row} className="mb-3">
-                                                <Form.Label column sm="3" className="fw-bold">
-                                                    CPU cores
-                                                </Form.Label>
-                                                <Col sm="8">
-                                                    <Form.Select
-                                                        name="cpu_cores"
-                                                        value={resource.cpu_cores}
-                                                        onChange={(e) => handleResourceChange(index, e)}
-                                                    >
-                                                        <option value="">Select Cores</option>
-                                                        <option value="1">1</option>
-                                                        <option value="2">2</option>
-                                                        <option value="4">4</option>
-                                                    </Form.Select>
-                                                </Col>
-                                            </Form.Group>
-                                            
-                                            <Form.Group as={Row} className="mb-3">
-                                                <Form.Label column sm="3" className="fw-bold">
-                                                    RAM (Gb)
-                                                </Form.Label>
-                                                <Col sm="8">
-                                                    <Form.Control
-                                                        type="number"
-                                                        name="ram_size"
-                                                        step="0.1"
-                                                        min="1.0"
-                                                        value={resource.ram_size}
-                                                        onChange={(e) => handleResourceChange(index, e)}
-                                                        placeholder="Select RAM size (in Gbytes)..."
-                                                        
+                                    <div className="mb-4">                                          
+                                        <Form.Group as={Row} className="mb-3">
+                                            <Form.Label column sm="3" className="fw-bold">
+                                                CPU cores
+                                            </Form.Label>
+                                            <Col sm="8">
+                                                <Form.Select
+                                                    name="cpu_cores"
+                                                    value={resources.cpu_cores}
+                                                    onChange={handleResourceChange}
+                                                >
+                                                    <option value="">Select Cores</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="4">4</option>
+                                                </Form.Select>
+                                            </Col>
+                                        </Form.Group>
+                                        
+                                        <Form.Group as={Row} className="mb-3">
+                                            <Form.Label column sm="3" className="fw-bold">
+                                                RAM (Gb)
+                                            </Form.Label>
+                                            <Col sm="8">
+                                                <Form.Control
+                                                    type="number"
+                                                    name="ram_gb"
+                                                    step="0.1"
+                                                    min="1.0"
+                                                    value={resources.ram_gb}
+                                                    onChange={handleResourceChange}
+                                                    placeholder="Select RAM size (in Gbytes)..."
+                                                />
+                                            </Col>
+                                        </Form.Group>
+
+                                        <Form.Group as={Row} className="mb-3">
+                                            <Form.Label column sm="3" className="fw-bold">
+                                                Disk (Gb)
+                                            </Form.Label>
+                                            <Col sm="8">
+                                                <Form.Control
+                                                    type="number"
+                                                    name="disk_gb"
+                                                    step="0.1"
+                                                    min="5.0"
+                                                    value={resources.disk_gb}
+                                                    onChange={handleResourceChange}
+                                                    placeholder="Select Disk size (in Gbytes)..."
+                                                />
+                                            </Col>
+                                        </Form.Group>
+
+                                        <Form.Group as={Row} className="mb-3">
+                                            <Form.Label column sm="3" className="fw-bold">
+                                                Zones
+                                            </Form.Label>
+                                            <Col sm="8">
+                                                <Form.Control
+                                                    type="text"
+                                                    name="zones"
+                                                    value={resources.zones}
+                                                    onChange={handleResourceChange}
+                                                    placeholder="Type zones..."
+                                                />
+                                            </Col>
+                                        </Form.Group>
+
+                                        <Form.Group as={Row} className="mb-3">
+                                            <Form.Label column sm="3" className="fw-bold">
+                                                Preemptible
+                                            </Form.Label>
+                                            <Col sm="8">
+                                                <div className="form-check form-switch">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        id="preemptibleSwitch"
+                                                        name="preemptible"
+                                                        checked={resources.preemptible}
+                                                        onChange={handleResourceChange}
                                                     />
-                                                </Col>
-                                            </Form.Group>
-
-                                            <Form.Group as={Row} className="mb-3">
-                                                <Form.Label column sm="3" className="fw-bold">
-                                                    Disk (Gb)
-                                                </Form.Label>
-                                                <Col sm="8">
-                                                    <Form.Control
-                                                        type="number"
-                                                        name="disk_size"
-                                                        step="0.1"
-                                                        min="5.0"
-                                                        value={resource.disk_size}
-                                                        onChange={(e) => handleResourceChange(index, e)}
-                                                        placeholder="Select Disk size (in Gbytes)..."
-                                                    />
-                                                </Col>
-                                            </Form.Group>
-
-                                            <Form.Group as={Row} className="mb-3">
-                                                <Form.Label column sm="3" className="fw-bold">
-                                                    Zones
-                                                </Form.Label>
-                                                <Col sm="8">
-                                                    <Form.Control
-                                                        type="text"
-                                                        name="zones"
-                                                        value={resource.zones}
-                                                        onChange={(e) => handleResourceChange(index, e)}
-                                                        placeholder="Type zones..."
-                                                    />
-                                                </Col>
-                                            </Form.Group>
-
-
-                                            <Form.Group as={Row} className="mb-3">
-                                                <Form.Label column sm="3" className="fw-bold">
-                                                    Preemptible
-                                                </Form.Label>
-                                                <Col sm="8">
-                                                    <div className="form-check form-switch">
-                                                        <input
-                                                            className="form-check-input"
-                                                            type="checkbox"
-                                                            id="preemptibleSwitch"
-                                                            name="preemptible"
-                                                            checked={resource.preemptible}
-                                                            onChange={(e) => handleResourceChange(index, e)}
-                                                        />
-                                                    </div>
-                                                </Col>
-                                            </Form.Group>
-                                        </div>
-                                    ))}
-
+                                                </div>
+                                            </Col>
+                                        </Form.Group>
+                                    </div>
                                 </Accordion.Body>
                             </Accordion.Item>
 
@@ -702,14 +742,14 @@ const TaskForm = () => {
                                         <Col sm="9">
                                             <OverlayTrigger
                                                 placement="top"
-                                                overlay={<Tooltip id={`tooltip-tags`}>Please type key=value pairs with the following format: KEY1=VALUE1 KEY2=VALUE2</Tooltip>}
+                                                overlay={<Tooltip id={`tooltip-tags`}>Please split tags with comma</Tooltip>}
                                             >
                                                 <Form.Control
                                                     type="text"
                                                     name="tag"
                                                     value={tags.tag.join(' ')}
                                                     onChange={handleTagsInputChange}
-                                                    placeholder="Type tags, separated by space..."
+                                                    placeholder="Type tags, separated with comma..."
                                                 />
                                             </OverlayTrigger>
                                         </Col>
