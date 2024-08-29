@@ -7,13 +7,13 @@ const LearnMore = () => {
     <Container>
       <Row className="mt-4">
         <Col>
-          <h1>What is SCHEMA Lab?</h1>
+          <h1>What is HYPATIA Lab?</h1>
         </Col>
       </Row>
       <Row>
         <Col>
           <p>
-            <strong>SCHEMA Lab</strong> is an open-source platform designed to assist researchers and scientists in managing and executing computational tasks efficiently. It specializes in submitting and monitoring containerized task execution requests, providing a seamless environment for your computational needs.
+            <strong>HYPATIA lab</strong> is a pre-release version of SCHEMA lab, currently available only to users of the HYPATIA platform. Full integration with SCHEMA lab's open-source capabilities is coming soon.
           </p>
         </Col>
       </Row>
@@ -36,6 +36,33 @@ const LearnMore = () => {
             </ListGroup.Item>
             <ListGroup.Item className="border-0 text-muted">
               <strong>Manage with Ease:</strong> Cancel or rerun tasks with just a click, ensuring flexibility and control over your computational workflows.
+            </ListGroup.Item>
+          </ListGroup>
+        </Col>
+      </Row>
+      <Row className="mt-4">
+        <Col>
+          <p>How to connect and use HYPATIA lab:</p>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <ListGroup variant="flush">
+            <ListGroup.Item className="border-0 text-muted">
+              <strong>Access HYPATIA Platform:</strong> Log in to the HYPATIA Platform with your credentials.
+              Navigate to the Dashboard and click "Access" next to your active on demand batch computation project.
+            </ListGroup.Item>
+            <ListGroup.Item className="border-0 text-muted">
+              <strong>Generate API Key:</strong> In the "Approved Resources" section, select "API tokens management."
+              Generate an API key by following the instructions provided. This API key will allow you to connect to HYPATIA Lab.
+            </ListGroup.Item>
+            <ListGroup.Item className="border-0 text-muted">
+              <strong> Connect to HYPATIA Lab:</strong> Visit the HYPATIA Lab platform and log in using the API key you generated.
+              Once logged in, you can start submitting and monitoring your computational tasks directly through the HYPATIA Lab interface.
+            </ListGroup.Item>
+            <ListGroup.Item className="border-0 text-muted">
+              <strong>Submit and Monitor Tasks:</strong> Use the "Run a Task" feature to submit new tasks.
+              Monitor your task status using the "Dashboard" and make any necessary adjustments, such as canceling or rerunning tasks.
             </ListGroup.Item>
           </ListGroup>
         </Col>

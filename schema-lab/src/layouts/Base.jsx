@@ -5,7 +5,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Image from 'react-bootstrap/Image';
-import logo from '../img/schema-logo-lab-1.png';
+import logo from '../img/hypatia-lab-logo.png';
 import {
     Link,
     Outlet
@@ -40,7 +40,7 @@ const Base = props => {
                             src={logo} // Path to your image
                             alt="SCHEMA lab"
                             style={{
-                                height: '50px', // Set height to match button size
+                                height: '60px', // Set height to match button size
                                 width: 'auto', // Maintain aspect ratio
                             }}
                         />

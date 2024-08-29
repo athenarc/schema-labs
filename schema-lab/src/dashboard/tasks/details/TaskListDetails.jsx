@@ -37,7 +37,7 @@ const TaskListDetails = () => {
                 const data = await response.json();
                 setTaskDetails({
                     name: data.name,
-                    status: data.status,
+                    status: data.status_history[data.status_history.length - 1].status,
                     executors: data.executors,
                     inputs: data.inputs,
                     outputs: data.outputs,

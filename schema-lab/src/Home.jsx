@@ -17,7 +17,7 @@ const Home = () => {
                                 alt="Welcome to SCHEMA lab"
                                 fluid 
                                 style={{
-                                    maxWidth: '80%', 
+                                    maxWidth: '70%', 
                                     height: 'auto',
                                     filter: 'brightness(0.9) contrast(1.2) saturate(1.5) sepia(0.2)',
                                     borderRadius: '8px',
