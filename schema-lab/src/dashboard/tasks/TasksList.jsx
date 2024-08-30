@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
-import Button from "react-bootstrap/Button";
+import React, { useState, useEffect, useContext, createContext } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Link } from "react-router-dom";
-import { Tooltip, OverlayTrigger, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Tooltip, OverlayTrigger, Dropdown, DropdownButton, Button, Alert } from 'react-bootstrap';
 
 import { faArrowDownAZ, faArrowDownZA } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,26 +10,67 @@ import Table from "react-bootstrap/Table";
 import { useTaskData, useTaskFilters } from "./TasksListProvider";
 import { cloneDeep } from "lodash";
 import  TaskStatus  from "./TaskStatus"
+import { cancelTaskPost } from "../../api/v1/actions"
+import { UserDetailsContext } from "../../utils/components/auth/AuthProvider";
+
+export const TaskDetailsContext = createContext();
 
 
-const TaskListing = ({ uuid, status, submitted_at, completed_at, isSelected, toggleSelection }) => {
+const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggleSelection }) => {
+    const { userDetails } = useContext(UserDetailsContext);
+    const [alertMessage, setAlertMessage] = useState(null);
+    const [isAlertActive, setIsAlertActive] = useState(false);
+
     const handleCheckboxChange = () => {
         toggleSelection(uuid);
     };
 
+    const handleCancelTask = (taskUUID, auth) => {
+        cancelTaskPost({ taskUUID, auth })
+            .then(response => {
+                if (!response.ok) {
+                    setAlertMessage(`Canceling ${taskUUID} failed! Please try again.`);
+                    setIsAlertActive(true);
+                    setTimeout(() => {
+                        setAlertMessage(null);
+                        setIsAlertActive(false);
+                    }, 1000);
+                }
+            });
+    };
+
     return (
-        <tr className={isSelected ? 'table-active' : ''}>
-            <td>
-                <input className="form-check-input" type="checkbox" checked={isSelected} onChange={handleCheckboxChange} />
-            </td>
-            <td><Link to={`/task-details/${uuid}/executors`}>{uuid}</Link></td>
-            <td><TaskStatus status={status} /></td>
-            <td>{new Date(submitted_at).toLocaleString('el')}</td>
-            <td>{completed_at ? new Date(completed_at).toLocaleString('el') : "-"}</td>
-            <td className="text-end">
-                <Button variant="primary" size="sm" as={Link} to="#/action-1">Cancel</Button>
-            </td>
-        </tr>
+        <>
+            {isAlertActive ? (
+                <tr>
+                    <td colSpan="5">
+                        <Alert variant="danger" dismissible>
+                            {alertMessage}
+                        </Alert>
+                    </td>
+                </tr>
+            ) : (
+                <tr className={isSelected ? 'table-active' : ''}>
+                    {/* Remove for pre-release version */}
+                    {/* <td>
+                        <input className="form-check-input" type="checkbox" checked={isSelected} onChange={handleCheckboxChange} />
+                    </td> */}
+                    <td><Link to={`/task-details/${uuid}/executors`}>{uuid}</Link></td>
+                    <td><TaskStatus status={status} /></td>
+                    <td>{new Date(submitted_at).toLocaleString('en')}</td>
+                    <td>{new Date(updated_at).toLocaleString('en')}</td>
+                    <td>
+                        <Button
+                            variant="primary"
+                            size="sm"
+                            onClick={() => handleCancelTask(uuid, userDetails.apiKey)}
+                        >
+                            Cancel
+                        </Button>
+                    </td>
+                </tr>
+            )}
+        </>
     );
 };
 
@@ -164,13 +204,14 @@ const TaskList = () => {
         <Row className="p-3 mb-5">
             <Col className="align-items-center">
                 {taskData && taskData.results && (
-                    <Table borderless responsive>
+                    <Table borderless responsive hover>
                         <thead>
                             <tr>
-                                <th>
+                                {/* Remove from pre-release version */}
+                                {/* <th>
                                     <input className="form-check-input" type="checkbox" onChange={handleSelectAll} />
-                                </th>
-                                <th>
+                                </th> */}
+                                <th className="col-4">
                                     <div className="input-group">
                                         <span className="input-group-text fw-bold" id="search">
                                             Name/UUID&nbsp;
@@ -225,7 +266,7 @@ const TaskList = () => {
                                     Submission time <ColumnOrderToggle columnName={"submitted_at"} currentOrder={orderBy} setOrder={setOrderBy} />
                                 </th>
                                 <th>Update time</th>
-                                <th className="text-end">Actions</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -233,11 +274,11 @@ const TaskList = () => {
                                 <TaskListing
                                     key={task.uuid}
                                     uuid={task.uuid}
-                                    status={task.status}
+                                    status={task.state.status}
                                     submitted_at={task.submitted_at}
-                                    completed_at={task.completed_at}
-                                    isSelected={selectedRows.includes(task.uuid)}
-                                    toggleSelection={toggleRowSelection}
+                                    updated_at={task.state.updated_at}
+                                    // isSelected={selectedRows.includes(task.uuid)}
+                                    // toggleSelection={toggleRowSelection}
                                 />
                             ))}
                         </tbody>

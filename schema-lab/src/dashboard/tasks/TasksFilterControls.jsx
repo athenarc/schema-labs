@@ -23,9 +23,10 @@ const TasksFilterControls = () => {
 
         </Col>
         <Col xs={6} className="text-end">
-        <Link to="/create-experiment">
+        {/* Remove for pre-release version */}
+        {/* <Link to="/create-experiment">
             <Button ref={elementRef} variant="primary" className="rounded-pill">Create Experiment <FontAwesomeIcon icon={faPlus} /></Button>
-        </Link>       
+        </Link>        */}
         </Col>
     </Row>;
 }

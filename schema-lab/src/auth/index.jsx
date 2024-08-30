@@ -6,19 +6,34 @@ import { UserDetailsContext } from "../utils/components/auth/AuthProvider";
 import LoginPrompt from "./LoginPrompt";
 import LogoutPrompt from "./LogoutPrompt";
 import WelcomeCard from "../layouts/WelcomeMessage";
+import { setLoginCookie, getCookie } from "../utils/cookies";
 
 const Auth = () => {
-    const { userDetails } = useContext(UserDetailsContext);
+    const { userDetails, setUserDetails } = useContext(UserDetailsContext);
     const navigate = useNavigate();
+
     useEffect(() => {
-        if (userDetails) {
+        const token = getCookie();
+        
+        if (token && !userDetails) {
+            // Use cookie to login
+            setUserDetails({
+                apiKey: token,
+                type: "apikey"
+            });
+            navigate('/dashboard');
+        } else if (userDetails) {
+            setLoginCookie(userDetails.apiKey, 7);
             navigate('/dashboard');
         }
-    }, [userDetails]);
+    }, [userDetails, navigate]);
+    
+
+
     const internal = userDetails
         ? <LogoutPrompt />
         : <Row>
-            <Col className="border-end border-muted-subtle"><WelcomeCard /> {/* Placeholder for potential register prompt */}</Col>
+            <Col className="border-end border-muted-subtle"><WelcomeCard /></Col>
             <Col className="p-4">
                 <LoginPrompt />
             </Col>

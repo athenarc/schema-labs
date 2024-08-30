@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileArrowUp, faList, faFileCircleCheck, faFileCircleXmark, faStopwatch, faGears, faCheck, faXmark, faQuestion } from '@fortawesome/free-solid-svg-icons';
 
@@ -46,6 +46,13 @@ const TaskStatus = (props) => {
             icon = faQuestion;
             break;
     }
+   
+    useEffect(() => {
+        if (props.onColorChange) {
+            props.onColorChange(color);
+        }
+    }, [color, props]);
+
     return (
         <span className={`text-${color}`}>
             <FontAwesomeIcon icon={icon} /> {text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()}

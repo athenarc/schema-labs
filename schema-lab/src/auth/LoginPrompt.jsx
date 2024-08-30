@@ -13,15 +13,18 @@ const LoginPrompt = props => {
      *  Multiple login providers have been passed
      */
     const [selectedLoginProviderId, setSelectedLoginProviderId] = useState('');
+    const DEFAULT_PROVIDER_ID = 'api_key';
+
     const availableLoginProviders = config.auth.loggin_providers.reduce((availableLoginProviders, { id, loginProviderName, LoginProvider }) => {
         availableLoginProviders[id] = { loginProviderName, LoginProvider };
         return availableLoginProviders;
     }, {});
     const handleSelectOptionChanged = evt => {
         const _selectedLoginProviderId = evt.target.value;
+        console.log(_selectedLoginProviderId)
         setSelectedLoginProviderId(_selectedLoginProviderId);
     }
-    const EffectiveLoginProvider = availableLoginProviders[selectedLoginProviderId] && availableLoginProviders[selectedLoginProviderId].LoginProvider;
+    const EffectiveLoginProvider = availableLoginProviders[DEFAULT_PROVIDER_ID] && availableLoginProviders[DEFAULT_PROVIDER_ID].LoginProvider;
 
     if (Object.keys(availableLoginProviders).length === 0) {
         return <Alert variant="danger">
@@ -34,27 +37,13 @@ const LoginPrompt = props => {
             <Col>
                 <Row>
                     <Col>
-                        <p className="display-6">Login</p>
+                        <p className="display-6 text-center">Login</p>
                         <p>Use your credentials to log in and gain access to the SCHEMA lab features</p>
                     </Col>
                 </Row>
-                <Row className="ps-3">
+                <Row>        
                     <Col>
-                        <Row>
-                            <Col>
-                                <Form.Group controlId="formBasicPassword">
-                                    <Form.Select aria-label="Default select example" onChange={handleSelectOptionChanged}>
-                                        <option value="">Select a way to authenticate</option>
-                                        {Object.keys(availableLoginProviders).map(id => <option key={`key-[${id}]`} value={id}>{availableLoginProviders[id].loginProviderName}</option>)}
-                                    </Form.Select>
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row className="ps-3 mt-3">
-                            <Col>
-                                {EffectiveLoginProvider && <EffectiveLoginProvider />}
-                            </Col>
-                        </Row>
+                        {EffectiveLoginProvider && <EffectiveLoginProvider />}
                     </Col>
                 </Row>
             </Col>

@@ -21,7 +21,8 @@ const TaskListDetails = () => {
     const { userDetails } = useContext(UserDetailsContext);
     
     const [taskDetails, setTaskDetails] = useState({}); // State to store task details
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(null); // State variable to store error messages
+    const [titleColor, setTitleColor] = useState(''); // State variable to store the color
 
     useEffect(() => {
         const fetchTaskDetails = async () => {
@@ -31,23 +32,17 @@ const TaskListDetails = () => {
                     auth: userDetails.apiKey
                 });
                 if (!response.ok) {
-                    throw new Error(`Network response was not ok. Status: ${response.status}, Status Text: ${response.statusText}`);
+                    throw new Error(`Error network response.. Status: ${response.status}, Status Text: ${response.statusText}`);
                 }
                 const data = await response.json();
-                console.log("stderr:",data.executors[0].stderr)
-                const stderrArray = data.executors.map(executor => executor.stderr);
-                const stdoutArray = data.executors.map(executor => executor.stdout);
                 setTaskDetails({
                     name: data.name,
-                    status: data.status,
+                    status: data.status_history[data.status_history.length - 1].status,
                     executors: data.executors,
                     inputs: data.inputs,
                     outputs: data.outputs,
-                    stderr: stderrArray,
-                    stdout: stdoutArray
                 });
             } catch (error) {
-                console.error('Fetch error:', error);
                 setError(error.toString());
             }
         };
@@ -59,8 +54,6 @@ const TaskListDetails = () => {
     const renderNavLinks = () => {
         const navLinks = [
             { to: 'executors', text: 'Executors' },
-            { to: 'stdout', text: 'Stdout' },
-            { to: 'stderr', text: 'Stderr' },
             { to: 'inputs', text: 'Inputs' },
             { to: 'outputs', text: 'Outputs' }
         ];
@@ -78,12 +71,24 @@ const TaskListDetails = () => {
         ));
     };
 
+    const handleColorChange = (color) => {
+        setTitleColor(color); 
+    };
     const title = taskDetails.name
-        ? <span><span className="fw-normal">Name:</span> {taskDetails.name} <span className="text-muted fs-6">({uuid})</span></span>
-        : <span><span className="fw-normal">UUID:</span> {uuid}</span>;
+    ? (
+        <span>
+            Name: <span className={`text-${titleColor}`}>{taskDetails.name}</span>
+            <span> (<span className={`text-${titleColor} fs-6`}>{uuid}</span>)</span>
+        </span>
+    )
+    : (
+        <span>
+            UUID: <span className={`text-${titleColor}`}>{uuid}</span>
+        </span>
+    );
 
     const subtitle = taskDetails.status
-        ? <span><span className="fw-normal">Status:</span> <TaskStatus status={taskDetails.status} /></span>
+        ? <span><TaskStatus status={taskDetails.status} onColorChange={handleColorChange} /></span>
         : ' - ';
 
     return (
@@ -91,7 +96,7 @@ const TaskListDetails = () => {
             <div>
                 <div>
                     <div className="lead">{title}</div>
-                    <div className="text-muted fs-6">{subtitle}</div>
+                    <div className="lead">{subtitle}</div>
                     <Navbar bg="light" data-bs-theme="info">
                         <Container>
                             <Nav variant="underline">
