@@ -13,7 +13,7 @@ const LearnMore = () => {
       <Row>
         <Col>
           <p>
-            <strong>HYPATIA lab</strong> is a pre-release version of SCHEMA lab, currently available only to users of the HYPATIA platform. Full integration with SCHEMA lab's open-source capabilities is coming soon.
+            <strong style={{ color: 'orange' }}>HYPATIA lab</strong> is a pre-release version of <a href="https://github.com/athenarc/schema-lab">SCHEMA lab</a>, currently available only to users of the HYPATIA platform. Full integration with SCHEMA lab's open-source capabilities is coming soon.
           </p>
         </Col>
       </Row>
@@ -29,18 +29,23 @@ const LearnMore = () => {
               <strong>Task Management</strong>
             </ListGroup.Item>
             <ListGroup.Item className="border-0 text-muted">
-              <strong>Create and Run Tasks:</strong> Easily create computational tasks and monitor their execution in real-time.
+              <strong>Submit and Run Tasks:</strong> Easily submit and run computational tasks.
             </ListGroup.Item>
             <ListGroup.Item className="border-0 text-muted">
               <strong>Track Task Status:</strong> Stay informed with clear status indicators showing whether tasks are submitted, running, completed, or have encountered errors.
             </ListGroup.Item>
             <ListGroup.Item className="border-0 text-muted">
-              <strong>Manage with Ease:</strong> Cancel or rerun tasks with just a click, ensuring flexibility and control over your computational workflows.
+              <strong>Manage with Ease:</strong> Cancel tasks with just a click, ensuring flexibility and control over your computational workflows.
             </ListGroup.Item>
           </ListGroup>
         </Col>
       </Row>
       <Row className="mt-4">
+        <Col>
+          <h1>Quick start</h1>
+        </Col>
+      </Row>
+      <Row className="mt-1">
         <Col>
           <p>How to connect and use HYPATIA lab:</p>
         </Col>
@@ -62,7 +67,7 @@ const LearnMore = () => {
             </ListGroup.Item>
             <ListGroup.Item className="border-0 text-muted">
               <strong>Submit and Monitor Tasks:</strong> Use the "Run a Task" feature to submit new tasks.
-              Monitor your task status using the "Dashboard" and make any necessary adjustments, such as canceling or rerunning tasks.
+              Monitor your task status using the "Dashboard" and make any necessary adjustments, such as canceling tasks.
             </ListGroup.Item>
           </ListGroup>
         </Col>

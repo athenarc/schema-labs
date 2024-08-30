@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { runTaskPost } from "../api/v1/actions";
 import { UserDetailsContext } from "../utils/components/auth/AuthProvider";
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 const TaskForm = () => {
     const navigate = useNavigate();
@@ -276,7 +277,16 @@ const TaskForm = () => {
                         {executors.map((executor, index) => (
                             <Card className="border-0 shadow-sm rounded-3 mb-4" key={index}>
                                 <Card.Header className={`bg-primary text-white py-3`}>
-                                    Executor Information
+                                    Executor Information&nbsp; 
+                                    <a 
+                                        href="https://schema.athenarc.gr/docs/schema-api/arch/tasks" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        className="text-white"
+                                        style={{ textDecoration: 'none' }}
+                                    >
+                                    <FontAwesomeIcon icon={faInfoCircle} />
+                                    </a>
                                 </Card.Header>
                                 <Card.Body>
                                     <Form.Group as={Row} className="mb-3">
