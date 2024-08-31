@@ -75,7 +75,7 @@ const LearnMore = () => {
       <Row className="mt-3">
         <Col>
           <p>
-            Open-source code for SCHEMA Lab is available here: <a href="https://github.com/athenarc/schema" target="_blank" rel="noopener noreferrer">SCHEMA Lab</a>
+            Open-source code for SCHEMA Lab is available here: <a href="https://github.com/athenarc/schema" target="_blank" rel="noopener noreferrer" style={{color: '#7700D4'}}>SCHEMA Lab</a>
           </p>
         </Col>
       </Row>
