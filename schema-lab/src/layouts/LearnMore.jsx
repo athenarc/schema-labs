@@ -13,7 +13,7 @@ const LearnMore = () => {
       <Row>
         <Col>
           <p>
-            <strong style={{ color: 'orange' }}>HYPATIA lab</strong> is a pre-release version of <a href="https://github.com/athenarc/schema-lab">SCHEMA lab</a>, currently available only to users of the HYPATIA platform. Full integration with SCHEMA lab's open-source capabilities is coming soon.
+            <strong style={{ color: 'orange' }}>HYPATIA lab</strong> is a pre-release version of <a href="https://github.com/athenarc/schema-lab" style={{color: '#7700D4'}}>SCHEMA lab</a>, currently available only to users of the HYPATIA platform. Full integration with SCHEMA lab's open-source capabilities is coming soon.
           </p>
         </Col>
       </Row>
