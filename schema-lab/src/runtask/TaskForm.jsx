@@ -11,12 +11,11 @@ const TaskForm = () => {
     const navigate = useNavigate();
     const [activeKey, setActiveKey] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [basicData, setBasicData] = useState({name: "", description: "" });
+    const [basicData, setBasicData] = useState({name: "", description: "", tag: [] });
     const [executors, setExecutors] = useState([{image: "", command: [], workdir: "", stdout: "", stderr: "", env: ""}]);
     const [inputs, setInputs] = useState([{ name: "", description: "", url: "", path: "", content: "", type: ""}]);
     const [outputs, setOutputs] = useState([{ name: "", description: "", url: "", path: "", type: ""}]);
     const [resources, setResources] = useState({ cpu_cores: 1, zones: "", preemptible: false, disk_gb: 5.0, ram_gb: 1.0 });
-    const [tags, setTags] = useState({tag: []});
     const [volumes, setVolumes] = useState([]);
     const { userDetails } = useContext(UserDetailsContext);
 
@@ -74,15 +73,15 @@ const TaskForm = () => {
     };
     
     const prepareRequestData = () => {
-        const { name, description } = basicData;
+        const { name, description, tag } = basicData;
         const data = {
             name,
             description,
+            tag,
             executors,
             inputs,
             outputs,
             resources,
-            tags,
             volumes
         };
     
@@ -128,7 +127,15 @@ const TaskForm = () => {
 
     const handleBasicChange = (e) => {
         const { name, value } = e.target;
-        setBasicData(prevData => ({ ...prevData, [name]: value }));
+
+        setBasicData((prevData) => {
+            if (name === 'tag') {
+                const tagsArray = value.split(' ');
+                return { ...prevData, tag: tagsArray };
+            } else {
+                return { ...prevData, [name]: value };
+            }
+        });
     };
 
     const handleExecutorChange = (index, e) => {
@@ -158,12 +165,11 @@ const TaskForm = () => {
     
     // Clear input boxes
     const handleClear = () => {
-        setBasicData({name: "", description: ""});
+        setBasicData({name: "", description: "", tag: []});
         setExecutors([{image: "", command: [], workdir: "", stdout: "", stderr: "", env: ""}]);
         setInputs([{ name: "", description: "", url: "", path: "", content: "", type: ""}]);
         setOutputs([{ name: "", description: "", url: "", path: "", type: ""}]);
         setResources({ cpu_cores: 1, zones: "", preemptible: false, disk_gb: 5.0, ram_gb: 1.0 });
-        setTags({tag: []});
         setVolumes([]);
     };
 
@@ -207,15 +213,6 @@ const TaskForm = () => {
 
     const removeOutputField = () => {
         setOutputs(prevOutputs => prevOutputs.slice(0, -1));
-    };
-
-    const handleTagsInputChange = (e) => {
-        const { name, value } = e.target;
-    
-        setTags(prevTags => ({
-            ...prevTags,
-            [name]: value.split(' ')
-        }));
     };
     
     const handleVolumeInputChange = (e) => {
@@ -271,6 +268,29 @@ const TaskForm = () => {
                                         />
                                     </Col>
                                 </Form.Group>
+
+
+                                <Form.Group as={Row} className="mb-3">
+                                    <Form.Label column sm="3" className="fw-bold">
+                                        Tags
+                                    </Form.Label>
+                                    <Col sm="9">
+                                        <OverlayTrigger
+                                            placement="top"
+                                            overlay={<Tooltip id={`tooltip-tags`}>Please split tags with comma</Tooltip>}
+                                        >
+                                            <Form.Control
+                                                type="text"
+                                                name="tag"
+                                                value={basicData.tag.join(' ')}
+                                                onChange={handleBasicChange}
+                                                placeholder="Type tags, separated with comma..."
+                                            />
+                                        </OverlayTrigger>
+                                    </Col>
+                                </Form.Group>
+
+
                             </Card.Body>
                         </Card>
 
@@ -372,14 +392,14 @@ const TaskForm = () => {
                                         <Col sm="9">
                                             <OverlayTrigger
                                                 placement="top"
-                                                overlay={<Tooltip id={`tooltip-env`}>Please type key:value pairs with the following format: KEY1:VALUE1, KEY2:VALUE2</Tooltip>}
+                                                overlay={<Tooltip id={`tooltip-env`}>Please type key:value pairs with the following format: KEY1:VALUE1, KEY2:VALUE2 seperated with comma</Tooltip>}
                                             >
-                                                                <Form.Control
+                                            <Form.Control
                                                 type="text"
                                                 name="env"
                                                 value={Object.entries(executor.env).map(([key, val]) => `${key}:${val}`).join(' ')}
                                                 onChange={(e) => handleExecutorChange(index, e)}
-                                                placeholder="Type environmental vars as key:value pairs, separated by comma..."
+                                                placeholder="Type environmental vars..."
                                             />
                                             </OverlayTrigger>
                                         </Col>
@@ -435,7 +455,7 @@ const TaskForm = () => {
                                                 <Col sm="8">
                                                     <OverlayTrigger
                                                         placement="top"
-                                                        overlay={<Tooltip>Please omit URL, if content is defined.</Tooltip>}
+                                                        overlay={<Tooltip>Location of a file or directory within your home directory on the remote storage..</Tooltip>}
                                                     >
                                                         <Form.Control
                                                             type="text"
@@ -453,6 +473,10 @@ const TaskForm = () => {
                                                     Path <span className="text-danger">*</span>
                                                 </Form.Label>
                                                 <Col sm="8">
+                                                    <OverlayTrigger
+                                                        placement="top"
+                                                        overlay={<Tooltip id={`tooltip-env`}>Location where the file or directory will be stored inside the task's container after the task completes.</Tooltip>}
+                                                    >
                                                     <Form.Control
                                                         type="text"
                                                         name="path"
@@ -460,10 +484,11 @@ const TaskForm = () => {
                                                         onChange={(e) => handleInputChange(index, e)}
                                                         placeholder="Type path..."
                                                     />
+                                                    </OverlayTrigger>
                                                 </Col>
                                             </Form.Group>
 
-                                            <Form.Group as={Row} className="mb-3">
+                                            {/* <Form.Group as={Row} className="mb-3">
                                                 <Form.Label column sm="3" className="fw-bold">
                                                     Content
                                                 </Form.Label>
@@ -481,7 +506,7 @@ const TaskForm = () => {
                                                         />
                                                     </OverlayTrigger>
                                                 </Col>
-                                            </Form.Group>
+                                            </Form.Group> */}
 
                                             <Form.Group as={Row} className="mb-3">
                                                 <Form.Label column sm="3" className="fw-bold">
@@ -562,6 +587,10 @@ const TaskForm = () => {
                                                     URL <span className="text-danger">*</span>
                                                 </Form.Label>
                                                 <Col sm="8">
+                                                    <OverlayTrigger
+                                                        placement="top"
+                                                        overlay={<Tooltip>Location of a file or directory within your home directory on the remote storage.</Tooltip>}
+                                                    >
                                                     <Form.Control
                                                         type="text"
                                                         name="url"
@@ -569,6 +598,7 @@ const TaskForm = () => {
                                                         onChange={(e) => handleOutputChange(index, e)}
                                                         placeholder="Type URL..."
                                                     />
+                                                    </OverlayTrigger>
                                                 </Col>
                                             </Form.Group>
 
@@ -577,6 +607,10 @@ const TaskForm = () => {
                                                     Path <span className="text-danger">*</span>
                                                 </Form.Label>
                                                 <Col sm="8">
+                                                    <OverlayTrigger
+                                                        placement="top"
+                                                        overlay={<Tooltip id={`tooltip-env`}>Location where the file or directory will be stored inside the task's container after the task completes.</Tooltip>}
+                                                    >
                                                     <Form.Control
                                                         type="text"
                                                         name="path"
@@ -584,6 +618,7 @@ const TaskForm = () => {
                                                         onChange={(e) => handleOutputChange(index, e)}
                                                         placeholder="Type path..."
                                                     />
+                                                    </OverlayTrigger>
                                                 </Col>
                                             </Form.Group>
 
@@ -625,7 +660,16 @@ const TaskForm = () => {
                             {/* Volumes */}
                             <Accordion.Item eventKey="2">
                                 <Accordion.Header>
-                                    Volumes Information (Optional)
+                                    Volumes Information (Optional)&nbsp; 
+                                    <a 
+                                        href="https://schema.athenarc.gr/docs/schema-api/arch/tasks/" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        className="text-dark"
+                                        style={{ textDecoration: 'none' }}
+                                    >
+                                    <FontAwesomeIcon icon={faInfoCircle} />
+                                    </a>
                                 </Accordion.Header>
                                 <Accordion.Body>
                                     <Form.Group as={Row} className="mb-3">
@@ -662,9 +706,11 @@ const TaskForm = () => {
                                                     onChange={handleResourceChange}
                                                 >
                                                     <option value="">Select Cores</option>
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="4">4</option>
+                                                    {Array.from({ length: 40 }, (_, i) => (
+                                                        <option key={i + 1} value={i + 1}>
+                                                        {i + 1}
+                                                        </option>
+                                                    ))}
                                                 </Form.Select>
                                             </Col>
                                         </Form.Group>
@@ -679,6 +725,7 @@ const TaskForm = () => {
                                                     name="ram_gb"
                                                     step="0.1"
                                                     min="1.0"
+                                                    max="128"
                                                     value={resources.ram_gb}
                                                     onChange={handleResourceChange}
                                                     placeholder="Select RAM size (in Gbytes)..."
@@ -686,7 +733,7 @@ const TaskForm = () => {
                                             </Col>
                                         </Form.Group>
 
-                                        <Form.Group as={Row} className="mb-3">
+                                        {/* <Form.Group as={Row} className="mb-3">
                                             <Form.Label column sm="3" className="fw-bold">
                                                 Disk (Gb)
                                             </Form.Label>
@@ -734,36 +781,8 @@ const TaskForm = () => {
                                                     />
                                                 </div>
                                             </Col>
-                                        </Form.Group>
+                                        </Form.Group> */}
                                     </div>
-                                </Accordion.Body>
-                            </Accordion.Item>
-
-                            {/* Tags */}
-                            <Accordion.Item eventKey="4">
-                                <Accordion.Header>
-                                    Tags Information (Optional)
-                                </Accordion.Header>
-                                <Accordion.Body>
-                                    <Form.Group as={Row} className="mb-3">
-                                        <Form.Label column sm="3" className="fw-bold">
-                                            Tags
-                                        </Form.Label>
-                                        <Col sm="9">
-                                            <OverlayTrigger
-                                                placement="top"
-                                                overlay={<Tooltip id={`tooltip-tags`}>Please split tags with comma</Tooltip>}
-                                            >
-                                                <Form.Control
-                                                    type="text"
-                                                    name="tag"
-                                                    value={tags.tag.join(' ')}
-                                                    onChange={handleTagsInputChange}
-                                                    placeholder="Type tags, separated with comma..."
-                                                />
-                                            </OverlayTrigger>
-                                        </Col>
-                                    </Form.Group>
                                 </Accordion.Body>
                             </Accordion.Item>
 
@@ -796,7 +815,7 @@ const TaskForm = () => {
                             </Button>
                         </Modal.Footer>
                         <Modal.Body>
-                            <pre>{JSON.stringify({ name: basicData.name, description: basicData.description, executors, inputs, outputs, volumes, resources, tags }, null, 2)}</pre>
+                            <pre>{JSON.stringify({ name: basicData.name, description: basicData.description, tag: basicData.tag, executors, inputs, outputs, volumes, resources }, null, 2)}</pre>
                         </Modal.Body>
                     </Modal>
                     
