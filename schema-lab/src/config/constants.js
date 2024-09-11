@@ -1,6 +1,6 @@
 import ApiKeyLogin from "../auth/ApiKeyLogin";
 
-export const SupportedLogginsMap = {
+export const SupportedLoginsMap = {
     'ApiKeyLogin': {
         id: 'api_key',
         loginProviderName: 'API Key login',
