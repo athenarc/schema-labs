@@ -49,7 +49,7 @@ const Base = props => {
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto ms-5">
                             {userDetails && <Nav.Link as={Link} to={"/dashboard"}>Dashboard</Nav.Link>}
-                            {/* {userDetails && <Nav.Link as={Link} to={"/ro-crates"}>RO-crates</Nav.Link>} */}
+                            {userDetails && <Nav.Link as={Link} to={"/ro-crates"}>RO-crates</Nav.Link>}
                             {userDetails && <Button className="ms-3" as={Link} to={"/runtask"} variant="outline-primary">Run a task</Button>}
                         </Nav>
                         <Nav className="text-primary">

@@ -22,12 +22,11 @@ const TasksFilterControls = () => {
         <Col xs={6}>
 
         </Col>
-        <Col xs={6} className="text-end">
-        {/* Remove for pre-release version */}
-        {/* <Link to="/create-experiment">
-            <Button ref={elementRef} variant="primary" className="rounded-pill">Create Experiment <FontAwesomeIcon icon={faPlus} /></Button>
-        </Link>        */}
-        </Col>
+            <Col xs={6} className="text-end">
+                <Link to="/experiment">
+                    <Button ref={elementRef} variant="primary">Create Experiment <FontAwesomeIcon icon={faPlus} /></Button>
+                </Link>       
+            </Col>
     </Row>;
 }
 

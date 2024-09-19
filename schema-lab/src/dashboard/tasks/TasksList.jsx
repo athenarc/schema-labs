@@ -51,10 +51,9 @@ const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggl
                 </tr>
             ) : (
                 <tr className={isSelected ? 'table-active' : ''}>
-                    {/* Remove for pre-release version */}
-                    {/* <td>
+                    <td>
                         <input className="form-check-input" type="checkbox" checked={isSelected} onChange={handleCheckboxChange} />
-                    </td> */}
+                    </td>
                     <td><Link to={`/task-details/${uuid}/executors`}>{uuid}</Link></td>
                     <td><TaskStatus status={status} /></td>
                     <td>{new Date(submitted_at).toLocaleString('en')}</td>
@@ -199,7 +198,7 @@ const TaskList = () => {
             setSelectedRows([]);
         }
     };
-
+    
     return (
         <Row className="p-3 mb-5">
             <Col className="align-items-center">
@@ -207,10 +206,9 @@ const TaskList = () => {
                     <Table borderless responsive hover>
                         <thead>
                             <tr>
-                                {/* Remove from pre-release version */}
-                                {/* <th>
+                                <th>
                                     <input className="form-check-input" type="checkbox" onChange={handleSelectAll} />
-                                </th> */}
+                                </th>
                                 <th className="col-4">
                                     <div className="input-group">
                                         <span className="input-group-text fw-bold" id="search">
@@ -277,8 +275,8 @@ const TaskList = () => {
                                     status={task.state.status}
                                     submitted_at={task.submitted_at}
                                     updated_at={task.state.updated_at}
-                                    // isSelected={selectedRows.includes(task.uuid)}
-                                    // toggleSelection={toggleRowSelection}
+                                    isSelected={selectedRows.includes(task.uuid)}
+                                    toggleSelection={toggleRowSelection}
                                 />
                             ))}
                         </tbody>
