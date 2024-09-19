@@ -6,17 +6,19 @@ import { faXmark, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { runTaskPost } from "../api/v1/actions";
 import { UserDetailsContext } from "../utils/components/auth/AuthProvider";
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { FaAngleRight, FaAngleDown } from 'react-icons/fa';
 
 const TaskForm = () => {
     const navigate = useNavigate();
     const [activeKey, setActiveKey] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [basicData, setBasicData] = useState({name: "", description: "", tag: [] });
+    const [basicData, setBasicData] = useState({name: "", description: "", tags: [] });
     const [executors, setExecutors] = useState([{image: "", command: [], workdir: "", stdout: "", stderr: "", env: ""}]);
     const [inputs, setInputs] = useState([{ name: "", description: "", url: "", path: "", content: "", type: ""}]);
     const [outputs, setOutputs] = useState([{ name: "", description: "", url: "", path: "", type: ""}]);
     const [resources, setResources] = useState({ cpu_cores: 1, zones: "", preemptible: false, disk_gb: 5.0, ram_gb: 1.0 });
     const [volumes, setVolumes] = useState([]);
+    const [showJson, setShowJson] = useState(false);
     const { userDetails } = useContext(UserDetailsContext);
 
 
@@ -73,11 +75,11 @@ const TaskForm = () => {
     };
     
     const prepareRequestData = () => {
-        const { name, description, tag } = basicData;
+        const { name, description, tags } = basicData;
         const data = {
             name,
             description,
-            tag,
+            tags,
             executors,
             inputs,
             outputs,
@@ -129,9 +131,9 @@ const TaskForm = () => {
         const { name, value } = e.target;
 
         setBasicData((prevData) => {
-            if (name === 'tag') {
-                const tagsArray = value.split(' ');
-                return { ...prevData, tag: tagsArray };
+            if (name === 'tags') {
+                const tagsArray = value.split(',');
+                return { ...prevData, tags: tagsArray };
             } else {
                 return { ...prevData, [name]: value };
             }
@@ -165,7 +167,7 @@ const TaskForm = () => {
     
     // Clear input boxes
     const handleClear = () => {
-        setBasicData({name: "", description: "", tag: []});
+        setBasicData({name: "", description: "", tags: []});
         setExecutors([{image: "", command: [], workdir: "", stdout: "", stderr: "", env: ""}]);
         setInputs([{ name: "", description: "", url: "", path: "", content: "", type: ""}]);
         setOutputs([{ name: "", description: "", url: "", path: "", type: ""}]);
@@ -281,8 +283,8 @@ const TaskForm = () => {
                                         >
                                             <Form.Control
                                                 type="text"
-                                                name="tag"
-                                                value={basicData.tag.join(' ')}
+                                                name="tags"
+                                                value={basicData.tags.join(',')}
                                                 onChange={handleBasicChange}
                                                 placeholder="Type tags, separated with comma..."
                                             />
@@ -488,26 +490,6 @@ const TaskForm = () => {
                                                 </Col>
                                             </Form.Group>
 
-                                            {/* <Form.Group as={Row} className="mb-3">
-                                                <Form.Label column sm="3" className="fw-bold">
-                                                    Content
-                                                </Form.Label>
-                                                <Col sm="8">
-                                                    <OverlayTrigger
-                                                        placement="top"
-                                                        overlay={<Tooltip>Please omit Content, if URL is defined.</Tooltip>}
-                                                    >
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="content"
-                                                            value={input.content}
-                                                            onChange={(e) => handleInputChange(index, e)}
-                                                            placeholder="Type content..."
-                                                        />
-                                                    </OverlayTrigger>
-                                                </Col>
-                                            </Form.Group> */}
-
                                             <Form.Group as={Row} className="mb-3">
                                                 <Form.Label column sm="3" className="fw-bold">
                                                     Type
@@ -700,18 +682,16 @@ const TaskForm = () => {
                                                 CPU cores
                                             </Form.Label>
                                             <Col sm="8">
-                                                <Form.Select
+                                                <Form.Control
+                                                    type="number"
                                                     name="cpu_cores"
+                                                    step="1"
+                                                    min="1"
+                                                    max="40"
                                                     value={resources.cpu_cores}
                                                     onChange={handleResourceChange}
-                                                >
-                                                    <option value="">Select Cores</option>
-                                                    {Array.from({ length: 40 }, (_, i) => (
-                                                        <option key={i + 1} value={i + 1}>
-                                                        {i + 1}
-                                                        </option>
-                                                    ))}
-                                                </Form.Select>
+                                                    placeholder="Select CPU cores..."
+                                                />
                                             </Col>
                                         </Form.Group>
                                         
@@ -732,56 +712,6 @@ const TaskForm = () => {
                                                 />
                                             </Col>
                                         </Form.Group>
-
-                                        {/* <Form.Group as={Row} className="mb-3">
-                                            <Form.Label column sm="3" className="fw-bold">
-                                                Disk (Gb)
-                                            </Form.Label>
-                                            <Col sm="8">
-                                                <Form.Control
-                                                    type="number"
-                                                    name="disk_gb"
-                                                    step="0.1"
-                                                    min="5.0"
-                                                    value={resources.disk_gb}
-                                                    onChange={handleResourceChange}
-                                                    placeholder="Select Disk size (in Gbytes)..."
-                                                />
-                                            </Col>
-                                        </Form.Group>
-
-                                        <Form.Group as={Row} className="mb-3">
-                                            <Form.Label column sm="3" className="fw-bold">
-                                                Zones
-                                            </Form.Label>
-                                            <Col sm="8">
-                                                <Form.Control
-                                                    type="text"
-                                                    name="zones"
-                                                    value={resources.zones}
-                                                    onChange={handleResourceChange}
-                                                    placeholder="Type zones..."
-                                                />
-                                            </Col>
-                                        </Form.Group>
-
-                                        <Form.Group as={Row} className="mb-3">
-                                            <Form.Label column sm="3" className="fw-bold">
-                                                Preemptible
-                                            </Form.Label>
-                                            <Col sm="8">
-                                                <div className="form-check form-switch">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="checkbox"
-                                                        id="preemptibleSwitch"
-                                                        name="preemptible"
-                                                        checked={resources.preemptible}
-                                                        onChange={handleResourceChange}
-                                                    />
-                                                </div>
-                                            </Col>
-                                        </Form.Group> */}
                                     </div>
                                 </Accordion.Body>
                             </Accordion.Item>
@@ -800,22 +730,49 @@ const TaskForm = () => {
                             </Button>
                         </div>
                     </Form>
-                    
+            
                     <Modal show={showModal} onHide={handleModalClose}>
                         <Modal.Header closeButton>
-                            <Modal.Title>Task Information</Modal.Title>
+                            <Modal.Title>Submit New Task</Modal.Title>
                         </Modal.Header>
-                            <Modal.Footer>
-                            <p>Please confirm that you want to submit the <span className="fw-bold">{basicData.name}</span> task with the following details?</p>
-                            <Button variant="danger" onClick={handleModalClose}>
-                                Cancel
-                            </Button>
-                            <Button variant="success" onClick={handleConfirmSubmit}>
-                                Confirm
-                            </Button>
+                        <Modal.Footer>
+                            <Row className="w-100">
+                                <Col className="text-left">
+                                    <p> Confirm that you want to submit the task?</p>
+                                </Col>
+                            </Row>
+                            <Row className="w-100 justify-content-center">
+                                <Col xs="auto">
+                                    <Button variant="danger" onClick={handleModalClose}>
+                                        Cancel
+                                    </Button>
+                                </Col>
+                                <Col xs="auto">
+                                    <Button variant="success" onClick={handleConfirmSubmit}>
+                                        Confirm
+                                    </Button>
+                                </Col>
+                            </Row>
                         </Modal.Footer>
+
                         <Modal.Body>
-                            <pre>{JSON.stringify({ name: basicData.name, description: basicData.description, tag: basicData.tag, executors, inputs, outputs, volumes, resources }, null, 2)}</pre>
+                            <div onClick={() => setShowJson(!showJson)} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                                {showJson ? <FaAngleDown /> : <FaAngleRight />}
+                                <span style={{ marginLeft: '8px' }}>Preview JSON</span>
+                            </div>
+
+                            {showJson && (
+                                <pre>{JSON.stringify({
+                                    name: basicData.name,
+                                    description: basicData.description,
+                                    tags: basicData.tags,
+                                    executors,
+                                    inputs,
+                                    outputs,
+                                    volumes,
+                                    resources
+                                }, null, 2)}</pre>
+                            )}
                         </Modal.Body>
                     </Modal>
                     
