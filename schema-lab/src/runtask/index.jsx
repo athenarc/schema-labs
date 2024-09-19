@@ -35,7 +35,7 @@ const RunTask = () => {
                 <Col>
                     <h1 className="display-6 mb-4">Setup a Task</h1>
                     <p className="display-7">
-      This form allows you to submit a new task for your current project: <strong>{projectName}</strong>. Please ensure all required fields marked with an asterisk (*) are completed before submission.
+      Submit task for project: <strong>{projectName}</strong>.
     </p>
                     <Container>
                         <TaskForm />

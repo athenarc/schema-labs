@@ -32,7 +32,7 @@ const Inputs = () => {
                     </Table>
                     ) : (
                         <Alert variant="warning" className="mt-0">
-                            Sorry, this task has no inputs!
+                            No inputs.
                         </Alert>
                     )}
                 </Card.Body>
