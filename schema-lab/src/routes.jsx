@@ -11,7 +11,7 @@ import Details from "./dashboard/tasks/details";
 import Executors from "./dashboard/tasks/details/Executors";
 import Outputs from "./dashboard/tasks/details/Outputs"
 import Inputs from "./dashboard/tasks/details/Inputs"
-import CreateExperiment from "./dashboard/tasks/CreateExperiment";
+import Experiment from "./dashboard/tasks/expriment"
 import RunTask from "./runtask";
 import Aboutus from './layouts/Aboutus';
 import LearnMore from "./layouts/LearnMore";
@@ -38,7 +38,7 @@ const router = createBrowserRouter(
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/runtask" element={<RunTask />} />
                 <Route path="/preferences" element={<UserPreferencesView />} />
-                <Route path="/create-experiment" element={<CreateExperiment/>} />
+                <Route path="/experiment" element={<Experiment/>} />
                 <Route path="/task-details/:uuid" element={<Details />}>
                     <Route index element={<Navigate to="executors" />} />
                     <Route path="executors" element={<Executors />} />

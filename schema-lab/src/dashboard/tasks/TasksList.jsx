@@ -1,20 +1,16 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Link } from "react-router-dom";
 import { Tooltip, OverlayTrigger, Dropdown, DropdownButton, Button, Alert } from 'react-bootstrap';
-
 import { faArrowDownAZ, faArrowDownZA } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Table from "react-bootstrap/Table";
 import { useTaskData, useTaskFilters } from "./TasksListProvider";
 import { cloneDeep } from "lodash";
-import  TaskStatus  from "./TaskStatus"
-import { cancelTaskPost } from "../../api/v1/actions"
+import TaskStatus from "./TaskStatus";
+import { cancelTaskPost } from "../../api/v1/actions";
 import { UserDetailsContext } from "../../utils/components/auth/AuthProvider";
-
-export const TaskDetailsContext = createContext();
-
 
 const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggleSelection }) => {
     const { userDetails } = useContext(UserDetailsContext);
@@ -99,14 +95,14 @@ const ColumnOrderToggle = ({ columnName, currentOrder, setOrder }) => {
 
 const TaskList = () => {
     const { taskData } = useTaskData();
-    const { taskFilters, setTaskFilters } = useTaskFilters();
+    const { taskFilters, setTaskFilters, selectedTasks, setSelectedTasks } = useTaskFilters();
     const [token, setToken] = useState(taskFilters.token);
     const [statuses, setStatuses] = useState({ ...(taskFilters.statuses) });
     const [typedChar, setTypedChar] = useState();
-    const [showValidationMessage, setShowValidationMessage] = useState(false); // State for managing validation message visibility
+    const [showValidationMessage, setShowValidationMessage] = useState(false);
     const [selectedRows, setSelectedRows] = useState([]);
 
-    const minCharThreshold = 2; // The minimum amount of characters to apply a filter
+    const minCharThreshold = 2;
 
     const orderBy = taskFilters.order;
     const setOrderBy = (attribute) => {
@@ -124,34 +120,29 @@ const TaskList = () => {
         if (evt.key !== 'Enter') {
             setTypedChar(evt.target.value.length);
         }
-        // on empty token restore filters
         if (evt.target.value === "") {
             setTaskFilters({ ...taskFilters, token: "", statuses: {} });
         }
     };
 
-    // Get filtered task elements on Enter pushed
     const handleApplyFilters = (event) => {
-        // Apply filter on Enter key pushed and two characters have typed
         if (event.key === 'Enter') {
             if (typedChar >= minCharThreshold) {
-                setShowValidationMessage(false); // Hide validation message if condition is met
+                setShowValidationMessage(false);
                 setTaskFilters({
                     ...taskFilters,
                     token,
                     statuses: { ...statuses },
-                    page: 0 // Always render first page of filtering results
+                    page: 0
                 });
             } else {
-                // Block accepting filtering keywords less than 2 chars
-                setShowValidationMessage(true); // Show validation message if condition is not met
+                setShowValidationMessage(true);
             }
         }
     };
 
     const handleStatusChange = (status) => {
-        
-        let newStatuses = {}; // Initialize an empty object to reset statuses
+        let newStatuses = {};
         if (status !== 'all') {
             newStatuses = { [status]: status };
         }
@@ -161,10 +152,8 @@ const TaskList = () => {
             token,
             statuses: newStatuses 
         });
-    
     };
 
-    // Get the amount of filtered elements found
     const findFilteredTokens = () => {
         if (taskData) {
             const { count } = taskData;
@@ -180,25 +169,25 @@ const TaskList = () => {
         }
     };
 
-    const toggleRowSelection = (uuid) => {
-        let updatedSelectedRows;
-        if (selectedRows.includes(uuid)) {
-            updatedSelectedRows = selectedRows.filter(id => id !== uuid);
-        } else {
-            updatedSelectedRows = [...selectedRows, uuid];
-        }
-        setSelectedRows(updatedSelectedRows);
+    const toggleRowSelection = (task) => {
+        const updatedSelectedTasks = selectedTasks.some(t => t.uuid === task.uuid)
+            ? selectedTasks.filter(t => t.uuid !== task.uuid)
+            : [...selectedTasks, task];
+    
+        setSelectedTasks(updatedSelectedTasks);
     };
+    
 
     const handleSelectAll = (event) => {
-        if (event.target.checked) {
-            const allUuids = taskData.results.map(task => task.uuid);
-            setSelectedRows(allUuids);
+        if (event.target.checked && taskData && taskData.results) {
+            const allTasks = taskData.results;
+            setSelectedTasks(allTasks);
         } else {
-            setSelectedRows([]);
+            setSelectedTasks([]);
         }
     };
     
+
     return (
         <Row className="p-3 mb-5">
             <Col className="align-items-center">
@@ -248,6 +237,9 @@ const TaskList = () => {
                                             </>
                                         }
                                         onSelect={handleStatusChange}
+                                        drop="auto"
+                                        renderMenuOnMount
+                                        container="body" 
                                     >   
                                         <Dropdown.Item eventKey='all'><TaskStatus status='ALL' /></Dropdown.Item>
                                         <Dropdown.Item eventKey='submitted'><TaskStatus status='SUBMITTED' /></Dropdown.Item>
@@ -275,8 +267,8 @@ const TaskList = () => {
                                     status={task.state.status}
                                     submitted_at={task.submitted_at}
                                     updated_at={task.state.updated_at}
-                                    isSelected={selectedRows.includes(task.uuid)}
-                                    toggleSelection={toggleRowSelection}
+                                    isSelected={selectedTasks.some(t => t.uuid === task.uuid)}
+                                    toggleSelection={() => toggleRowSelection(task)}
                                 />
                             ))}
                         </tbody>

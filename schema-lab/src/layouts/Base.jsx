@@ -48,15 +48,16 @@ const Base = props => {
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto ms-5">
-                            {userDetails && <Nav.Link as={Link} to={"/dashboard"}>Dashboard</Nav.Link>}
-                            {userDetails && <Nav.Link as={Link} to={"/ro-crates"}>RO-crates</Nav.Link>}
+                            {userDetails && <Button className="ms-3" as={Link} to={"/dashboard"} variant="outline-primary">Dashboard</Button>}
+                            {userDetails && <Button className="ms-3" as={Link} to={"/"} variant="outline-primary">Expriments</Button>}
+                            {userDetails && <Button className="ms-3" as={Link} to={"/ro-crates"} variant="outline-primary">RO-crates</Button>}
                             {userDetails && <Button className="ms-3" as={Link} to={"/runtask"} variant="outline-primary">Run a task</Button>}
                         </Nav>
                         <Nav className="text-primary">
                             {userDetails 
                                 ? (
                                     <>
-                                        <Button variant="primary" as={Link} to="/logout" className="me-2">Logout</Button>
+                                        <Button variant="primary" as={Link} to="/logout">Logout</Button>
                                         {/* <Dropdown>
                                             <Dropdown.Toggle variant="primary" id="dropdown-basic" className="rounded-pill">
                                                 Logged in with API key: {userDetails.apiKey.substring(0, 8)}...
