@@ -15,7 +15,7 @@ const LoginPrompt = props => {
     const [selectedLoginProviderId, setSelectedLoginProviderId] = useState('');
     const DEFAULT_PROVIDER_ID = 'api_key';
 
-    const availableLoginProviders = config.auth.loggin_providers.reduce((availableLoginProviders, { id, loginProviderName, LoginProvider }) => {
+    const availableLoginProviders = config.auth.login_providers.reduce((availableLoginProviders, { id, loginProviderName, LoginProvider }) => {
         availableLoginProviders[id] = { loginProviderName, LoginProvider };
         return availableLoginProviders;
     }, {});
