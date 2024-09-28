@@ -20,9 +20,7 @@ const TasksFilterControls = () => {
         <Row>
             <Col xs={6}></Col>
             <Col xs={6} className="text-end">
-                <Button ref={elementRef} onClick={handleCreateExperiment} variant="primary">
-                    Create Experiment <FontAwesomeIcon icon={faPlus} />
-                </Button>
+                {/* Placeholder for button */}
             </Col>
         </Row>
     );

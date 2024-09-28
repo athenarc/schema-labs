@@ -11,7 +11,9 @@ import {
     Outlet
 } from "react-router-dom";
 import { UserDetailsContext } from "../utils/components/auth/AuthProvider";
-import Footer from './Footer'; // Import the Footer component
+import Footer from './Footer';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 
 const Base = props => {
     const { userDetails } = useContext(UserDetailsContext);
@@ -49,7 +51,7 @@ const Base = props => {
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto ms-5">
                             {userDetails && <Button className="ms-3" as={Link} to={"/dashboard"} variant="outline-primary">Dashboard</Button>}
-                            {userDetails && <Button className="ms-3" as={Link} to={"/"} variant="outline-primary">Expriments</Button>}
+                            {userDetails && <Button className="ms-3" as={Link} to={"/experiment"} variant="outline-primary">Experiments</Button>}
                             {userDetails && <Button className="ms-3" as={Link} to={"/ro-crates"} variant="outline-primary">RO-crates</Button>}
                             {userDetails && <Button className="ms-3" as={Link} to={"/runtask"} variant="outline-primary">Run a task</Button>}
                         </Nav>
@@ -57,7 +59,8 @@ const Base = props => {
                             {userDetails 
                                 ? (
                                     <>
-                                        <Button variant="primary" as={Link} to="/logout">Logout</Button>
+                                        <Button variant="primary"  as={Link} to="/logout">
+                                            <FontAwesomeIcon icon={faRightToBracket} className="me-2" />Logout</Button>
                                         {/* <Dropdown>
                                             <Dropdown.Toggle variant="primary" id="dropdown-basic" className="rounded-pill">
                                                 Logged in with API key: {userDetails.apiKey.substring(0, 8)}...

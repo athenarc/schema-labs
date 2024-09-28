@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Row, Col, Card, Container, Table, Modal } from "react-bootstrap";
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import TaskStatus from "../TaskStatus";
+import TaskStatus from "../../TaskStatus";
 
 
 const CreateExperiment = () => {
@@ -14,11 +14,6 @@ const CreateExperiment = () => {
 
     const location = useLocation();
     const [selectedTasks, setSelectedTasks] = useState(location.state?.selectedTasks || []);
-
-
-    const handleToggle = (key) => {
-        setActiveKey(activeKey === key ? null : key);
-    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -39,6 +34,9 @@ const CreateExperiment = () => {
         if (isValid) {
             setShowModal(true);
         }
+    };
+
+    const handleNextClick = () => {
     };
 
     const handleBackClick = () => {
@@ -155,7 +153,7 @@ const CreateExperiment = () => {
                                 Edit
                             </Button>
                             <Button variant="success" type="submit">
-                                Save
+                                Submit Experiment
                             </Button>
                         </div>
                     </Form>
