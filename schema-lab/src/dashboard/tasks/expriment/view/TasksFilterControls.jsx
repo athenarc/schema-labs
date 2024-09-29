@@ -20,7 +20,7 @@ const TasksFilterControls = () => {
         <Row className="mt-3 align-items-center">
             <Col className="text-start">
                 <h6 className="d-inline">
-                <FontAwesomeIcon icon={faArrowAltCircleRight} className="ms-2"/> Select Tasks and click Next to continue:
+                <FontAwesomeIcon icon={faArrowAltCircleRight} className="ms-2"/> Select Tasks and click Next to submit Experiment:
                 </h6>
 
                 <Button
