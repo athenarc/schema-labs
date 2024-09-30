@@ -7,7 +7,10 @@ import TasksListProvider from "./TasksListProvider";
 import TasksPaginationControls from "./TasksPaginationControls";
 import { UserDetailsContext } from "../../utils/components/auth/AuthProvider";
 import { getProjectName } from "../../api/v1/actions";
-
+import Tooltip from 'react-bootstrap/Tooltip';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 
 const Tasks = () => {
     const { userDetails } = useContext(UserDetailsContext); // Ensure this context provides `userDetails`
@@ -25,10 +28,30 @@ const Tasks = () => {
         }
     }, [userDetails]);
 
+    const renderTooltip = (props) => (
+        <Tooltip id="button-tooltip" {...props}>
+            You are currently connected using a token for the HYPATIA project: {projectName}
+        </Tooltip>
+    );
+
     return (
         <Row>
             <Col>
-                <h1 className="display-6">Tasks for project: {projectName}</h1>
+                    <h1 className="display-6">
+                        Project Tasks
+                        <OverlayTrigger
+                            placement="right"
+                            overlay={renderTooltip}
+                        >
+                            <FontAwesomeIcon
+                                icon={faQuestionCircle}
+                                className="fs-6 py-2"
+                                style={{ cursor: 'pointer' }}
+                            />
+                        </OverlayTrigger>
+                    </h1>
+
+                
                     <TasksListProvider>
                         <TasksFilterControls />
                         <TasksPaginationControls />

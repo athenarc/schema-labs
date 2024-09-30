@@ -14,10 +14,13 @@ import { UserDetailsContext } from "../utils/components/auth/AuthProvider";
 import Footer from './Footer';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import { getProjectName } from "../api/v1/actions";
 
 const Base = props => {
     const { userDetails } = useContext(UserDetailsContext);
     const [showShadow, setShowShadow] = useState(false);
+
+    const [projectName, setProjectName] = useState(null);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -26,10 +29,19 @@ const Base = props => {
         };
 
         document.addEventListener('scroll', handleScroll);
+    
+            if (userDetails && userDetails.apiKey) {
+            getProjectName(userDetails.apiKey)
+                .then(response => response.json())
+                .then(data => {
+                    setProjectName(data.name || 'No project name available');
+                });
+        }
+
         return () => {
             document.removeEventListener('scroll', handleScroll);
         };
-    }, [showShadow]);
+    }, [showShadow, userDetails]);
 
 
 
@@ -59,6 +71,11 @@ const Base = props => {
                             {userDetails 
                                 ? (
                                     <>
+                                        {projectName && (
+                                            <span className="px-3 py-2 text-dark fw-bold">
+                                                {projectName}
+                                            </span>
+                                        )}
                                         <Button variant="primary"  as={Link} to="/logout">
                                             <FontAwesomeIcon icon={faRightToBracket} className="me-2" />Logout</Button>
                                         {/* <Dropdown>
