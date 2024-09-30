@@ -11,8 +11,8 @@ export const useTaskData = () => {
 }
 
 export const useTaskFilters = () => {
-    const {taskFilters, setTaskFilters} = useContext(TasksContext);
-    return {taskFilters, setTaskFilters};
+    const {taskFilters, setTaskFilters, selectedTasks, setSelectedTasks} = useContext(TasksContext);
+    return {taskFilters, setTaskFilters, selectedTasks, setSelectedTasks};
 }
 
 const TasksListProvider = ({children}) => {
@@ -26,6 +26,8 @@ const TasksListProvider = ({children}) => {
         order: "-submitted_at",
         page: 0
     });
+
+    const [selectedTasks, setSelectedTasks] = useState([]);
     const { userDetails } = useContext(UserDetailsContext);
 
     const refreshInterval = 5000; // TaskData refresh rate (every 5sec)
@@ -60,10 +62,10 @@ const TasksListProvider = ({children}) => {
     // Every refreshInterval seconds call fetchTaskData task
     useEffect(() => {
         const intervalId = setInterval(fetchTaskData, refreshInterval);
-        return () => clearInterval(intervalId); // Clear interval on component unmount
+        return () => clearInterval(intervalId);
     }, [taskFilters]);
     
-    return <TasksContext.Provider value={{taskData, setTaskData, taskFilters, setTaskFilters}}>
+    return <TasksContext.Provider value={{taskData, setTaskData, taskFilters, setTaskFilters, selectedTasks, setSelectedTasks }}>
         {children}
     </TasksContext.Provider>
     

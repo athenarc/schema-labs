@@ -722,7 +722,7 @@ const TaskForm = () => {
                             <Button variant="primary" className="me-2" onClick={handleClear}>
                                 Clear All
                             </Button>
-                            <Button variant="danger" className="me-2" onClick={() => navigate("/Dashboard")}>
+                            <Button variant="danger" className="me-2" onClick={() => navigate(-1)}>
                                 Back
                             </Button>
                             <Button variant="success" type="submit">

@@ -108,7 +108,7 @@ const TaskListDetails = () => {
                 <Outlet />
             </div>
             <div className="mt-3">
-                <Button variant="primary" onClick={() => navigate("/Dashboard")}>Back</Button>
+                <Button variant="primary" onClick={() => navigate(-1)}>Back</Button>
             </div>
         </TaskDetailsContext.Provider>
     );

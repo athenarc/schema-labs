@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Link } from "react-router-dom";
@@ -6,13 +6,13 @@ import { Tooltip, OverlayTrigger, Dropdown, DropdownButton, Button, Alert } from
 import { faArrowDownAZ, faArrowDownZA } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Table from "react-bootstrap/Table";
-import { useTaskData, useTaskFilters } from "./TasksListProvider";
+import { useTaskData, useTaskFilters } from "../../TasksListProvider";
 import { cloneDeep } from "lodash";
-import TaskStatus from "./TaskStatus";
-import { cancelTaskPost } from "../../api/v1/actions";
-import { UserDetailsContext } from "../../utils/components/auth/AuthProvider";
+import TaskStatus from "../../TaskStatus";
+import { cancelTaskPost } from "../../../../api/v1/actions";
+import { UserDetailsContext } from "../../../../utils/components/auth/AuthProvider";
 
-const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggleSelection }) => {
+const ExprimentTaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggleSelection }) => {
     const { userDetails } = useContext(UserDetailsContext);
     const [alertMessage, setAlertMessage] = useState(null);
     const [isAlertActive, setIsAlertActive] = useState(false);
@@ -47,9 +47,9 @@ const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggl
                 </tr>
             ) : (
                 <tr className={isSelected ? 'table-active' : ''}>
-                    {/* <td>
+                    <td>
                         <input className="form-check-input" type="checkbox" checked={isSelected} onChange={handleCheckboxChange} />
-                    </td> */}
+                    </td>
                     <td><Link to={`/task-details/${uuid}/executors`}>{uuid}</Link></td>
                     <td><TaskStatus status={status} /></td>
                     <td>{new Date(submitted_at).toLocaleString('en')}</td>
@@ -93,7 +93,7 @@ const ColumnOrderToggle = ({ columnName, currentOrder, setOrder }) => {
     );
 };
 
-const TaskList = () => {
+const ExprimentTaskList = () => {
     const { taskData } = useTaskData();
     const { taskFilters, setTaskFilters, selectedTasks, setSelectedTasks } = useTaskFilters();
     const [token, setToken] = useState(taskFilters.token);
@@ -169,23 +169,23 @@ const TaskList = () => {
         }
     };
 
-    // const toggleRowSelection = (task) => {
-    //     const updatedSelectedTasks = selectedTasks.some(t => t.uuid === task.uuid)
-    //         ? selectedTasks.filter(t => t.uuid !== task.uuid)
-    //         : [...selectedTasks, task];
+    const toggleRowSelection = (task) => {
+        const updatedSelectedTasks = selectedTasks.some(t => t.uuid === task.uuid)
+            ? selectedTasks.filter(t => t.uuid !== task.uuid)
+            : [...selectedTasks, task];
     
-    //     setSelectedTasks(updatedSelectedTasks);
-    // };
+        setSelectedTasks(updatedSelectedTasks);
+    };
     
 
-    // const handleSelectAll = (event) => {
-    //     if (event.target.checked && taskData && taskData.results) {
-    //         const allTasks = taskData.results;
-    //         setSelectedTasks(allTasks);
-    //     } else {
-    //         setSelectedTasks([]);
-    //     }
-    // };
+    const handleSelectAll = (event) => {
+        if (event.target.checked && taskData && taskData.results) {
+            const allTasks = taskData.results;
+            setSelectedTasks(allTasks);
+        } else {
+            setSelectedTasks([]);
+        }
+    };
     
 
     return (
@@ -195,9 +195,9 @@ const TaskList = () => {
                     <Table borderless responsive hover>
                         <thead>
                             <tr>
-                                {/* <th>
+                                <th>
                                     <input className="form-check-input" type="checkbox" onChange={handleSelectAll} />
-                                </th> */}
+                                </th>
                                 <th className="col-4">
                                     <div className="input-group">
                                         <span className="input-group-text fw-bold" id="search">
@@ -261,14 +261,14 @@ const TaskList = () => {
                         </thead>
                         <tbody>
                         {taskData.results.map((task) => (
-                                <TaskListing
+                                <ExprimentTaskListing
                                     key={task.uuid}
                                     uuid={task.uuid}
                                     status={task.state.status}
                                     submitted_at={task.submitted_at}
                                     updated_at={task.state.updated_at}
-                                    // isSelected={selectedTasks.some(t => t.uuid === task.uuid)}
-                                    // toggleSelection={() => toggleRowSelection(task)}
+                                    isSelected={selectedTasks.some(t => t.uuid === task.uuid)}
+                                    toggleSelection={() => toggleRowSelection(task)}
                                 />
                             ))}
                         </tbody>
@@ -280,4 +280,4 @@ const TaskList = () => {
     );
 };
 
-export default TaskList;
+export default ExprimentTaskList;
