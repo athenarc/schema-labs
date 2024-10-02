@@ -1,4 +1,5 @@
 import {SupportedLoginsMap} from "./constants";
+import configuration from "./config.json";
 
 const readEnv = (envName, {trim = false, defaultValue = null, emptyValueIsValid = true} = {}) => {
     const envValue = process.env[envName];
@@ -29,6 +30,8 @@ const parseLoginProviders = supportedLoginsProvidersDescription => {
     throw new Error(`Invalid configuration [LoginProviders]: Value "${loginProviderIdentifiers[unknownLoginProvider]}" is not a known login provider`)
 };
 
+const { pagination } = configuration;
+
 const config = {
     auth: {
         login_providers: parseLoginProviders(
@@ -47,11 +50,7 @@ const config = {
     },
     client: {
         preferences: {
-            pageSize: Number.parseInt(readEnv("REACT_APP_SCHEMA_LAB_PAGE_SIZE", {
-                trim: true,
-                emptyValueIsValid: false,
-                defaultValue: "20"
-            }), 10)
+            pageSize: Number.parseInt(pagination.taskPerPage)
         }
     }
 };

@@ -1,11 +1,14 @@
 import React from 'react';
+import config from "../config/config.json"
 
 const Footer = () => {
+    const { footer } = config;
+    
     return (
         <footer className="bg-light text-center">
             <p>
-                Powered by <a href="https://github.com/athenarc/schema-lab" style={{color: '#7700D4'}}>SCHEMA lab</a>, 
-                <br /> Copyright © 2024, HYPATIA lab, ATHENA RC.
+                {footer.footerMainText} <a href={footer.footerLink} className='text-dark'>{footer.footerLinkText}</a>, 
+                <br /> {footer.footerExtraText}
             </p>
         </footer>
     );

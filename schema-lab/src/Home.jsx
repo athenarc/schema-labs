@@ -3,9 +3,16 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Image from "react-bootstrap/Image";
 import WelcomeCard from "./layouts/WelcomeMessage";
-import welcome_img from './img/welcome.png';
+import config from "./config/config.json";
 
 const Home = () => {
+    const { title, faviconLogo, welcomeImg, welcomeImgAlt } = config;
+    
+    const favicon = document.querySelector('link[rel="icon"]') || document.createElement('link');
+    favicon.href = faviconLogo;
+    document.head.appendChild(favicon); // Update favicon.ico
+    document.title = title // Update title
+
     return <div>
         <Row className="justify-content-center p-1">
             <Col className="border border-light-subtle rounded p-4">
@@ -13,8 +20,8 @@ const Home = () => {
                     <Col className="border-end border-muted-subtle"><WelcomeCard /></Col>
                     <Col className="d-flex justify-content-center align-items-center"> 
                     <Image
-                                src={welcome_img} 
-                                alt="Welcome to SCHEMA lab"
+                                src={welcomeImg}
+                                alt={welcomeImgAlt}
                                 fluid 
                                 style={{
                                     maxWidth: '70%', 

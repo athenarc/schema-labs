@@ -5,7 +5,6 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Image from 'react-bootstrap/Image';
-import logo from '../img/hypatia-lab-logo.png';
 import {
     Link,
     Outlet
@@ -15,8 +14,10 @@ import Footer from './Footer';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { getProjectName } from "../api/v1/actions";
+import config from "../config/config.json"
 
 const Base = props => {
+    const { welcomeLogo, welcomeLogoAlt } = config;
     const { userDetails } = useContext(UserDetailsContext);
     const [showShadow, setShowShadow] = useState(false);
 
@@ -51,8 +52,8 @@ const Base = props => {
                 <Container>
                     <Navbar.Brand as={Link} to='/'>
                         <Image
-                            src={logo} // Path to your image
-                            alt="SCHEMA lab"
+                            src={welcomeLogo}
+                            alt={welcomeLogoAlt}
                             style={{
                                 height: '60px', // Set height to match button size
                                 width: 'auto', // Maintain aspect ratio
