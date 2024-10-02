@@ -1,0 +1,25 @@
+{
+    "title": "HYPATIA lab",
+    "faviconLogo": "favicon.ico",
+    "welcomeImg": "media/welcome.png",
+    "welcomeImgAlt": "Welcome to Hypatia lab",
+    "welcomeLogo":"media/hypatia-lab-logo.png",
+    "welcomeLogoAlt":"Hypatia Logo",
+    "welcome": {
+        "keyword": "HYPATIA lab",
+        "extraKeyword": "SCHEMA lab",
+        "extraKeywordLink": "https://github.com/athenarc/schema-lab",
+        "text": "Welcome to Hypatia Lab",
+        "extraText": "Your platform for managing computational tasks"
+    },
+    "pagination": {
+        "taskPerPage": 6
+    },
+    "footer": {
+        "footerMainText":"Powered by",
+        "footerLink": "https://github.com/athenarc/schema-lab",
+        "footerLinkText": "SCHEMA lab",
+        "footerExtraText": "Copyright © 2024, HYPATIA lab, ATHENA RC."
+    }
+  }
+  

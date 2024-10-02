@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Alert from "react-bootstrap/Alert";
 import config from "../config";
+import configuration from "../config/config.json"
 
 const LoginPrompt = props => {
 
@@ -14,6 +15,8 @@ const LoginPrompt = props => {
      */
     const [selectedLoginProviderId, setSelectedLoginProviderId] = useState('');
     const DEFAULT_PROVIDER_ID = 'api_key';
+
+    const { welcome } = configuration
 
     const availableLoginProviders = config.auth.login_providers.reduce((availableLoginProviders, { id, loginProviderName, LoginProvider }) => {
         availableLoginProviders[id] = { loginProviderName, LoginProvider };
@@ -38,7 +41,7 @@ const LoginPrompt = props => {
                 <Row>
                     <Col>
                         <p className="display-6 text-center">Login</p>
-                        <p>Use your credentials to log in and gain access to the SCHEMA lab features</p>
+                        <p>Use your credentials to log in and gain access to the {welcome.extraKeyword} features</p>
                     </Col>
                 </Row>
                 <Row>        

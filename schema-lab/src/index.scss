@@ -1,4 +1,4 @@
-$primary: #e6833b;
+$primary: #e6833b; // Update $primary to modify primary color for the webpage
 $secondary: #ffc484;
 
 .nav-link {
@@ -22,7 +22,7 @@ $secondary: #ffc484;
 }
 
 a {
-    color: $primary;
+    color: var(--primary);
     text-decoration: none !important;
     font-weight: bold;
 }
