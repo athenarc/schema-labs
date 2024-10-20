@@ -18,20 +18,22 @@ const TasksFilterControls = () => {
 
     return (
         <Row className="mt-3 align-items-center">
-            <Col className="text-start">
-                <h6 className="d-inline">
-                <FontAwesomeIcon icon={faArrowAltCircleRight} className="ms-2"/> Select Tasks and click Next to submit Experiment:
-                </h6>
-
-                <Button
-                    ref={elementRef}
-                    onClick={handleCreateExperiment}
-                    variant="outline-primary"
-                    disabled={selectedTasks.length === 0}
-                    className="ms-2"
-                >
-                    Next
-                </Button>
+            <Col>
+                <div className="d-flex justify-content-between align-items-center">
+                    <h6 className="d-inline mb-0">
+                        <FontAwesomeIcon icon={faArrowAltCircleRight} className="ms-2" /> 
+                        &nbsp;Select Tasks and click <b>Create</b> to submit Experiment:
+                    </h6>
+                    <Button
+                        ref={elementRef}
+                        onClick={handleCreateExperiment}
+                        variant="outline-primary"
+                        disabled={selectedTasks.length === 0}
+                        className="ms-auto"
+                    >
+                        Create
+                    </Button>
+                </div>
             </Col>
         </Row>
     );
