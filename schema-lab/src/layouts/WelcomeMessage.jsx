@@ -5,15 +5,13 @@ import config from "../config/config.json"
 
 
 const WelcomeCard = () => {
-  const { welcome } = config;
-
   return (
     <div>
       <div className="text-center ps-3 mt-4">
-      <p className="display-6">{welcome.text}</p>
+      <p className="display-6">{config.landing_page.title}</p>
       </div>
       <div className="card-body">
-        <p className="card-text text-center">{welcome.extraText}</p>
+        <p className="card-text text-center">{config.landing_page.subtitle}</p>
         <div className="text-center mt-4">
           <Button variant="primary" as={Link} to="/learnmore" className="me-2">Learn more</Button>
         </div>

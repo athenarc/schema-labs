@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
-import Dropdown from "react-bootstrap/Dropdown";
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Image from 'react-bootstrap/Image';
@@ -17,7 +16,7 @@ import { getProjectName } from "../api/v1/actions";
 import config from "../config/config.json"
 
 const Base = props => {
-    const { welcomeLogo, welcomeLogoAlt } = config;
+    const { logo, logo_alt } = config.landing_page;
     const { userDetails } = useContext(UserDetailsContext);
     const [showShadow, setShowShadow] = useState(false);
 
@@ -52,8 +51,8 @@ const Base = props => {
                 <Container>
                     <Navbar.Brand as={Link} to='/'>
                         <Image
-                            src={welcomeLogo}
-                            alt={welcomeLogoAlt}
+                            src={logo}
+                            alt={logo_alt}
                             style={{
                                 height: '60px', // Set height to match button size
                                 width: 'auto', // Maintain aspect ratio
