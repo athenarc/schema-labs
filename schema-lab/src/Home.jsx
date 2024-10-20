@@ -6,12 +6,12 @@ import WelcomeCard from "./layouts/WelcomeMessage";
 import config from "./config/config.json";
 
 const Home = () => {
-    const { title, faviconLogo, welcomeImg, welcomeImgAlt } = config;
+    const { image, image_alt } = config.landing_page;
     
     const favicon = document.querySelector('link[rel="icon"]') || document.createElement('link');
-    favicon.href = faviconLogo;
-    document.head.appendChild(favicon); // Update favicon.ico
-    document.title = title // Update title
+    favicon.href = config.favicon_logo;
+    document.head.appendChild(favicon); 
+    document.title = config.title
 
     return <div>
         <Row className="justify-content-center p-1">
@@ -20,8 +20,8 @@ const Home = () => {
                     <Col className="border-end border-muted-subtle"><WelcomeCard /></Col>
                     <Col className="d-flex justify-content-center align-items-center"> 
                     <Image
-                                src={welcomeImg}
-                                alt={welcomeImgAlt}
+                                src={image}
+                                alt={image_alt}
                                 fluid 
                                 style={{
                                     maxWidth: '70%', 
