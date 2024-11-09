@@ -5,13 +5,11 @@ import TasksFilterControls from "./TasksFilterControls";
 import TasksListProvider from "../../TasksListProvider";
 import TasksPaginationControls from "../../TasksPaginationControls";
 import ExprimentTaskList from "./TasksList";
-import HorizontalMenu from "../HorizontalMenu";
 
 const Experiment = () => {
 
     return (
         <>
-        <HorizontalMenu/>
         <Row>
             <Col>
                 <TasksListProvider>

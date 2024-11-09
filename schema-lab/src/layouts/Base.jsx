@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Container, Nav, Navbar, Image, NavDropdown } from "react-bootstrap";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, Navigate } from "react-router-dom";
 import { UserDetailsContext } from "../utils/components/auth/AuthProvider";
 import Footer from './Footer';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,7 +13,10 @@ const Base = (props) => {
     const { userDetails } = useContext(UserDetailsContext);
     const [showShadow, setShowShadow] = useState(false);
     const [projectName, setProjectName] = useState(null);
-    const [dropdownOpen, setDropdownOpen] = useState(false); // Track the dropdown state
+
+    // Separate state for tracking each dropdown
+    const [tasksDropdownOpen, setTasksDropdownOpen] = useState(false);
+    const [experimentsDropdownOpen, setExperimentsDropdownOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -37,8 +40,11 @@ const Base = (props) => {
     }, [showShadow, userDetails]);
 
     // Handlers to show/hide the dropdown on hover
-    const handleMouseEnter = () => setDropdownOpen(true);
-    const handleMouseLeave = () => setDropdownOpen(false);
+    const handleTasksMouseEnter = () => setTasksDropdownOpen(true);
+    const handleTasksMouseLeave = () => setTasksDropdownOpen(false);
+
+    const handleExperimentsMouseEnter = () => setExperimentsDropdownOpen(true);
+    const handleExperimentsMouseLeave = () => setExperimentsDropdownOpen(false);
 
     return (
         <div className="d-flex flex-column min-vh-100">
@@ -56,33 +62,50 @@ const Base = (props) => {
                         <Nav className="me-auto ms-5">
                             {userDetails && (
                                 <>
-                                    {/* Dashboard Dropdown Menu */}
+                                    {/* Tasks Dropdown Menu */}
                                     <NavDropdown
-                                        id="nav-dropdown-dashboard"
-                                        title="Tasks"
+                                        id="nav-dropdown-tasks"
+                                        title={<span className="text-primary">Tasks</span>}
                                         menuVariant="light"
-                                        show={dropdownOpen}
-                                        onMouseEnter={handleMouseEnter}
-                                        onMouseLeave={handleMouseLeave}
-                                        className="ms-3"
+                                        show={tasksDropdownOpen}
+                                        onMouseEnter={handleTasksMouseEnter}
+                                        onMouseLeave={handleTasksMouseLeave}
+                                        className="ms-3 rounded-2 border border-primary"
                                     >
-                                        <NavDropdown.Item as={Link} to="/dashboard" className="text-dark">
+                                        <NavDropdown.Item as={Link} to="/dashboard" className="text-primary">
                                             View
                                         </NavDropdown.Item>
-                                        <NavDropdown.Item as={Link} to="/runtask" className="text-dark">
+                                        <NavDropdown.Item as={Link} to="/runtask" className="text-primary">
                                             Run a Task
                                         </NavDropdown.Item>
                                     </NavDropdown>
 
-                                    {/* Experiments Button */}
-                                    <Nav.Link as={Link} to="/experiment" className="ms-3 text-dark">
-                                        Experiments
-                                    </Nav.Link>
-
-                                    {/* RO-crates Button */}
-                                    <Nav.Link as={Link} to="/ro-crates" className="ms-3 text-dark">
-                                        RO-crates
-                                    </Nav.Link>
+                                    {/* Experiments Dropdown Menu */}
+                                    <NavDropdown
+                                        id="nav-dropdown-experiments"
+                                        title={<span className="text-primary">Experiments</span>}
+                                        menuVariant="light"
+                                        show={experimentsDropdownOpen}
+                                        onMouseEnter={handleExperimentsMouseEnter}
+                                        onMouseLeave={handleExperimentsMouseLeave}
+                                        className="ms-3 rounded-2 border border-primary"
+                                    >
+                                        <NavDropdown.Item as={Link} to="/experiment" className="text-primary">
+                                            About
+                                        </NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/preview" className="text-primary">
+                                            View
+                                        </NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/view" className="text-primary">
+                                            Create
+                                        </NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/" className="text-muted disabled">
+                                            Export RO-crates
+                                        </NavDropdown.Item>
+                                        <NavDropdown.Item as={Link} to="/" className="text-muted disabled">
+                                            Publish RO-hub
+                                        </NavDropdown.Item>
+                                    </NavDropdown>
                                 </>
                             )}
                         </Nav>
@@ -96,7 +119,7 @@ const Base = (props) => {
                                                 {projectName}
                                             </span>
                                         )}
-                                        <Button variant="primary" as={Link} to="/logout" className="rounded-pill px-4">
+                                        <Button variant="primary" as={Link} to="/logout" className="px-4">
                                             <FontAwesomeIcon icon={faRightToBracket} className="me-2" />Logout
                                         </Button>
                                     </>
@@ -111,6 +134,7 @@ const Base = (props) => {
                 </Container>
             </Navbar>
 
+            {/* Default landing page when Experiments menu is clicked */}
             <Container className="flex-grow-1 mt-5">
                 <Outlet />
             </Container>
