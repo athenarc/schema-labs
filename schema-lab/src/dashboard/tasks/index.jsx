@@ -30,7 +30,7 @@ const Tasks = () => {
 
     const renderTooltip = (props) => (
         <Tooltip id="button-tooltip" {...props}>
-            You are currently connected using a token for the HYPATIA project: {projectName}
+            You are currently connected using a token for the project: {projectName}
         </Tooltip>
     );
 
