@@ -28,9 +28,25 @@ const Experiments = () => {
       <Row className="p-5">
         <Col>
         <h1 className="display-6 mb-4">Welcome to Experiments</h1>
-          <p>
-            This is your Experiments dashboard where you can manage and create new experiments.
-            Use the menu above to view or create your experiments.
+          <p className="lead">
+            This interface provides a streamlined experience for creating and managing computational experiments. You can:
+          </p>
+          <ul>
+            <li>
+              <strong>Create Experiments:</strong> Combine one or more tasks (execution instances) into a computational experiment.
+            </li>
+            <li>
+              <strong>Manage Tasks:</strong> Easily select and group tasks using checkboxes.
+            </li>
+            <li>
+              <strong>View Details:</strong> Access detailed information about each task and experiment.
+            </li>
+            <li>
+              <strong>Export and Share:</strong> Export experiments as RO-Crates and register them on RO-Hub to enhance research reproducibility.
+            </li>
+          </ul>
+          <p className="mt-4">
+            Customize your experiments with intuitive tools and an organized workspace tailored to your needs.
           </p>
           <Button variant="primary" href="#">
             Learn More
