@@ -12,7 +12,7 @@ import Executors from "./dashboard/tasks/details/Executors";
 import Outputs from "./dashboard/tasks/details/Outputs"
 import Inputs from "./dashboard/tasks/details/Inputs"
 import RunTask from "./runtask";
-import Aboutus from './layouts/Aboutus';
+// import Aboutus from './layouts/Aboutus';
 import AboutusTemplate from "./layouts/Aboutus_template";
 import LearnMore from "./layouts/LearnMore";
 import SelectTask from "./dashboard/tasks/expriment/create";
