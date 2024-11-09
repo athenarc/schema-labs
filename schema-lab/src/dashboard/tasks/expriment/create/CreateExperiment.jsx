@@ -36,13 +36,6 @@ const CreateExperiment = () => {
         }
     };
 
-    const handleNextClick = () => {
-    };
-
-    const handleBackClick = () => {
-        setShowConfirmModal(true);
-    };
-
     const handleConfirmBack = () => {
         setShowConfirmModal(false);
         navigate(-1);
@@ -148,9 +141,6 @@ const CreateExperiment = () => {
                         <div className="d-flex justify-content-end mt-4">
                             <Button variant="primary" className="me-2" onClick={handleClear}>
                                 Clear All
-                            </Button>
-                            <Button variant="secondary" className="me-2" onClick={handleBackClick}>
-                                Edit
                             </Button>
                             <Button variant="success" type="submit">
                                 Submit Experiment
