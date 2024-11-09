@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Alert from "react-bootstrap/Alert";
 import config from "../config";
@@ -12,18 +11,14 @@ const LoginPrompt = props => {
      *  One login provider has been passed
      *  Multiple login providers have been passed
      */
-    const [selectedLoginProviderId, setSelectedLoginProviderId] = useState('');
     const DEFAULT_PROVIDER_ID = 'api_key';
+
 
     const availableLoginProviders = config.auth.login_providers.reduce((availableLoginProviders, { id, loginProviderName, LoginProvider }) => {
         availableLoginProviders[id] = { loginProviderName, LoginProvider };
         return availableLoginProviders;
     }, {});
-    const handleSelectOptionChanged = evt => {
-        const _selectedLoginProviderId = evt.target.value;
-        console.log(_selectedLoginProviderId)
-        setSelectedLoginProviderId(_selectedLoginProviderId);
-    }
+    
     const EffectiveLoginProvider = availableLoginProviders[DEFAULT_PROVIDER_ID] && availableLoginProviders[DEFAULT_PROVIDER_ID].LoginProvider;
 
     if (Object.keys(availableLoginProviders).length === 0) {
@@ -38,7 +33,7 @@ const LoginPrompt = props => {
                 <Row>
                     <Col>
                         <p className="display-6 text-center">Login</p>
-                        <p>Use your credentials to log in and gain access to the SCHEMA lab features</p>
+                        <p>Use your credentials to log in and gain access to the SCHEMA Lab features</p>
                     </Col>
                 </Row>
                 <Row>        

@@ -1,21 +1,26 @@
 import React, { useContext, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
-import Dropdown from "react-bootstrap/Dropdown";
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Image from 'react-bootstrap/Image';
-import logo from '../img/hypatia-lab-logo.png';
 import {
     Link,
     Outlet
 } from "react-router-dom";
 import { UserDetailsContext } from "../utils/components/auth/AuthProvider";
-import Footer from './Footer'; // Import the Footer component
+import Footer from './Footer';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import { getProjectName } from "../api/v1/actions";
+import config from "../config/config.json"
 
 const Base = props => {
+    const { logo, logo_alt } = config.landing_page;
     const { userDetails } = useContext(UserDetailsContext);
     const [showShadow, setShowShadow] = useState(false);
+
+    const [projectName, setProjectName] = useState(null);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -24,10 +29,19 @@ const Base = props => {
         };
 
         document.addEventListener('scroll', handleScroll);
+    
+            if (userDetails && userDetails.apiKey) {
+            getProjectName(userDetails.apiKey)
+                .then(response => response.json())
+                .then(data => {
+                    setProjectName(data.name || 'No project name available');
+                });
+        }
+
         return () => {
             document.removeEventListener('scroll', handleScroll);
         };
-    }, [showShadow]);
+    }, [showShadow, userDetails]);
 
 
 
@@ -37,8 +51,8 @@ const Base = props => {
                 <Container>
                     <Navbar.Brand as={Link} to='/'>
                         <Image
-                            src={logo} // Path to your image
-                            alt="SCHEMA lab"
+                            src={logo}
+                            alt={logo_alt}
                             style={{
                                 height: '60px', // Set height to match button size
                                 width: 'auto', // Maintain aspect ratio
@@ -48,15 +62,22 @@ const Base = props => {
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto ms-5">
-                            {userDetails && <Nav.Link as={Link} to={"/dashboard"}>Dashboard</Nav.Link>}
-                            {/* {userDetails && <Nav.Link as={Link} to={"/ro-crates"}>RO-crates</Nav.Link>} */}
+                            {userDetails && <Button className="ms-3" as={Link} to={"/dashboard"} variant="outline-primary">Dashboard</Button>}
+                            {userDetails && <Button className="ms-3" as={Link} to={"/experiment"} variant="outline-primary">Experiments</Button>}
+                            {userDetails && <Button className="ms-3" as={Link} to={"/ro-crates"} variant="outline-primary">RO-crates</Button>}
                             {userDetails && <Button className="ms-3" as={Link} to={"/runtask"} variant="outline-primary">Run a task</Button>}
                         </Nav>
                         <Nav className="text-primary">
                             {userDetails 
                                 ? (
                                     <>
-                                        <Button variant="primary" as={Link} to="/logout" className="me-2">Logout</Button>
+                                        {projectName && (
+                                            <span className="px-3 py-2 text-dark fw-bold">
+                                                {projectName}
+                                            </span>
+                                        )}
+                                        <Button variant="primary"  as={Link} to="/logout">
+                                            <FontAwesomeIcon icon={faRightToBracket} className="me-2" />Logout</Button>
                                         {/* <Dropdown>
                                             <Dropdown.Toggle variant="primary" id="dropdown-basic" className="rounded-pill">
                                                 Logged in with API key: {userDetails.apiKey.substring(0, 8)}...

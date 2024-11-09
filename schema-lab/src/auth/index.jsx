@@ -23,7 +23,7 @@ const Auth = () => {
             });
             navigate('/dashboard');
         } else if (userDetails) {
-            setLoginCookie(userDetails.apiKey, 7);
+            setLoginCookie(userDetails.apiKey, 1);
             navigate('/dashboard');
         }
     }, [userDetails, navigate]);

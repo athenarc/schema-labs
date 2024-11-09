@@ -1,5 +1,5 @@
-$primary: #e6833b;
-$secondary: #ffc484;
+$primary: #7700D4; // Update $primary to modify primary color for the webpage
+$secondary: #FF80F6;
 
 .nav-link {
     transition: text-decoration 0.3s ease-in-out;  // Smooth transition for hover effect
@@ -22,7 +22,7 @@ $secondary: #ffc484;
 }
 
 a {
-    color: $primary;
+    color: var(--primary);
     text-decoration: none !important;
     font-weight: bold;
 }

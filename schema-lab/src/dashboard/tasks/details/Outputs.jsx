@@ -32,7 +32,7 @@ const Outputs = () => {
                     </Table>
                     ) : (
                         <Alert variant="warning" className="mt-0">
-                            Sorry, this task has no outputs!
+                            No outputs.
                         </Alert>
                     )}
                 </Card.Body>
