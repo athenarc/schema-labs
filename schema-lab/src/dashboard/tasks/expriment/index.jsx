@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import HorizontalMenu from './HorizontalMenu';
 import { UserDetailsContext } from "../../../utils/components/auth/AuthProvider";
 import { getProjectName } from "../../../api/v1/actions";
 
@@ -23,7 +22,6 @@ const Experiments = () => {
 
   return (
     <Container fluid>
-      <HorizontalMenu />
 
       <Row className="p-5">
         <Col>

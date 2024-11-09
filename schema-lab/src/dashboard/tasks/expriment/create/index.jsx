@@ -3,7 +3,6 @@ import CreateExperiment from "./CreateExperiment";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Container } from "react-bootstrap";
-import HorizontalMenu from "../HorizontalMenu";
  
 const SelectTask = () => {
 
@@ -12,7 +11,6 @@ const SelectTask = () => {
 
     return (
         <>
-        <HorizontalMenu  isNextClicked={nextClicked} />
         <div className="d-flex flex-column min-vh-100">
         <Container className="flex-grow-1">
             <Row>
