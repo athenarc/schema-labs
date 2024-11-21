@@ -25,7 +25,7 @@ const Experiments = () => {
 
       <Row className="p-5">
         <Col>
-        <h1 className="display-6 mb-4">Welcome to Experiments</h1>
+        <h1 className="display-6 mb-4">Welcome to Experiments!</h1>
           <p className="lead">
             This interface provides a streamlined experience for creating and managing computational experiments. You can:
           </p>

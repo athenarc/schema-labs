@@ -96,7 +96,6 @@ const TaskForm = () => {
 
     const handleConfirmSubmit = () => {
         const requestData = prepareRequestData();
-        console.log("RequestData:",requestData)
         runTaskPost(userDetails.apiKey, requestData)
             .then(response => {
                 if (response.ok) {

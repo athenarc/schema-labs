@@ -1,27 +1,65 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import PreviewExperiments from "./PreviewExperiments";
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import { UserDetailsContext } from "../../../../utils/components/auth/AuthProvider";
+import { getProjectName } from "../../../../api/v1/actions";
+import ExperimentsPaginationControls from "../ExperimentsPaginationControls";
+import ExperimentsProvider from "./ExperimentsProvider";
 
-const PreviewExperiments = () => {
-   
+const ViewExperiments = () => {
+    const { userDetails } = useContext(UserDetailsContext);
+    const [projectName, setProjectName] = useState(null);
 
-   
+    useEffect(() => {
+        if (userDetails && userDetails.apiKey) {
+            getProjectName(userDetails.apiKey)
+                .then((response) => response.json())
+                .then((data) => {
+                    setProjectName(data.name || "No project name available");
+                })
+                .catch(() => {
+                    setProjectName("Error retrieving project name");
+                });
+        }
+    }, [userDetails]);
+
+    const renderTooltip = (props) => (
+        <Tooltip id="button-tooltip" {...props}>
+            You are currently connected using a token for the project: {projectName}
+        </Tooltip>
+    );
+
 
     return (
         <Row>
             <Col>
-                    <h1 className="display-6">
-                        Experiments
-                    </h1>
-
-                
-
+                <h1 className="display-6">
+                        Project Experiments{" "}
+                        <OverlayTrigger placement="right" overlay={renderTooltip}>
+                        <FontAwesomeIcon
+                            icon={faQuestionCircle}
+                            className="fs-6 py-2"
+                            style={{ cursor: "pointer" }}
+                        />
+                    </OverlayTrigger>
+                </h1>
+                <ExperimentsProvider>
+                    <ExperimentsPaginationControls />
+                    <Row className="p-3 mb-5">
+                         <Col>
+                             <PreviewExperiments />
+                         </Col>
+                     </Row>
+                </ExperimentsProvider>
             </Col>
         </Row>
+
     );
 };
 
-export default PreviewExperiments;
+export default ViewExperiments;

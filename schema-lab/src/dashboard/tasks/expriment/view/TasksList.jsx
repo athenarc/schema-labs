@@ -12,27 +12,13 @@ import TaskStatus from "../../TaskStatus";
 import { cancelTaskPost } from "../../../../api/v1/actions";
 import { UserDetailsContext } from "../../../../utils/components/auth/AuthProvider";
 
-const ExprimentTaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggleSelection }) => {
+const ExperimentTaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggleSelection }) => {
     const { userDetails } = useContext(UserDetailsContext);
     const [alertMessage, setAlertMessage] = useState(null);
     const [isAlertActive, setIsAlertActive] = useState(false);
 
     const handleCheckboxChange = () => {
         toggleSelection(uuid);
-    };
-
-    const handleCancelTask = (taskUUID, auth) => {
-        cancelTaskPost({ taskUUID, auth })
-            .then(response => {
-                if (!response.ok) {
-                    setAlertMessage(`Canceling ${taskUUID} failed! Please try again.`);
-                    setIsAlertActive(true);
-                    setTimeout(() => {
-                        setAlertMessage(null);
-                        setIsAlertActive(false);
-                    }, 1000);
-                }
-            });
     };
 
     return (
@@ -54,15 +40,6 @@ const ExprimentTaskListing = ({ uuid, status, submitted_at, updated_at, isSelect
                     <td><TaskStatus status={status} /></td>
                     <td>{new Date(submitted_at).toLocaleString('en')}</td>
                     <td>{new Date(updated_at).toLocaleString('en')}</td>
-                    <td>
-                        <Button
-                            variant="primary"
-                            size="sm"
-                            onClick={() => handleCancelTask(uuid, userDetails.apiKey)}
-                        >
-                            Cancel
-                        </Button>
-                    </td>
                 </tr>
             )}
         </>
@@ -93,7 +70,7 @@ const ColumnOrderToggle = ({ columnName, currentOrder, setOrder }) => {
     );
 };
 
-const ExprimentTaskList = () => {
+const ExperimentTaskList = () => {
     const { taskData } = useTaskData();
     const { taskFilters, setTaskFilters, selectedTasks, setSelectedTasks } = useTaskFilters();
     const [token, setToken] = useState(taskFilters.token);
@@ -256,12 +233,11 @@ const ExprimentTaskList = () => {
                                     Submission time <ColumnOrderToggle columnName={"submitted_at"} currentOrder={orderBy} setOrder={setOrderBy} />
                                 </th>
                                 <th>Update time</th>
-                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                         {taskData.results.map((task) => (
-                                <ExprimentTaskListing
+                                <ExperimentTaskListing
                                     key={task.uuid}
                                     uuid={task.uuid}
                                     status={task.state.status}
@@ -280,4 +256,4 @@ const ExprimentTaskList = () => {
     );
 };
 
-export default ExprimentTaskList;
+export default ExperimentTaskList;

@@ -1,22 +1,56 @@
-import React, { useState, useContext } from 'react';
-import { Form, Button, Row, Col, Card, Container, Table, Modal } from "react-bootstrap";
-import { useNavigate, useLocation, Link } from 'react-router-dom';
-import TaskStatus from "../../TaskStatus";
-import { postExperiment, putExperimentTasks } from "../../../../api/v1/actions";
+import React, { useState, useContext, useEffect } from 'react';
+import { Form, Button, Row, Col, Card, Container, Modal } from "react-bootstrap";
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { editExperiment, getExperimentDetails } from "../../../../api/v1/actions"; // Import the API call
 import { UserDetailsContext } from "../../../../utils/components/auth/AuthProvider";
 
-const CreateExperiment = () => {
+
+const PatchExperiment = () => {
     const navigate = useNavigate();
-    const [experimentName, setExperimentName] = useState('');
-    const [description, setDescription] = useState('');
-    const [showModal, setShowModal] = useState(false);
-    const [activeKey, setActiveKey] = useState("0");
-    const [showConfirmModal, setShowConfirmModal] = useState(false);
-    const [errorMessage, setErrorMessage] = useState(null);
     const { userDetails } = useContext(UserDetailsContext);
     const location = useLocation();
-    const [selectedTasks, setSelectedTasks] = useState(location.state?.selectedTasks || []);
+    const { creator, name } = useParams();
     const apiKey = userDetails.apiKey;
+
+    const [experimentName, setExperimentName] = useState('');
+    const [description, setDescription] = useState('');
+    const [selectedTasks, setSelectedTasks] = useState(location.state?.selectedTasks || []);
+    const [showModal, setShowModal] = useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [loading, setLoading] = useState(true); // Track loading state
+
+    useEffect(() => {
+        const fetchExperimentData = async () => {
+            try {
+                
+                console.log("name:",name," creator:",creator)
+                const response = await getExperimentDetails({ 
+                    creator, 
+                    name, 
+                    auth: apiKey });
+                
+                // Check if the response is OK
+                if (response.ok) {
+                    const experimentDetails = await response.json();
+                    
+                    // Set the state with the fetched data
+                    setExperimentName(experimentDetails.name);
+                    setDescription(experimentDetails.description);
+                    setSelectedTasks(experimentDetails.tasks || []);
+                } else {
+                    throw new Error('Failed to fetch experiment details');
+                }
+            } catch (error) {
+                setErrorMessage('Failed to fetch experiment details.');
+                console.error(error);
+            } finally {
+                setLoading(false);  
+            }
+        };
+
+        fetchExperimentData();
+    }, [creator, name, apiKey]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -44,22 +78,21 @@ const CreateExperiment = () => {
             name: experimentName,
             description: description
         };
-
-        const taskUuids = selectedTasks.map((task) => task.uuid);
-
+    
+        console.log("experimentdata:", experimentData);
+        console.log("name:", name, " creator:", creator);
+    
         try {
-            // Step 1: Post Experiment data (name and description)
-            const postResponse = await postExperiment(apiKey, experimentData);
-            // Step 2: Post Task Details
-            const putResponse = await putExperimentTasks(apiKey, postResponse.creator, experimentName, taskUuids);
+            const editResponse = await editExperiment(
+                creator,     // Creator
+                name,        // Experiment name
+                apiKey,      // API key
+                experimentData // Experiment data
+            );
+            console.log("editRes:", editResponse);
             setShowConfirmModal(false);
             setShowModal(true);
-
         } catch (error) {
-            setErrorMessage(
-                <>Experiment name <strong>{experimentName}</strong> must be unique. Please choose a different name.</>
-            );
-            setTimeout(() => setErrorMessage(null), 3000);
             setShowConfirmModal(false);
             console.error(error);
         }
@@ -74,6 +107,19 @@ const CreateExperiment = () => {
         setExperimentName("");
         setSelectedTasks([]);
     };
+
+    // Loading spinner while fetching data
+    if (loading) {
+        return (
+            <Container className="py-5">
+                <div className="d-flex justify-content-center">
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </Container>
+        );
+    }
 
     return (
         <Container className='py-5'>
@@ -90,7 +136,7 @@ const CreateExperiment = () => {
                     </p>
                     <Form onSubmit={handleSubmit}>
                         <Card className="border-0 shadow-sm rounded-3 mb-4">
-                            <Card.Header className={`bg-primary text-white ${activeKey === "0" ? "border-bottom" : ""}`}>
+                            <Card.Header className={`bg-primary text-white`}>
                                 Basic Information
                             </Card.Header>
                             <Card.Body>
@@ -128,46 +174,6 @@ const CreateExperiment = () => {
                             </Card.Body>
                         </Card>
 
-                        <Card className="border-0 shadow-sm rounded-3 mb-4">
-                            <Card.Header className={`bg-primary text-white ${activeKey === "0" ? "border-bottom" : ""}`}>
-                                Selected Tasks
-                            </Card.Header>
-                            <Card.Body>
-                                <Table borderless responsive hover>
-                                    <thead>
-                                        <tr>
-                                            <th>Name/UUID</th>
-                                            <th>Status</th>
-                                            <th>Submission Time</th>
-                                            <th>Update Time</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {selectedTasks.length === 0 ? (
-                                            <tr>
-                                                <td colSpan="4">
-                                                    <div className="alert alert-warning text-center" role="alert">
-                                                        No tasks selected.
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ) : (
-                                            selectedTasks.map((task) => (
-                                                <tr key={task.uuid}>
-                                                    <td>
-                                                        <Link to={`/task-details/${task.uuid}/executors`}>{task.uuid}</Link>
-                                                    </td>
-                                                    <td><TaskStatus status={task.state.status} /></td>
-                                                    <td>{new Date(task.submitted_at).toLocaleString('en')}</td>
-                                                    <td>{new Date(task.state.updated_at).toLocaleString('en')}</td>
-                                                </tr>
-                                            ))
-                                        )}
-                                    </tbody>
-                                </Table>
-                            </Card.Body>
-                        </Card>
-
                         <div className="d-flex justify-content-end mt-4">
                             <Button variant="primary" className="me-2" onClick={() => navigate(-1)}>
                                 Back
@@ -189,7 +195,7 @@ const CreateExperiment = () => {
                     <Modal.Title>Confirm Experiment Submission</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Are you sure you want to submit this experiment?
+                    Are you sure you want to edit this experiment?
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCancelBack}>
@@ -204,13 +210,13 @@ const CreateExperiment = () => {
             {/* Success Modal */}
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Experiment Created Successfully</Modal.Title>
+                    <Modal.Title>Experiment Updated Successfully</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Your experiment has been created successfully.
+                    Your experiment has been updated successfully.
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={() => setShowModal(false)}>
+                    <Button variant="primary" onClick={() => { setShowModal(false); navigate(-1); }}>
                         OK
                     </Button>
                 </Modal.Footer>
@@ -219,4 +225,4 @@ const CreateExperiment = () => {
     );
 };
 
-export default CreateExperiment;
+export default PatchExperiment;

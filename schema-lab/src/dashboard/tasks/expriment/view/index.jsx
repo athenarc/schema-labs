@@ -4,26 +4,24 @@ import Row from "react-bootstrap/Row";
 import TasksFilterControls from "./TasksFilterControls";
 import TasksListProvider from "../../TasksListProvider";
 import TasksPaginationControls from "../../TasksPaginationControls";
-import ExprimentTaskList from "./TasksList";
+import ExperimentTaskList from "./TasksList";
 
-const Experiment = () => {
 
+const Experiment = ({ taskDetails }) => {
     return (
-        <>
         <Row>
             <Col>
-                <TasksListProvider>
+                <TasksListProvider initialTasks={taskDetails}>
                     <TasksFilterControls />
                     <TasksPaginationControls />
                     <Row className="p-3 mb-5">
                         <Col>
-                            <ExprimentTaskList />
+                            <ExperimentTaskList />
                         </Col>
                     </Row>
                 </TasksListProvider>
             </Col>
         </Row>
-        </>
     );
 };
 
