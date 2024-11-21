@@ -32,6 +32,7 @@ const TasksListProvider = ({children}) => {
 
     const refreshInterval = 5000; // TaskData refresh rate (every 5sec)
 
+
     const fetchTaskData = ()=>{
         const filters = {
             ...taskFilters,

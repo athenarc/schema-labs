@@ -35,4 +35,8 @@ a:hover {
     margin-bottom: 0;
 }
 
+.no-arrow-dropdown .dropdown-toggle::after {
+    display: none !important;
+}
+
 @import '~bootstrap/scss/bootstrap';

@@ -47,9 +47,6 @@ const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggl
                 </tr>
             ) : (
                 <tr className={isSelected ? 'table-active' : ''}>
-                    {/* <td>
-                        <input className="form-check-input" type="checkbox" checked={isSelected} onChange={handleCheckboxChange} />
-                    </td> */}
                     <td><Link to={`/task-details/${uuid}/executors`}>{uuid}</Link></td>
                     <td><TaskStatus status={status} /></td>
                     <td>{new Date(submitted_at).toLocaleString('en')}</td>
@@ -169,24 +166,6 @@ const TaskList = () => {
         }
     };
 
-    // const toggleRowSelection = (task) => {
-    //     const updatedSelectedTasks = selectedTasks.some(t => t.uuid === task.uuid)
-    //         ? selectedTasks.filter(t => t.uuid !== task.uuid)
-    //         : [...selectedTasks, task];
-    
-    //     setSelectedTasks(updatedSelectedTasks);
-    // };
-    
-
-    // const handleSelectAll = (event) => {
-    //     if (event.target.checked && taskData && taskData.results) {
-    //         const allTasks = taskData.results;
-    //         setSelectedTasks(allTasks);
-    //     } else {
-    //         setSelectedTasks([]);
-    //     }
-    // };
-    
 
     return (
         <Row className="p-3 mb-5">
@@ -195,9 +174,6 @@ const TaskList = () => {
                     <Table borderless responsive hover>
                         <thead>
                             <tr>
-                                {/* <th>
-                                    <input className="form-check-input" type="checkbox" onChange={handleSelectAll} />
-                                </th> */}
                                 <th className="col-4">
                                     <div className="input-group">
                                         <span className="input-group-text fw-bold" id="search">

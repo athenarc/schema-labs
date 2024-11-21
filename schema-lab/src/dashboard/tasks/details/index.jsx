@@ -15,10 +15,8 @@ const Details = () =>
                     <h1 className="display-6">Task Details</h1>
                     <Container>
                         <TasksListProvider>
-                            <TasksFilterControls />
-                            <TaskListDetails>
+                            <TasksFilterControls />   
                                 <TaskListDetails />
-                            </TaskListDetails>
                         </TasksListProvider>
                     </Container>
                 </Col>

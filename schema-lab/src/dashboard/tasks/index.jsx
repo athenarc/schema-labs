@@ -38,7 +38,7 @@ const Tasks = () => {
         <Row>
             <Col>
                     <h1 className="display-6">
-                        Project Tasks
+                        Project Tasks{" "}
                         <OverlayTrigger
                             placement="right"
                             overlay={renderTooltip}

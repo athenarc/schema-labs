@@ -18,7 +18,10 @@ import LearnMore from "./layouts/LearnMore";
 import SelectTask from "./dashboard/tasks/expriment/create";
 import Experiments from "./dashboard/tasks/expriment"
 import Experiment from "./dashboard/tasks/expriment/view"
-import PreviewExperiments from "./dashboard/tasks/expriment/preview"
+import ViewExperiments from "./dashboard/tasks/expriment/preview/index"
+import ExperimentListDetails from "./dashboard/tasks/expriment/details";
+import ExperimentDetails from "./dashboard/tasks/expriment/details/ExperimentDetails";
+import EditExperiment from "./dashboard/tasks/expriment/edit";
 
 const ProtectedRoutes = () => {
     const { userDetails } = useContext(UserDetailsContext);
@@ -46,13 +49,18 @@ const router = createBrowserRouter(
                 <Route path="/experiment" element={<Experiments/>} />
                     <Route path="/view" element={<Experiment/>} />
                     <Route path="/create" element={<SelectTask/>} />
-                    <Route path="/preview" element={<PreviewExperiments/>} />
+                    <Route path="/preview" element={<ViewExperiments/>} />
+                    <Route path="/edit/:creator/:name" element={<EditExperiment/>} />
+                <Route path="/experiment-details/:creator/:name" element={<ExperimentListDetails />}>
+                    <Route index element={<Navigate to="description" />} />
+                    <Route path="description" element={<ExperimentDetails />} />
+                </Route>               
                 <Route path="/task-details/:uuid" element={<Details />}>
                     <Route index element={<Navigate to="executors" />} />
                     <Route path="executors" element={<Executors />} />
                     <Route path="inputs" element={<Inputs />} />
                     <Route path="outputs" element={<Outputs />} />
-                </Route>               
+                </Route>
             </Route>
             <Route path="/*" element={<Navigate to={"/"} />} />
         </Route>

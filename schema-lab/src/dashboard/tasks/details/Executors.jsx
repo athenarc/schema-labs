@@ -36,7 +36,7 @@ const Executors = () => {
     if (!taskDetails || !taskDetails.executors) {
         return (
             <Alert variant="warning" className="mt-3">
-                Sorry, no task details are available!
+                No task details are available!
             </Alert>
         );
     }
