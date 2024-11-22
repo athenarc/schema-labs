@@ -210,7 +210,13 @@ const CreateExperiment = () => {
                     Your experiment has been created successfully.
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={() => setShowModal(false)}>
+                    <Button
+                        variant="primary"
+                        onClick={() => {
+                            setShowModal(false);
+                            navigate('/preview');
+                        }}
+                    >
                         OK
                     </Button>
                 </Modal.Footer>
