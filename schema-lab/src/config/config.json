@@ -1,20 +1,20 @@
 {
-    "title": "SCHEMA lab",
-    "favicon_logo": "media/schema-favicon.ico",    
+    "title": "HYPATIA lab",
+    "favicon_logo": "media/hypatia/favicon.ico",    
     "landing_page": {
-        "title": "Welcome to SCHEMA lab",
+        "title": "Welcome to Hypatia lab",
         "subtitle": "Your platform for managing computational tasks",
-        "logo":"media/schema-logo.png",
-        "logo_alt":"SCHEMA Logo",
-        "image": "media/schema-lab-welcome.png",
-        "image_alt":"SCHEMA Image"
+        "logo":"media/hypatia/hypatia-lab-logo.png",
+        "logo_alt":"Hypatia Logo",
+        "image": "media/hypatia/welcome.png",
+        "image_alt":"Hypatia Image"
     },
 
     "footer": {
         "footerMainText":"Powered by",
         "footerLink": "https://github.com/athenarc/schema-lab",
         "footerLinkText": "SCHEMA lab",
-        "footerExtraText": "Copyright © 2024, ATHENA RC."
+        "footerExtraText": "Copyright © 2024, HYPATIA lab, ATHENA RC."
     },
     
     "pagination": {

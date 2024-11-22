@@ -13,7 +13,7 @@ import Outputs from "./dashboard/tasks/details/Outputs"
 import Inputs from "./dashboard/tasks/details/Inputs"
 import RunTask from "./runtask";
 // import Aboutus from './layouts/Aboutus';
-import AboutusTemplate from "./layouts/Aboutus_template";
+import Aboutus from "./layouts/Aboutus";
 import LearnMore from "./layouts/LearnMore";
 import SelectTask from "./dashboard/tasks/expriment/create";
 import Experiments from "./dashboard/tasks/expriment"
@@ -39,7 +39,7 @@ const router = createBrowserRouter(
             <Route path="/" element={<Home />} />
             <Route path="/auth" element={<Auth />} />
             {/* To render the customized AboutUs page, modify element class from AboutusTemplate to Aboutus */}
-            <Route path="/aboutus" element={<AboutusTemplate />} />
+            <Route path="/aboutus" element={<Aboutus />} />
             <Route path="/learnmore" element={<LearnMore />} />
             <Route element={<ProtectedRoutes />}>
                 <Route path="/logout" element={<Logout />} />
