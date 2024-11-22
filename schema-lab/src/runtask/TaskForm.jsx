@@ -451,7 +451,7 @@ const TaskForm = () => {
 
                                             <Form.Group as={Row} className="mb-3">
                                                 <Form.Label column sm="3" className="fw-bold">
-                                                    URL
+                                                    URL <span className="text-danger">*</span>
                                                 </Form.Label>
                                                 <Col sm="8">
                                                     <OverlayTrigger
@@ -464,6 +464,7 @@ const TaskForm = () => {
                                                             value={input.url}
                                                             onChange={(e) => handleInputChange(index, e)}
                                                             placeholder="Type URL..."
+                                                            required
                                                         />
                                                     </OverlayTrigger>
                                                 </Col>
