@@ -28,39 +28,80 @@ const ExperimentsProvider = ({ children }) => {
     const { userDetails } = useContext(UserDetailsContext);
     const refreshInterval = 4000;
 
+    // const fetchExperimentData = () => {
+    //     const filters = {
+    //         ...ExperimentFilters,
+    //         view: "detailed",
+    //         limit: pageSize,
+    //         offset: ExperimentFilters.page * pageSize,
+    //     };
+    
+    //     getExperiments({
+    //         filters,
+    //         auth: userDetails.apiKey,
+    //     }).then((data) => {
+    //         if (data) {
+    //             // Group records by page size if necessary
+    //             const paginatedResults = data.results.slice(
+    //                 ExperimentFilters.page * pageSize,
+    //                 (ExperimentFilters.page + 1) * pageSize
+    //             );
+
+    //             setExperimentData({
+    //                 count: data.count || 0,
+    //                 results: paginatedResults || [],
+    //             });
+    //         } else {
+    //             console.error("Unexpected data format:", data);
+    //             setExperimentData({ count: 0, results: [] });
+    //         }
+    //     })
+    //     .catch((error) => {
+    //         console.error("Error fetching experiments:", error);
+    //         setExperimentData({ count: 0, results: [] });
+    //     });
+    // };
     const fetchExperimentData = () => {
         const filters = {
             ...ExperimentFilters,
             view: "detailed",
-            limit: pageSize,
-            offset: ExperimentFilters.page * pageSize,
+            limit: pageSize, // Fetch a larger dataset if needed for sorting
         };
     
         getExperiments({
             filters,
             auth: userDetails.apiKey,
-        }).then((data) => {
-            if (data) {
-                // Group records by page size if necessary
-                const paginatedResults = data.results.slice(
-                    ExperimentFilters.page * pageSize,
-                    (ExperimentFilters.page + 1) * pageSize
-                );
-
-                setExperimentData({
-                    count: data.count || 0,
-                    results: paginatedResults || [],
-                });
-            } else {
-                console.error("Unexpected data format:", data);
-                setExperimentData({ count: 0, results: [] });
-            }
         })
-        .catch((error) => {
-            console.error("Error fetching experiments:", error);
-            setExperimentData({ count: 0, results: [] });
-        });
+            .then((data) => {
+                if (data && data.results) {
+                    // Sort data locally
+                    const sortedResults = [...data.results].sort((a, b) =>
+                        ExperimentFilters.order === "-created_at"
+                            ? new Date(b.created_at) - new Date(a.created_at)
+                            : new Date(a.created_at) - new Date(b.created_at)
+                    );
+    
+                    // Paginate sorted data
+                    const paginatedResults = sortedResults.slice(
+                        ExperimentFilters.page * pageSize,
+                        (ExperimentFilters.page + 1) * pageSize
+                    );
+    
+                    setExperimentData({
+                        count: sortedResults.length,
+                        results: paginatedResults,
+                    });
+                } else {
+                    console.error("Unexpected data format:", data);
+                    setExperimentData({ count: 0, results: [] });
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching experiments:", error);
+                setExperimentData({ count: 0, results: [] });
+            });
     };
+    
     
 
     useEffect(() => {
