@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Link } from "react-router-dom";
 import { UserDetailsContext } from "../../../utils/components/auth/AuthProvider";
 import { getProjectName } from "../../../api/v1/actions";
 
@@ -46,8 +47,8 @@ const Experiments = () => {
           <p className="mt-4">
             Customize your experiments with intuitive tools and an organized workspace tailored to your needs.
           </p>
-          <Button variant="primary" href="#">
-            Learn More
+          <Button variant="primary" as={Link} to="/view">
+            Create new experiment
           </Button>
         </Col>
          {/* <h1 className="display-6 my-3">Setup experiment for project: {projectName}</h1> */}
