@@ -115,7 +115,9 @@ const ExperimentDetails = () => {
                                                 tasks.map((task) => (
                                                     <tr key={task.uuid}>
                                                         <td>
-                                                            <Link to={`/task-details/${task.uuid}/executors`}>{task.uuid}</Link>
+                                                            <Link
+                                                            to={`/task-details/${task.uuid}/executors`} state={{ from: 'experiments', creator: `${experimentDetails.creator}`, name: `${experimentDetails.name}` }}>
+                                                            {task.uuid}</Link>
                                                         </td>
                                                         <td><TaskStatus status={task.state.status} /></td>
                                                         {/* <td>{new Date(task.submitted_at).toLocaleString('en')}</td> */}
