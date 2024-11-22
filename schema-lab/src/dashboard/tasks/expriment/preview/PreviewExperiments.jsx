@@ -1,12 +1,11 @@
-import React, { useState, useContext, createContext } from "react";
-import { useExperimentsData } from "./ExperimentsProvider";
+import React, { useState, useContext } from "react";
+import { useExperimentsData, useExperimentFilters } from "./ExperimentsProvider";
 import { Row, Col, Table, DropdownButton, Dropdown, OverlayTrigger, Tooltip, Modal, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDownAZ, faArrowDownZA } from "@fortawesome/free-solid-svg-icons";
 import { deleteExperiment } from "../../../../api/v1/actions";
 import { UserDetailsContext } from "../../../../utils/components/auth/AuthProvider";
-
 
 const ExperimentListing = ({ name, creator, created_at, onActionSelect }) => (
     <tr>
@@ -19,7 +18,7 @@ const ExperimentListing = ({ name, creator, created_at, onActionSelect }) => (
             <DropdownButton
                 variant="primary"
                 size="sm"
-                title="Select... "
+                title="Select..."
                 drop="auto"
                 renderMenuOnMount
                 container="body"
@@ -48,38 +47,28 @@ const ColumnOrderToggle = ({ columnName, currentOrder, setOrder }) => {
     );
 };
 
-
 const PreviewExperiments = () => {
-    const { ExperimentData, ExperimentFilters, setExperimentFilters } = useExperimentsData();
+    const { ExperimentData } = useExperimentsData();
+    const { ExperimentFilters, setExperimentFilters } = useExperimentFilters();
     const [searchName, setSearchName] = useState("");
-    const [showValidationMessage, setShowValidationMessage] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [experimentToDelete, setExperimentToDelete] = useState(null);
     const { userDetails } = useContext(UserDetailsContext);
-    const apiKey = userDetails.apiKey;
     const navigate = useNavigate();
 
-    const minCharThreshold = 2;
-
     const handleSearchInput = (evt) => setSearchName(evt.target.value);
+
     const applyFilters = (evt) => {
-        if (evt.key === "Enter" && searchName.length >= minCharThreshold) {
-            setShowValidationMessage(false);
-            setExperimentFilters({ ...ExperimentFilters, searchName, page: 0 });
-        } else {
-            setShowValidationMessage(true);
+        if (evt.key === "Enter" && searchName.length >= 2) {
+            setExperimentFilters({ ...ExperimentFilters, token: searchName, page: 0 });
         }
     };
 
     const restoreFilters = (evt) => {
         if (evt.target.value === "") {
-            setExperimentFilters({ ...ExperimentFilters, searchName: "" });
+            setExperimentFilters({ ...ExperimentFilters, token: "" });
         }
     };
-
-    const filteredData = ExperimentData.results.filter((experiment) =>
-        experiment.name.toLowerCase().includes(searchName.toLowerCase())
-    );
 
     const onActionSelect = async (action, { name, creator }) => {
         if (action === "delete") {
@@ -95,7 +84,6 @@ const PreviewExperiments = () => {
         if (experimentToDelete) {
             const { name, creator } = experimentToDelete;
             try {
-                console.log("apikey:",apiKey)
                 const response = await deleteExperiment({
                     creator,
                     name,
@@ -105,13 +93,18 @@ const PreviewExperiments = () => {
                     setShowDeleteConfirmation(false);
                 }
             } catch (error) {
-                alert("Error deleting the experiment.");
+                console.error("Error deleting the experiment:", error);
             }
         }
     };
-    
-    
-    if (!ExperimentData || !ExperimentData.results) return <div>Loading...</div>;
+
+    if (!ExperimentData || !ExperimentData.results.length) {
+        return <div>Loading...</div>;
+    }
+
+    const filteredData = ExperimentData.results.filter((experiment) =>
+        experiment.name.toLowerCase().includes(searchName.toLowerCase())
+    );
 
     return (
         <Row className="p-3 mb-5">
@@ -123,11 +116,17 @@ const PreviewExperiments = () => {
                                 <div className="input-group">
                                     <span className="input-group-text fw-bold">
                                         Name&nbsp;
-                                        <ColumnOrderToggle columnName="name" currentOrder="name" setOrder={() => {}} />
+                                        <ColumnOrderToggle
+                                            columnName="name"
+                                            currentOrder={ExperimentFilters.order}
+                                            setOrder={(newOrder) =>
+                                                setExperimentFilters({ ...ExperimentFilters, order: newOrder })
+                                            }
+                                        />
                                     </span>
                                     <OverlayTrigger
                                         placement="bottom"
-                                        overlay={<Tooltip>Please type at least two characters!</Tooltip>}
+                                        overlay={<Tooltip>Type at least 2 characters to search.</Tooltip>}
                                     >
                                         <input
                                             type="text"
@@ -144,15 +143,21 @@ const PreviewExperiments = () => {
                             <th className="text-center">Creator</th>
                             <th className="text-center">
                                 Created At&nbsp;
-                                <ColumnOrderToggle columnName="created_at" currentOrder="created_at" setOrder={() => {}} />
+                                <ColumnOrderToggle
+                                    columnName="created_at"
+                                    currentOrder={ExperimentFilters.order}
+                                    setOrder={(newOrder) =>
+                                        setExperimentFilters({ ...ExperimentFilters, order: newOrder })
+                                    }
+                                />
                             </th>
                             <th className="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredData.map(({ name, creator, created_at }, index) => (
+                        {filteredData.map(({ name, creator, created_at }) => (
                             <ExperimentListing
-                                key={index}
+                                key={`${creator}-${name}`}
                                 name={name}
                                 creator={creator}
                                 created_at={created_at}
@@ -164,7 +169,7 @@ const PreviewExperiments = () => {
             </Col>
             {filteredData.length === 0 && (
                 <div className="alert alert-warning text-center">
-                    Your search <b>{searchName}</b> did not match any task!
+                    No experiments match your search criteria.
                 </div>
             )}
 

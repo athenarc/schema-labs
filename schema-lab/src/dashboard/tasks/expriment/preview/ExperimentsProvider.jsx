@@ -26,7 +26,7 @@ const ExperimentsProvider = ({ children }) => {
     });
 
     const { userDetails } = useContext(UserDetailsContext);
-    const refreshInterval = 5000;
+    const refreshInterval = 4000;
 
     const fetchExperimentData = () => {
         const filters = {
