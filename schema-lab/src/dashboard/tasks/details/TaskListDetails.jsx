@@ -91,6 +91,17 @@ const TaskListDetails = () => {
         ? <span><TaskStatus status={taskDetails.status} onColorChange={handleColorChange} /></span>
         : ' - ';
 
+    const handleBack = () => {
+        const state = location.state;
+        if (state && state.from) {
+            // Navigate to the route stored in state
+            navigate(state.from);
+        } else {
+            // Fallback: Navigate to a default parent for Tasks
+            navigate("/dashboard");
+        }
+    };
+
     return (
         <TaskDetailsContext.Provider value={taskDetails}>
             <div>
@@ -108,7 +119,7 @@ const TaskListDetails = () => {
                 <Outlet />
             </div>
             <div className="mt-3">
-                <Button variant="primary" onClick={() => navigate(-1)}>Back</Button>
+                <Button variant="primary" onClick={handleBack}>Back</Button>
             </div>
         </TaskDetailsContext.Provider>
     );
