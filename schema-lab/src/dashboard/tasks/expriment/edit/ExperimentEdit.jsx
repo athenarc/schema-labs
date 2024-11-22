@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Form, Button, Row, Col, Card, Container, Modal } from "react-bootstrap";
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { editExperiment, getExperimentDetails } from "../../../../api/v1/actions"; // Import the API call
+import { editExperiment, getExperimentDetails } from "../../../../api/v1/actions";
 import { UserDetailsContext } from "../../../../utils/components/auth/AuthProvider";
 
 
@@ -18,7 +18,7 @@ const PatchExperiment = () => {
     const [showModal, setShowModal] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
-    const [loading, setLoading] = useState(true); // Track loading state
+    const [loading, setLoading] = useState(true); 
 
     useEffect(() => {
         const fetchExperimentData = async () => {

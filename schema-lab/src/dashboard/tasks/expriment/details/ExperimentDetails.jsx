@@ -77,29 +77,35 @@ const ExperimentDetails = () => {
 
                             {experimentDetails.description && (
                                 <Card className="border-0 shadow-sm rounded-3 mt-4">
-                                    <Card.Header className={`bg-primary text-white py-3}`}>Description</Card.Header>
-                                        <Card.Body>
-                                            <Card.Text>{experimentDetails.description}</Card.Text>
-                                        </Card.Body>
+                                    <Card.Header className="bg-primary text-white py-3">Description</Card.Header>
+                                    <Card.Body>
+                                        <Card.Text>{experimentDetails.description}</Card.Text>
+                                    </Card.Body>
                                 </Card>
                             )}
 
                             <Card className="border-0 shadow-sm rounded-3 mt-4">
-                                <Card.Header className={`bg-primary text-white py-3}`}>Selected Tasks</Card.Header>
+                                <Card.Header className="bg-primary text-white py-3">Selected Tasks</Card.Header>
                                 <Card.Body>
                                     <Table borderless responsive hover>
                                         <thead>
                                             <tr>
-                                                <th>Name/UUID</th>
-                                                <th>Status</th>
-                                                <th>Submission Time</th>
-                                                <th>Update Time</th>
+                                                <th className="col-4 text-start">
+                                                    Name/UUID
+                                                </th>
+                                                <th className="col-2 text-start">
+                                                    Status
+                                                </th>
+                                                {/* <th className="col-4 text-start">Submission Time</th> */}
+                                                <th className="col-4 text-start">
+                                                    Update Time
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {tasks.length === 0 ? (
                                                 <tr>
-                                                    <td colSpan="4">
+                                                    <td colSpan="3">
                                                         <div className="alert alert-warning text-center" role="alert">
                                                             No tasks available.
                                                         </div>
@@ -112,7 +118,7 @@ const ExperimentDetails = () => {
                                                             <Link to={`/task-details/${task.uuid}/executors`}>{task.uuid}</Link>
                                                         </td>
                                                         <td><TaskStatus status={task.state.status} /></td>
-                                                        <td>{new Date(task.submitted_at).toLocaleString('en')}</td>
+                                                        {/* <td>{new Date(task.submitted_at).toLocaleString('en')}</td> */}
                                                         <td>{new Date(task.state.updated_at).toLocaleString('en')}</td>
                                                     </tr>
                                                 ))

@@ -31,16 +31,22 @@ const ExperimentListing = ({ name, creator, created_at, onActionSelect }) => (
     </tr>
 );
 
+
 const ColumnOrderToggle = ({ columnName, currentOrder, setOrder }) => {
     const isActive = currentOrder && currentOrder.endsWith(columnName);
-    const isAsc = currentOrder && !currentOrder.startsWith("-");
+    const isAsc = currentOrder && !currentOrder.startsWith("-"); // Ascending order is without a leading "-"
     const icon = isActive && isAsc ? faArrowDownZA : faArrowDownAZ;
+
+    const handleToggle = () => {
+        // Toggle the order based on the current state
+        setOrder(isActive && isAsc ? `-${columnName}` : columnName);
+    };
 
     return (
         <span
             role="button"
             className={`fw-bold ${isActive ? "text-primary" : "text-muted"}`}
-            onClick={() => setOrder(isActive && isAsc ? `-${columnName}` : columnName)}
+            onClick={handleToggle}
         >
             <FontAwesomeIcon icon={icon} />
         </span>
@@ -102,9 +108,24 @@ const PreviewExperiments = () => {
         return <div>Loading...</div>;
     }
 
-    const filteredData = ExperimentData.results.filter((experiment) =>
-        experiment.name.toLowerCase().includes(searchName.toLowerCase())
-    );
+    const filteredData = ExperimentData.results
+        .filter((experiment) =>
+            experiment.name.toLowerCase().includes(searchName.toLowerCase())
+        )
+        .sort((a, b) => {
+            const order = ExperimentFilters.order;
+            const isDescending = order && order.startsWith("-");
+            const key = order && order.startsWith("-") ? order.substring(1) : order;
+
+            if (key === "created_at") {
+                const dateA = new Date(a[key]);
+                const dateB = new Date(b[key]);
+
+                return isDescending ? dateB - dateA : dateA - dateB;
+            }
+
+            return 0;
+        });
 
     return (
         <Row className="p-3 mb-5">
@@ -115,14 +136,7 @@ const PreviewExperiments = () => {
                             <th className="text-center col-4">
                                 <div className="input-group">
                                     <span className="input-group-text fw-bold">
-                                        Name&nbsp;
-                                        <ColumnOrderToggle
-                                            columnName="name"
-                                            currentOrder={ExperimentFilters.order}
-                                            setOrder={(newOrder) =>
-                                                setExperimentFilters({ ...ExperimentFilters, order: newOrder })
-                                            }
-                                        />
+                                        Name
                                     </span>
                                     <OverlayTrigger
                                         placement="bottom"
