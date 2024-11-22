@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { Button, Container, Nav, Navbar, Image, NavDropdown } from "react-bootstrap";
 import { Link, Outlet } from "react-router-dom";
 import { UserDetailsContext } from "../utils/components/auth/AuthProvider";
@@ -8,32 +8,52 @@ import { faChevronDown, faRightToBracket } from "@fortawesome/free-solid-svg-ico
 import { getProjectName } from "../api/v1/actions";
 import config from "../config/config.json";
 
-const HoverableNavDropdown = ({ id, title, items }) => {
+const ClickableNavDropdown = ({ id, title, items }) => {
     const [show, setShow] = useState(false);
+    const dropdownRef = useRef(null);
+
+    // Toggle dropdown on click
+    const handleDropdownToggle = () => setShow((prev) => !prev);
+
+    // Close dropdown if clicked outside
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setShow(false);
+        }
+    };
+
+    useEffect(() => {
+        // Add event listener for clicks outside
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            // Cleanup event listener on unmount
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
         <NavDropdown
-    id={id}
-    title={<span className="text-primary">{title} <FontAwesomeIcon icon={faChevronDown} /></span>}
-    menuVariant="light"
-    className="ms-3 no-arrow-dropdown"
-    drop="down"
-    show={show}
-    onMouseEnter={() => setShow(true)}
-    onMouseLeave={() => setTimeout(() => setShow(false), 300)}
->
-    {items.map(({ to, text, disabled }, index) => (
-        <NavDropdown.Item
-            as={Link}
-            to={to}
-            key={index}
-            className={disabled ? "text-muted disabled" : "text-primary"}
+            id={id}
+            title={<span className="text-primary">{title} <FontAwesomeIcon icon={faChevronDown} /></span>}
+            menuVariant="light"
+            className="ms-3 no-arrow-dropdown"
+            drop="down"
+            show={show}
+            onClick={handleDropdownToggle} // Toggle on click
+            ref={dropdownRef} // Reference for click outside detection
         >
-            {text}
-        </NavDropdown.Item>
-    ))}
-</NavDropdown>
-
+            {items.map(({ to, text, disabled }, index) => (
+                <NavDropdown.Item
+                    as={Link}
+                    to={to}
+                    key={index}
+                    className={disabled ? "text-muted disabled" : "text-primary"}
+                >
+                    {text}
+                </NavDropdown.Item>
+            ))}
+        </NavDropdown>
     );
 };
 
@@ -74,7 +94,7 @@ const Base = (props) => {
                         <Nav className="me-auto ms-5">
                             {userDetails && (
                                 <>
-                                    <HoverableNavDropdown
+                                    <ClickableNavDropdown
                                         id="nav-dropdown-tasks"
                                         title="Tasks"
                                         items={[
@@ -82,7 +102,7 @@ const Base = (props) => {
                                             { to: "/runtask", text: "Run a Task" },
                                         ]}
                                     />
-                                    <HoverableNavDropdown
+                                    <ClickableNavDropdown
                                         id="nav-dropdown-experiments"
                                         title="Experiments"
                                         items={[
