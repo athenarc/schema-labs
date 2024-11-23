@@ -272,8 +272,8 @@ export const editExperiment = async (creator, name, apiKey, experimentdata) => {
         });
         
         if (!response.ok) {
-            // Handle errors based on response status
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            const errorData = await response.json();
+            throw new Error(`Error ${response.status}: ${errorData.message || response.statusText}`);
         }
         
         return response;

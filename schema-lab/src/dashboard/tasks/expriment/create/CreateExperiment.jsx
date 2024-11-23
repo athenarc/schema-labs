@@ -138,8 +138,8 @@ const CreateExperiment = () => {
                                         <tr>
                                             <th>Name/UUID</th>
                                             <th>Status</th>
-                                            <th>Submission Time</th>
-                                            <th>Update Time</th>
+                                            <th>Submission</th>
+                                            <th>Last Update</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -176,7 +176,7 @@ const CreateExperiment = () => {
                                 Clear All
                             </Button>
                             <Button variant="success" type="submit">
-                                Submit
+                                Save
                             </Button>
                         </div>
                     </Form>
