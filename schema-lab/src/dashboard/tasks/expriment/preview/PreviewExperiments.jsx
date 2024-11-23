@@ -65,7 +65,7 @@ const PreviewExperiments = () => {
     const handleSearchInput = (evt) => setSearchName(evt.target.value);
 
     const applyFilters = (evt) => {
-        if (evt.key === "Enter" && searchName.length >= 2) {
+        if (evt.key === "Enter" && searchName.length >= 2) {            
             setExperimentFilters({ ...ExperimentFilters, token: searchName, page: 0 });
         }
     };
@@ -104,14 +104,8 @@ const PreviewExperiments = () => {
         }
     };
 
-    if (!ExperimentData || !ExperimentData.results.length) {
-        return <div>Loading...</div>;
-    }
 
     const filteredData = ExperimentData.results
-        .filter((experiment) =>
-            experiment.name.toLowerCase().includes(searchName.toLowerCase())
-        )
         .sort((a, b) => {
             const order = ExperimentFilters.order;
             const isDescending = order && order.startsWith("-");
@@ -140,7 +134,7 @@ const PreviewExperiments = () => {
                                     </span>
                                     <OverlayTrigger
                                         placement="bottom"
-                                        overlay={<Tooltip>Type at least 2 characters to search.</Tooltip>}
+                                        overlay={<Tooltip>Type at least 2 characters and push Enter.</Tooltip>}
                                     >
                                         <input
                                             type="text"
@@ -181,9 +175,9 @@ const PreviewExperiments = () => {
                     </tbody>
                 </Table>
             </Col>
-            {filteredData.length === 0 && (
+            {filteredData.length === 0 && searchName.length >= 2 && (
                 <div className="alert alert-warning text-center">
-                    No experiments match your search criteria.
+                    No experiments match <b>{searchName}</b> your search criteria.
                 </div>
             )}
 
