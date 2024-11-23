@@ -26,6 +26,8 @@ const ExperimentListing = ({ name, creator, created_at, onActionSelect }) => (
             >
                 <Dropdown.Item eventKey="edit">Edit</Dropdown.Item>
                 <Dropdown.Item eventKey="delete">Delete</Dropdown.Item>
+                <Dropdown.Item eventKey="export" disabled>Export RO-crates</Dropdown.Item>
+                <Dropdown.Item eventKey="publish" disabled>Publish RO-hub</Dropdown.Item>
             </DropdownButton>
         </td>
     </tr>

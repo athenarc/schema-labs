@@ -14,7 +14,7 @@ const LearnMore = () => {
       <Row>
         <Col>
           <p>
-            <strong>HYPATIA lab</strong> is a pre-release version of <a href="https://github.com/athenarc/schema-lab" className='text-dark'>SCHEMA lab</a>, currently available only to users of the HYPATIA platform. Full integration with SCHEMA lab's open-source capabilities is coming soon.
+            <strong>HYPATIA lab</strong> is a pre-release version of <a href="https://github.com/athenarc/schema-lab" className='primary'>SCHEMA lab</a>, currently available only to users of the HYPATIA platform. Full integration with SCHEMA lab's open-source capabilities is coming soon.
           </p>
         </Col>
       </Row>
@@ -55,7 +55,7 @@ const LearnMore = () => {
         <Col>
           <ListGroup variant="flush">
             <ListGroup.Item className="border-0 text-muted">
-              <strong>Access HYPATIA lab:</strong> Log in to the HYPATIA lab with your credentials.
+              <strong>Access HYPATIA lab:</strong> Log in to the <a href="https://hypatia.athenarc.gr/" className='primary'>HYPATIA</a> with your credentials.
               Navigate to the Dashboard and click "Access" next to your active on demand batch computation project.
             </ListGroup.Item>
             <ListGroup.Item className="border-0 text-muted">
@@ -76,7 +76,7 @@ const LearnMore = () => {
       <Row className="mt-3">
         <Col>
           <p>
-            Open-source code for SCHEMA lab is available here: <a href="https://github.com/athenarc/schema-lab" target="_blank" rel="noopener noreferrer" className='text-dark'>SCHEMA lab</a>
+            Open-source code for SCHEMA lab is available here: <a href="https://github.com/athenarc/schema-lab" target="_blank" rel="noopener noreferrer" className='primary'>SCHEMA lab</a>
           </p>
         </Col>
       </Row>

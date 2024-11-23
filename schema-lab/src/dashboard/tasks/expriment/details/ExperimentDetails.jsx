@@ -98,7 +98,7 @@ const ExperimentDetails = () => {
                                                 </th>
                                                 {/* <th className="col-4 text-start">Submission Time</th> */}
                                                 <th className="col-4 text-start">
-                                                    Update Time
+                                                    Last Update
                                                 </th>
                                             </tr>
                                         </thead>

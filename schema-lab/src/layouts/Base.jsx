@@ -4,7 +4,7 @@ import { Link, Outlet } from "react-router-dom";
 import { UserDetailsContext } from "../utils/components/auth/AuthProvider";
 import Footer from './Footer';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faRightToBracket, faCode, faFlask } from "@fortawesome/free-solid-svg-icons";
 import { getProjectName } from "../api/v1/actions";
 import config from "../config/config.json";
 
@@ -96,7 +96,12 @@ const Base = (props) => {
                                 <>
                                     <ClickableNavDropdown
                                         id="nav-dropdown-tasks"
-                                        title="Tasks"
+                                        title={
+                                            <>
+                                                <FontAwesomeIcon icon={faCode} className="me-1"/>
+                                                Tasks
+                                            </>
+                                        }
                                         items={[
                                             { to: "/dashboard", text: "Dashboard" },
                                             { to: "/runtask", text: "Run a Task" },
@@ -104,12 +109,15 @@ const Base = (props) => {
                                     />
                                     <ClickableNavDropdown
                                         id="nav-dropdown-experiments"
-                                        title="Experiments"
+                                        title={
+                                            <>
+                                                <FontAwesomeIcon icon={faFlask} className="me-1"/>
+                                                Experiments
+                                            </>
+                                        }
                                         items={[
                                             { to: "/preview", text: "Dashboard" },
                                             { to: "/view", text: "Create" },
-                                            { to: "/", text: "Export RO-crates", disabled: true },
-                                            { to: "/", text: "Publish RO-hub", disabled: true },
                                             { to: "/experiment", text: "About" },
                                         ]}
                                     />

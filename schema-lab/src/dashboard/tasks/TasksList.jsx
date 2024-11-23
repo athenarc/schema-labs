@@ -3,7 +3,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Link, useNavigate } from "react-router-dom";
 import { Tooltip, OverlayTrigger, Dropdown, DropdownButton, Button, Alert } from 'react-bootstrap';
-import { faArrowDownAZ, faArrowDownZA } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDownAZ, faArrowDownZA, faXmark, faArrowRotateRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Table from "react-bootstrap/Table";
 import { useTaskData, useTaskFilters } from "./TasksListProvider";
@@ -35,6 +35,9 @@ const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggl
             });
     };
 
+    const nonCancelableStatuses = ["COMPLETED", "ERROR", "CANCELED", "REJECTED"];
+    const canCancel = !nonCancelableStatuses.includes(status.toUpperCase());
+
     return (
         <>
             {isAlertActive ? (
@@ -52,13 +55,35 @@ const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggl
                     <td>{new Date(submitted_at).toLocaleString('en')}</td>
                     <td>{new Date(updated_at).toLocaleString('en')}</td>
                     <td>
-                        <Button
-                            variant="primary"
-                            size="sm"
-                            onClick={() => handleCancelTask(uuid, userDetails.apiKey)}
+                        {canCancel && (
+                            <OverlayTrigger
+                                placement="bottom"
+                                overlay={<Tooltip id="cancel-tooltip">Cancel</Tooltip>}
+                            >
+                                <Button
+                                    variant="primary"
+                                    size="sm"
+                                    onClick={() => handleCancelTask(uuid, userDetails.apiKey)}
+                                    className="cancel-button"
+                                >
+                                    <FontAwesomeIcon icon={faXmark} />
+                                </Button>
+                            </OverlayTrigger>
+                        )}
+
+                        <OverlayTrigger
+                            placement="bottom"
+                            overlay={<Tooltip id="retry-tooltip">Rerun</Tooltip>}
                         >
-                            Cancel
-                        </Button>
+                            <Button
+                            variant="secondary"
+                            size="sm"
+                            
+                            className="retry-button ms-2"
+                            >
+                            <FontAwesomeIcon icon={faArrowRotateRight} />
+                            </Button>
+                        </OverlayTrigger>
                     </td>
                 </tr>
             )}
@@ -229,9 +254,9 @@ const TaskList = () => {
                                     </DropdownButton>
                                 </th>
                                 <th>
-                                    Submission time <ColumnOrderToggle columnName={"submitted_at"} currentOrder={orderBy} setOrder={setOrderBy} />
+                                    Submission <ColumnOrderToggle columnName={"submitted_at"} currentOrder={orderBy} setOrder={setOrderBy} />
                                 </th>
-                                <th>Update time</th>
+                                <th>Last Update</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>

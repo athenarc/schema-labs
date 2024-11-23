@@ -230,9 +230,9 @@ const ExperimentTaskList = () => {
                                     </DropdownButton>
                                 </th>
                                 <th>
-                                    Submission time <ColumnOrderToggle columnName={"submitted_at"} currentOrder={orderBy} setOrder={setOrderBy} />
+                                    Submission <ColumnOrderToggle columnName={"submitted_at"} currentOrder={orderBy} setOrder={setOrderBy} />
                                 </th>
-                                <th>Update time</th>
+                                <th>Last Update</th>
                             </tr>
                         </thead>
                         <tbody>
