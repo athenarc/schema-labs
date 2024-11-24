@@ -43,6 +43,27 @@ const LearnMore = () => {
       </Row>
       <Row className="mt-4">
         <Col>
+          <ListGroup variant="flush">
+            <ListGroup.Item className="border-0 text-muted">
+              <strong>Computational Experiments</strong>
+            </ListGroup.Item>
+            <ListGroup.Item className="border-0 text-muted">
+            This interface provides a streamlined experience for creating and managing computational experiments.
+            </ListGroup.Item>
+            <ListGroup.Item className="border-0 text-muted">
+              <strong>Create Experiments:</strong> Combine one or more tasks into a computational experiment. 
+            </ListGroup.Item>
+            <ListGroup.Item className="border-0 text-muted">
+              <strong>Manage Tasks:</strong> Easily select and group tasks using checkboxes. 
+            </ListGroup.Item>
+            <ListGroup.Item className="border-0 text-muted">
+              <strong>View Details:</strong> Access detailed information about each task and experiment.
+            </ListGroup.Item>
+          </ListGroup>
+        </Col>
+      </Row>
+      <Row className="mt-4">
+        <Col>
           <h1>Quick start</h1>
         </Col>
       </Row>

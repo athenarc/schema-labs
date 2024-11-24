@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Link, useNavigate } from "react-router-dom";
-import { Tooltip, OverlayTrigger, Dropdown, DropdownButton, Button, Alert } from 'react-bootstrap';
+import { Link } from "react-router-dom";
+import { Tooltip, OverlayTrigger, Dropdown, DropdownButton, Button, Alert, Modal } from 'react-bootstrap';
 import { faArrowDownAZ, faArrowDownZA, faXmark, faArrowRotateRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Table from "react-bootstrap/Table";
@@ -21,16 +21,24 @@ const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggl
         toggleSelection(uuid);
     };
 
+    const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
+
+    const confirmCancelTask = () => {
+        // Execute the cancel task only when confirmed
+        handleCancelTask(uuid, userDetails.apiKey);
+        setShowCancelConfirmation(false); // Close the modal after confirmation
+    };
+
     const handleCancelTask = (taskUUID, auth) => {
         cancelTaskPost({ taskUUID, auth })
             .then(response => {
                 if (!response.ok) {
-                    setAlertMessage(`Canceling ${taskUUID} failed! Please try again.`);
+                    setAlertMessage(<span>Canceling <strong>{taskUUID}</strong> task failed! Please try again.</span>);
                     setIsAlertActive(true);
                     setTimeout(() => {
                         setAlertMessage(null);
                         setIsAlertActive(false);
-                    }, 1000);
+                    }, 3000);
                 }
             });
     };
@@ -63,7 +71,7 @@ const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggl
                                 <Button
                                     variant="primary"
                                     size="sm"
-                                    onClick={() => handleCancelTask(uuid, userDetails.apiKey)}
+                                    onClick={() => setShowCancelConfirmation(true)}
                                     className="cancel-button"
                                 >
                                     <FontAwesomeIcon icon={faXmark} />
@@ -87,6 +95,30 @@ const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggl
                     </td>
                 </tr>
             )}
+
+            {/* Cancel Confirmation Modal */}
+            <Modal
+                show={showCancelConfirmation}
+                onHide={() => setShowCancelConfirmation(false)}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Cancellation</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Are you sure you want to cancel this task?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="primary"
+                        onClick={() => setShowCancelConfirmation(false)}
+                    >
+                        No
+                    </Button>
+                    <Button variant="success" onClick={confirmCancelTask}>
+                        Yes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 };
