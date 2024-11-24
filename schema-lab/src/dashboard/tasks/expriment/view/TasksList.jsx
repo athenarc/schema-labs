@@ -36,7 +36,7 @@ const ExperimentTaskListing = ({ uuid, status, submitted_at, updated_at, isSelec
                     <td>
                         <OverlayTrigger
                             placement="top"
-                            overlay={<Tooltip id="checkbox-tooltip">Checkout a task for the experiment</Tooltip>}
+                            overlay={<Tooltip id="checkbox-tooltip">Select a task to be added in the experiment</Tooltip>}
                             trigger={['hover']}
                         >
                             <input
@@ -187,7 +187,7 @@ const ExperimentTaskList = () => {
                                 <th>
                                     <OverlayTrigger
                                         placement="top"
-                                        overlay={<Tooltip id="checkbox-tooltip">Checkout all tasks for the experiment</Tooltip>}
+                                        overlay={<Tooltip id="checkbox-tooltip">Select all tasks to be added in the experiment</Tooltip>}
                                         trigger={['hover']}
                                     >
                                         <input className="form-check-input" type="checkbox" onChange={handleSelectAll} />
