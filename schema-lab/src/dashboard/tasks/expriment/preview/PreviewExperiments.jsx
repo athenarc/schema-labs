@@ -15,20 +15,33 @@ const ExperimentListing = ({ name, creator, created_at, onActionSelect }) => (
         <td className="text-center">{creator}</td>
         <td className="text-center">{new Date(created_at).toLocaleString("en")}</td>
         <td className="text-center">
-            <DropdownButton
-                variant="primary"
-                size="sm"
-                title="Select..."
-                drop="auto"
-                renderMenuOnMount
-                container="body"
-                onSelect={(action) => onActionSelect(action, { name, creator })}
-            >
-                <Dropdown.Item eventKey="edit">Edit</Dropdown.Item>
-                <Dropdown.Item eventKey="delete">Delete</Dropdown.Item>
-                <Dropdown.Item eventKey="export" disabled>Export RO-crates</Dropdown.Item>
-                <Dropdown.Item eventKey="publish" disabled>Publish RO-hub</Dropdown.Item>
-            </DropdownButton>
+            <OverlayTrigger
+                placement="top"
+                overlay={
+                    <Tooltip id={`tooltip-${name}`}>
+                        Select an action for this experiment.
+                    </Tooltip>
+                }
+                >
+                <DropdownButton
+                    variant="primary"
+                    size="sm"
+                    title="Select..."
+                    drop="auto"
+                    renderMenuOnMount
+                    container="body"
+                    onSelect={(action) => onActionSelect(action, { name, creator })}
+                >
+                    <Dropdown.Item eventKey="edit">Edit</Dropdown.Item>
+                    <Dropdown.Item eventKey="delete">Delete</Dropdown.Item>
+                    <Dropdown.Item eventKey="export" disabled>
+                        Export RO-crates
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey="publish" disabled>
+                        Publish RO-hub
+                    </Dropdown.Item>
+                </DropdownButton>
+            </OverlayTrigger>
         </td>
     </tr>
 );

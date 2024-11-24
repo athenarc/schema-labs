@@ -137,7 +137,7 @@ const ExperimentDetails = () => {
             )}
 
             <div className="mt-3">
-                <Button variant="primary" onClick={() => navigate(-1)}>
+                <Button variant="primary" onClick={() => navigate("/preview")}>
                     Back
                 </Button>
             </div>
