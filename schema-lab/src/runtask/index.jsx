@@ -35,8 +35,8 @@ const RunTask = () => {
                 <Col>
                     <h1 className="display-6 mb-4">Setup a Task</h1>
                     <p className="display-7">
-      Submit task for project: <strong>{projectName}</strong>.
-    </p>
+                        Submit task for project: <strong>{projectName}</strong>.
+                    </p>
                     <Container>
                         <TaskForm />
                     </Container>
