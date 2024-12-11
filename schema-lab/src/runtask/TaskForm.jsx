@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Form, Button, Row, Col, Card, Container, Accordion, OverlayTrigger, Tooltip, Modal, Alert } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +10,9 @@ import { FaAngleRight, FaAngleDown } from 'react-icons/fa';
 
 const TaskForm = () => {
     const navigate = useNavigate();
+    // Get data from re-run action
+    const { state } = useLocation();
+    const taskData = state?.taskData || null;
     const [activeKey, setActiveKey] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [basicData, setBasicData] = useState({name: "", description: "", tags: [] });
@@ -20,6 +23,65 @@ const TaskForm = () => {
     const [volumes, setVolumes] = useState([]);
     const [showJson, setShowJson] = useState(false);
     const { userDetails } = useContext(UserDetailsContext);
+
+    // Fill input boxes with data if UUID already exists
+    useEffect(() => {
+        if (taskData) {
+            setBasicData({
+                name: taskData.name || "",
+                description: taskData.description || "",
+                tags: taskData.tags || []
+            });
+
+            setExecutors(
+                Array.isArray(taskData.executors) && taskData.executors.length > 0
+                    ? taskData.executors.map((executor) => ({
+                          image: executor?.image || "",
+                          command: executor?.command || [],
+                          workdir: executor?.workdir || "",
+                          stdout: executor?.stdout || "",
+                          stderr: executor?.stderr || "",
+                          env: executor?.env || {}
+                      }))
+                    : [{ image: "", command: [], workdir: "", stdout: "", stderr: "", env: {} }]
+            );
+
+            setInputs(
+                Array.isArray(taskData.inputs)
+                    ? taskData.inputs.map((input) => ({
+                          name: input?.name || "",
+                          description: input?.description || "",
+                          url: input?.url || "",
+                          path: input?.path || "",
+                          content: input?.content || "",
+                          type: input?.type || ""
+                      }))
+                    : [{ name: "", description: "", url: "", path: "", content: "", type: "" }]
+            );
+
+            setOutputs(
+                Array.isArray(taskData.outputs)
+                    ? taskData.outputs.map((output) => ({
+                          name: output?.name || "",
+                          description: output?.description || "",
+                          url: output?.url || "",
+                          path: output?.path || "",
+                          type: output?.type || ""
+                      }))
+                    : [{ name: "", description: "", url: "", path: "", type: "" }]
+            );
+
+            setVolumes(taskData?.volumes || []);
+
+            setResources({
+                cpu_cores: taskData?.resources?.cpu_cores || 1,
+                zones: taskData?.resources?.zones || "",
+                preemptible: taskData?.resources?.preemptible || false,
+                disk_gb: taskData?.resources?.disk_gb || 5.0,
+                ram_gb: taskData?.resources?.ram_gb || 1.0,
+            });
+        }
+    }, [taskData]);
 
 
     const handleToggle = (eventKey) => {
@@ -32,7 +94,7 @@ const TaskForm = () => {
         const form = e.target;
         const requiredFields = form.querySelectorAll('input[required], textarea[required]');
         let isValid = true;
-    
+     
         requiredFields.forEach(field => {
             if (!field.value.trim()) {
                 isValid = false;

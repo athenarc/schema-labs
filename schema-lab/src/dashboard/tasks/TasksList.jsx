@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Tooltip, OverlayTrigger, Dropdown, DropdownButton, Button, Alert, Modal } from 'react-bootstrap';
 import { faArrowDownAZ, faArrowDownZA, faXmark, faArrowRotateRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,13 +9,15 @@ import Table from "react-bootstrap/Table";
 import { useTaskData, useTaskFilters } from "./TasksListProvider";
 import { cloneDeep } from "lodash";
 import TaskStatus from "./TaskStatus";
-import { cancelTaskPost } from "../../api/v1/actions";
+import { cancelTaskPost, retrieveTaskDetails } from "../../api/v1/actions";
 import { UserDetailsContext } from "../../utils/components/auth/AuthProvider";
 
 const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggleSelection }) => {
     const { userDetails } = useContext(UserDetailsContext);
     const [alertMessage, setAlertMessage] = useState(null);
     const [isAlertActive, setIsAlertActive] = useState(false);
+    const navigate = useNavigate();
+    const [error, setError] = useState(null); 
 
     const handleCheckboxChange = () => {
         toggleSelection(uuid);
@@ -41,6 +43,23 @@ const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggl
                     }, 3000);
                 }
             });
+    };
+
+    const handleRerunButtonClick = async () => {
+        try {
+            const response = await retrieveTaskDetails({
+                taskUUID: uuid,
+                auth: userDetails.apiKey
+            });
+            if (!response.ok) {
+                throw new Error(`Error network response.. Status: ${response.status}, Status Text: ${response.statusText}`);
+            }
+            const data = await response.json();
+            // Navigating to /runtask with the retrieved data
+            navigate('/runtask', { state: { taskData: data } });
+        } catch (error) {
+            setError(error.toString());
+        }
     };
 
     const nonCancelableStatuses = ["COMPLETED", "ERROR", "CANCELED", "REJECTED"];
@@ -84,10 +103,10 @@ const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggl
                             overlay={<Tooltip id="retry-tooltip">Rerun</Tooltip>}
                         >
                             <Button
-                            variant="secondary"
-                            size="sm"
-                            
-                            className="retry-button ms-2"
+                                variant="secondary"
+                                size="sm"
+                                onClick={handleRerunButtonClick}
+                                className="retry-button ms-2"
                             >
                             <FontAwesomeIcon icon={faArrowRotateRight} />
                             </Button>

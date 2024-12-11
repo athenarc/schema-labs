@@ -28,6 +28,7 @@ export const listTasks = options => {
     );
 }
 
+// Get Task details
 export const retrieveTaskDetails = ({taskUUID, auth}) => {
     const qualifiedUrl=`${config.api.url}/api/tasks/${taskUUID}`
     return fetch(

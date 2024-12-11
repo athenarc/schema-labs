@@ -189,14 +189,14 @@ const CreateExperiment = () => {
                     <Modal.Title>Confirm Experiment Submission</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Are you sure you want to submit this experiment?
+                    Are you sure you want to save this experiment?
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCancelBack}>
+                    <Button variant="danger" onClick={handleCancelBack}>
                         Cancel
                     </Button>
                     <Button variant="success" onClick={handleConfirmSubmit}>
-                        Confirm
+                        Save
                     </Button>
                 </Modal.Footer>
             </Modal>
