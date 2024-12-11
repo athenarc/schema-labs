@@ -475,7 +475,14 @@ const TaskForm = () => {
                             {/* Inputs */}
                             <Accordion.Item eventKey="0">
                                 <Accordion.Header>
-                                    Inputs Information (Optional)
+                                    Inputs Information (Optional)&nbsp;
+                                    <FontAwesomeIcon 
+                                        icon={faInfoCircle} 
+                                        className="ms-2" 
+                                        data-bs-toggle="tooltip" 
+                                        data-bs-placement="top" 
+                                        title="Input information is optional, but if provided, both URL and Path are required." 
+                                    />
                                 </Accordion.Header>
                                 <Accordion.Body>
                                     {inputs.map((input, index) =>  (
@@ -526,7 +533,7 @@ const TaskForm = () => {
                                                             value={input.url}
                                                             onChange={(e) => handleInputChange(index, e)}
                                                             placeholder="Type URL..."
-                                                            required
+                                                            required={!!(input.name || input.description || input.type || input.path)} 
                                                         />
                                                     </OverlayTrigger>
                                                 </Col>
@@ -547,6 +554,7 @@ const TaskForm = () => {
                                                         value={input.path}
                                                         onChange={(e) => handleInputChange(index, e)}
                                                         placeholder="Type path..."
+                                                        required={!!(input.name || input.description || input.type || input.url)} 
                                                     />
                                                     </OverlayTrigger>
                                                 </Col>
@@ -590,7 +598,14 @@ const TaskForm = () => {
                             {/* Outputs */}
                             <Accordion.Item eventKey="1">
                                 <Accordion.Header>
-                                    Outputs Information (Optional)
+                                    Outputs Information (Optional)&nbsp;
+                                    <FontAwesomeIcon 
+                                        icon={faInfoCircle} 
+                                        className="ms-2" 
+                                        data-bs-toggle="tooltip" 
+                                        data-bs-placement="top" 
+                                        title="Output information is optional, but if provided, both URL and Path are required." 
+                                    />
                                 </Accordion.Header>
                                 <Accordion.Body>
                                     {outputs.map((output, index) => (
@@ -641,6 +656,7 @@ const TaskForm = () => {
                                                         value={output.url}
                                                         onChange={(e) => handleOutputChange(index, e)}
                                                         placeholder="Type URL..."
+                                                        required={!!(output.name || output.description || output.type || output.path)}
                                                     />
                                                     </OverlayTrigger>
                                                 </Col>
@@ -661,6 +677,7 @@ const TaskForm = () => {
                                                         value={output.path}
                                                         onChange={(e) => handleOutputChange(index, e)}
                                                         placeholder="Type path..."
+                                                        required={!!(output.name || output.description || output.type || output.url)}
                                                     />
                                                     </OverlayTrigger>
                                                 </Col>
