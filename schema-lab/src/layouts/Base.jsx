@@ -4,7 +4,7 @@ import { Link, Outlet } from "react-router-dom";
 import { UserDetailsContext } from "../utils/components/auth/AuthProvider";
 import Footer from './Footer';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faRightToBracket, faFlask, faCodeBranch } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faRightToBracket, faFlask, faCodeBranch, faDiagramProject } from "@fortawesome/free-solid-svg-icons";
 import { getProjectName } from "../api/v1/actions";
 import config from "../config/config.json";
 
@@ -117,6 +117,19 @@ const Base = (props) => {
                                             { to: "/preview", text: "Dashboard" },
                                             { to: "/view", text: "Create" },
                                             { to: "/experiment", text: "About" },
+                                        ]}
+                                    />
+                                    <ClickableNavDropdown
+                                        id="nav-dropdown-tasks"
+                                        title={
+                                            <>
+                                                <FontAwesomeIcon icon={faDiagramProject} className="me-1" />
+                                                Workflows
+                                            </>
+                                        }
+                                        items={[
+                                            { to: "/workflow-preview", text: "Dashboard" },
+                                            { to: "/workflow-view", text: "Create" },
                                         ]}
                                     />
                                     <Button

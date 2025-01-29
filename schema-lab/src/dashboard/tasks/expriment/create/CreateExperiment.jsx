@@ -185,9 +185,6 @@ const CreateExperiment = () => {
 
             {/* Confirmation Modal */}
             <Modal show={showConfirmModal} onHide={handleCancelBack}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Confirm Experiment Submission</Modal.Title>
-                </Modal.Header>
                 <Modal.Body>
                     Are you sure you want to save this experiment?
                 </Modal.Body>

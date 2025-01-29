@@ -22,6 +22,8 @@ import ViewExperiments from "./dashboard/tasks/expriment/preview/index"
 import ExperimentListDetails from "./dashboard/tasks/expriment/details";
 import ExperimentDetails from "./dashboard/tasks/expriment/details/ExperimentDetails";
 import EditExperiment from "./dashboard/tasks/expriment/edit";
+import Workflow from "./dashboard/tasks/workflow/view";
+import ViewWorkflows from "./dashboard/tasks/workflow/preview";
 
 const ProtectedRoutes = () => {
     const { userDetails } = useContext(UserDetailsContext);
@@ -54,7 +56,9 @@ const router = createBrowserRouter(
                 <Route path="/experiment-details/:creator/:name" element={<ExperimentListDetails />}>
                     <Route index element={<Navigate to="description" />} />
                     <Route path="description" element={<ExperimentDetails />} />
-                </Route>               
+                </Route>
+                <Route path="/workflow" element={<Workflow/>} />
+                    <Route path="/workflow-preview" element={<ViewWorkflows/>} />
                 <Route path="/task-details/:uuid" element={<Details />}>
                     <Route index element={<Navigate to="executors" />} />
                     <Route path="executors" element={<Executors />} />

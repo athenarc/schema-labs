@@ -64,6 +64,11 @@ const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggl
 
     const nonCancelableStatuses = ["COMPLETED", "ERROR", "CANCELED", "REJECTED"];
     const canCancel = !nonCancelableStatuses.includes(status.toUpperCase());
+    // Handle runnable tasks
+    const rerunnableStatuses = ["COMPLETED", "ERROR", "CANCELED", "REJECTED"];
+    const nonRerunnableStatuses = ["SUBMITTED", "APPROVED", "RUNNING"];
+    const canRerun = rerunnableStatuses.includes(status.toUpperCase());
+    const cannotRerun = nonRerunnableStatuses.includes(status.toUpperCase());
 
     return (
         <>
@@ -100,16 +105,24 @@ const TaskListing = ({ uuid, status, submitted_at, updated_at, isSelected, toggl
 
                         <OverlayTrigger
                             placement="bottom"
-                            overlay={<Tooltip id="retry-tooltip">Rerun</Tooltip>}
+                            overlay={
+                                <Tooltip id="retry-tooltip">
+                                    {canRerun ? "Rerun" : "Rerun only tasks in COMPLETED, ERROR, CANCELED and REJECTED status."}
+                                </Tooltip>
+                            }
                         >
-                            <Button
-                                variant="secondary"
-                                size="sm"
-                                onClick={handleRerunButtonClick}
-                                className="retry-button ms-2"
-                            >
-                            <FontAwesomeIcon icon={faArrowRotateRight} />
-                            </Button>
+                            <span className="d-inline-block">
+                                <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    onClick={canRerun ? handleRerunButtonClick : undefined}
+                                    className="retry-button ms-2"
+                                    disabled={cannotRerun}
+                                    style={cannotRerun ? { pointerEvents: "none" } : {}}
+                                >
+                                    <FontAwesomeIcon icon={faArrowRotateRight} />
+                                </Button>
+                            </span>
                         </OverlayTrigger>
                     </td>
                 </tr>
